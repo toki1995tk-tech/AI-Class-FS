@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>2 класс — Компьютерная миссия с Байтом</title>
+<style>
+  :root{
+    --sky1:#b8ebff;
+    --sky2:#e7f8ff;
+    --grass1:#dff8c9;
+    --grass2:#f6fff1;
+    --blue:#2196e6;
+    --blue-dark:#0f6db5;
+    --blue-soft:#eef8ff;
+    --green:#6cc24a;
+    --green-dark:#3e9630;
+    --green-soft:#f0fae9;
+    --orange:#ffb43d;
+    --orange-dark:#df8c11;
+    --orange-soft:#fff7e5;
+    --purple:#8b70f0;
+    --purple-soft:#f4efff;
+    --red:#ef6555;
+    --red-soft:#fff1ee;
+    --ink:#173d5c;
+    --muted:#6d8799;
+    --line:#d8e8f2;
+    --white:#ffffff;
+    --shadow:0 14px 36px rgba(33,101,151,.14);
+    --radius:28px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{
+    font-family:"Trebuchet MS", Arial, sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 10% 8%, rgba(255,255,255,.95) 0 7%, transparent 8%),
+      radial-gradient(circle at 30% 14%, rgba(255,255,255,.9) 0 5%, transparent 6%),
+      radial-gradient(circle at 72% 10%, rgba(255,255,255,.9) 0 8%, transparent 9%),
+      radial-gradient(circle at 86% 20%, rgba(255,255,255,.85) 0 5%, transparent 6%),
+      linear-gradient(180deg, var(--sky1) 0%, var(--sky2) 28%, var(--grass1) 28%, var(--grass2) 100%);
+    min-height:100vh;
+  }
+
+  .app{
+    width:min(1320px, 96vw);
+    margin:18px auto 46px;
+  }
+
+  /* HERO */
+  .hero{
+    position:relative;
+    overflow:hidden;
+    background:rgba(255,255,255,.97);
+    border:3px solid rgba(33,150,230,.18);
+    border-radius:34px;
+    box-shadow:var(--shadow);
+    padding:22px 24px 18px;
+  }
+  .hero::before{
+    content:"";
+    position:absolute;
+    inset:auto -60px -60px auto;
+    width:220px;height:220px;
+    background:radial-gradient(circle, rgba(255,214,102,.22), transparent 62%);
+    pointer-events:none;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:170px 1fr 370px;
+    gap:18px;
+    align-items:center;
+  }
+  .robot-card{
+    background:linear-gradient(180deg,#f3fbff,#ffffff);
+    border:3px solid #bfe0f4;
+    border-radius:30px;
+    box-shadow:inset 0 8px 20px rgba(149,209,242,.18);
+    min-height:170px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
+  }
+  .robot-face{
+    font-size:84px;
+    line-height:1;
+    filter:drop-shadow(0 8px 6px rgba(0,0,0,.08));
+  }
+  .robot-name{
+    display:inline-block;
+    background:linear-gradient(180deg,#25a8f3,#1685d0);
+    color:white;
+    font-size:24px;
+    font-weight:900;
+    padding:8px 18px;
+    border-radius:18px;
+    box-shadow:0 5px 0 #0f6fb0;
+  }
+  .hero-title h1{
+    margin:0 0 8px;
+    font-size:clamp(30px,4vw,48px);
+    line-height:1.05;
+    color:var(--blue-dark);
+  }
+  .hero-title p{
+    margin:0;
+    font-size:19px;
+    line-height:1.45;
+  }
+  .mini-tags{
+    display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;
+  }
+  .mini-tag{
+    background:#f4fbff;
+    border:2px solid #d4ebf8;
+    border-radius:999px;
+    padding:8px 14px;
+    font-weight:800;
+    font-size:15px;
+  }
+  .speech{
+    position:relative;
+    background:linear-gradient(180deg,#fbfeff,#f4fbff);
+    border:3px dashed #b7dbef;
+    border-radius:26px;
+    padding:18px 18px 18px 20px;
+    min-height:150px;
+  }
+  .speech::before{
+    content:"";
+    position:absolute;
+    left:-18px; top:42px;
+    width:30px;height:30px;
+    background:#f7fdff;
+    border-left:3px dashed #b7dbef;
+    border-bottom:3px dashed #b7dbef;
+    transform:rotate(45deg);
+  }
+  .speech-title{
+    font-size:18px;
+    font-weight:900;
+    color:#0f7fc1;
+    margin-bottom:6px;
+  }
+  .speech-text{
+    font-size:18px;
+    line-height:1.45;
+  }
+
+  .progress-wrap{
+    margin-top:16px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .progress{
+    flex:1;
+    height:18px;
+    background:#e7eef5;
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,#72c94b,#a5df69);
+    transition:.35s ease;
+  }
+  .progress-label{
+    min-width:76px;
+    text-align:right;
+    font-size:18px;
+    font-weight:900;
+  }
+
+  /* TABS */
+  .tabs{
+    margin:18px 0;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+  }
+  .tab{
+    border:none;
+    border-radius:22px;
+    padding:16px 8px;
+    font-size:18px;
+    font-weight:900;
+    cursor:pointer;
+    background:#fff;
+    color:var(--ink);
+    box-shadow:0 8px 18px rgba(31,88,117,.10);
+    transition:.18s;
+  }
+  .tab:hover:not(.locked){transform:translateY(-2px)}
+  .tab.active{
+    color:white;
+    background:linear-gradient(180deg,#22a1ef,#117dca);
+  }
+  .tab.locked{
+    background:#e1e7ec;
+    color:#8d9ba6;
+    cursor:not-allowed;
+    box-shadow:none;
+  }
+  .tab.done{
+    background:#eaf8df;
+    color:#3f8b2f;
+  }
+  .tab.done::after{content:" ✓"}
+
+  /* COMMON PANEL */
+  .panel{
+    display:none;
+    background:rgba(255,255,255,.98);
+    border-radius:32px;
+    box-shadow:var(--shadow);
+    padding:24px;
+  }
+  .panel.active{display:block}
+  .title-row{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:8px;
+  }
+  .badge{
+    width:68px;height:68px;
+    border-radius:22px;
+    display:grid;
+    place-items:center;
+    font-size:30px;
+    border:2px solid #cde7f5;
+    background:#f1fbff;
+    flex:0 0 auto;
+  }
+  h2{
+    margin:0;
+    font-size:clamp(26px,3vw,38px);
+    line-height:1.1;
+  }
+  .instruction{
+    margin:0 0 18px;
+    font-size:19px;
+    line-height:1.45;
+    color:#49687d;
+  }
+  .hint-ribbon{
+    display:inline-block;
+    margin-bottom:16px;
+    background:linear-gradient(180deg,#fff8df,#fff0bb);
+    border:2px solid #f0d27e;
+    border-radius:999px;
+    padding:8px 16px;
+    font-weight:900;
+    font-size:15px;
+    color:#946000;
+  }
+
+  /* Devices */
+  .device-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    gap:12px;
+  }
+  .device{
+    background:white;
+    border:2px solid var(--line);
+    border-radius:22px;
+    min-height:104px;
+    padding:10px 8px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:6px;
+    text-align:center;
+    font-weight:900;
+    font-size:15px;
+    line-height:1.15;
+    cursor:grab;
+    user-select:none;
+    box-shadow:0 6px 12px rgba(31,88,117,.05);
+  }
+  .device:active{cursor:grabbing}
+  .device .icon{font-size:38px; line-height:1}
+  .device.correct{
+    background:var(--green-soft);
+    border-color:#7ac64e;
+  }
+  .device.wrong{
+    background:var(--red-soft);
+    border-color:#ef6b5d;
+  }
+  .device.placed{
+    cursor:default;
+    box-shadow:none;
+  }
+
+  .actions{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:18px;
+  }
+  .btn{
+    border:none;
+    border-radius:18px;
+    padding:14px 26px;
+    font-size:20px;
+    font-weight:900;
+    cursor:pointer;
+    color:white;
+    background:linear-gradient(180deg,#1ba4ef,#0f7fc4);
+    box-shadow:0 7px 0 #0d679d;
+  }
+  .btn:active{transform:translateY(3px); box-shadow:0 4px 0 #0d679d}
+  .btn.secondary{
+    background:linear-gradient(180deg,#7cd15b,#58ba4a);
+    box-shadow:0 7px 0 #46963d;
+  }
+  .btn.light{
+    background:linear-gradient(180deg,#ffca62,#f3a61d);
+    box-shadow:0 7px 0 #d28a12;
+  }
+
+  .feedback{
+    min-height:34px;
+    margin-top:14px;
+    text-align:center;
+    font-size:20px;
+    font-weight:900;
+  }
+  .good{color:#3a922d}
+  .bad{color:#d04e43}
+
+  /* Mission 1 */
+  .mission1-layout{
+    display:grid;
+    grid-template-columns:260px 1fr 300px;
+    gap:18px;
+    align-items:start;
+  }
+  .side-box, .palette, .bank, .final-bank{
+    background:#fbfeff;
+    border:2px solid #dae9f2;
+    border-radius:26px;
+    padding:16px;
+  }
+  .side-box h3, .palette h3, .bank h3, .final-bank h3{
+    margin:0 0 12px;
+    font-size:22px;
+  }
+  .table-scene{
+    position:relative;
+    min-height:520px;
+    border-radius:28px;
+    border:3px dashed #b9dceb;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.82), rgba(237,247,253,.92)),
+      radial-gradient(circle at 15% 16%, rgba(255,223,132,.25), transparent 20%);
+    overflow:hidden;
+    padding:16px;
+  }
+  .scene-title{
+    text-align:center;
+    font-size:23px;
+    font-weight:900;
+    margin-bottom:10px;
+  }
+  .scene-robot{
+    position:absolute;
+    left:22px;
+    bottom:84px;
+    width:140px;
+    height:180px;
+    border-radius:26px;
+    background:linear-gradient(180deg,#f3fbff,#ffffff);
+    border:3px solid #c4e3f5;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    box-shadow:inset 0 8px 18px rgba(128,195,232,.16);
+  }
+  .scene-robot .emoji{
+    font-size:72px; line-height:1;
+  }
+  .scene-robot .name{
+    margin-top:6px;
+    background:#1a97e4;
+    color:white;
+    padding:6px 14px;
+    border-radius:16px;
+    font-weight:900;
+    font-size:20px;
+  }
+  .computer-table{
+    position:absolute;
+    left:170px; right:18px; bottom:18px;
+    height:170px;
+    background:linear-gradient(180deg,#ddb386,#c88f60);
+    border-radius:30px 30px 20px 20px;
+    box-shadow:inset 0 10px 18px rgba(255,255,255,.22);
+  }
+  .desk-drop{
+    position:absolute;
+    left:190px; right:30px; top:90px; bottom:130px;
+    border:3px dashed #bddbea;
+    border-radius:26px;
+    display:flex;
+    flex-wrap:wrap;
+    align-content:flex-start;
+    gap:12px;
+    padding:14px;
+    background:rgba(255,255,255,.72);
+  }
+  .drop-hint{
+    width:100%;
+    text-align:center;
+    color:#6d8da4;
+    font-size:19px;
+    font-weight:800;
+    padding-top:52px;
+  }
+  .robot-chat{
+    background:#ffffff;
+    border:3px dashed #b7dcef;
+    border-radius:22px;
+    padding:14px;
+    min-height:170px;
+    font-size:18px;
+    line-height:1.45;
+  }
+  .robot-chat b{color:#0f81c2}
+
+  /* Mission 2 */
+  .zones-top{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin-bottom:18px;
+  }
+  .zone{
+    min-height:290px;
+    border-radius:28px;
+    padding:16px;
+    border:3px dashed #bcdaeb;
+    background:#fbfeff;
+  }
+  .zone.blue{background:linear-gradient(180deg,#f5fbff,#eef8ff)}
+  .zone.green{background:linear-gradient(180deg,#f9fff5,#f0fae9)}
+  .zone-title{
+    font-size:28px;
+    font-weight:900;
+    margin-bottom:4px;
+  }
+  .zone-sub{
+    font-size:15px;
+    color:#5f7d92;
+    margin-bottom:10px;
+    line-height:1.35;
+  }
+  .zone-items{
+    min-height:180px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-content:flex-start;
+  }
+
+  /* Mission 3 */
+  .mission3-layout{
+    display:grid;
+    grid-template-columns:260px 1fr;
+    gap:18px;
+  }
+  .small-note{
+    font-size:14px;
+    color:#668195;
+    line-height:1.4;
+  }
+  .situation-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:16px;
+  }
+  .situation{
+    background:white;
+    border:2px solid #dde9f2;
+    border-radius:24px;
+    padding:16px;
+  }
+  .situation h4{
+    margin:0 0 8px;
+    font-size:20px;
+    color:#1182c4;
+  }
+  .situation p{
+    margin:0 0 12px;
+    font-size:18px;
+    line-height:1.35;
+    min-height:80px;
+  }
+  .answer-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .slot{
+    flex:1 1 120px;
+    min-height:94px;
+    border:3px dashed #bedbea;
+    background:#f9fdff;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:10px;
+    color:#7893a7;
+    font-weight:800;
+  }
+  .slot.filled{
+    border-style:solid;
+    background:#fff;
+    color:var(--ink);
+  }
+  .answer-chip{
+    width:100%;
+    background:#eef9ff;
+    border:2px solid #baddf0;
+    border-radius:14px;
+    padding:8px 6px;
+    font-weight:900;
+    cursor:pointer;
+  }
+  .answer-chip.correct{
+    background:var(--green-soft);
+    border-color:#77c44b;
+  }
+  .answer-chip.wrong{
+    background:var(--red-soft);
+    border-color:#ee6a5a;
+  }
+
+  /* Mission 4 */
+  .flip-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+    perspective:1200px;
+  }
+  .flip-card{
+    height:275px;
+    perspective:1200px;
+    cursor:pointer;
+  }
+  .flip-inner{
+    position:relative;
+    width:100%;
+    height:100%;
+    transition:transform .65s;
+    transform-style:preserve-3d;
+  }
+  .flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+  .face{
+    position:absolute;
+    inset:0;
+    border-radius:26px;
+    border:2px solid #d8e7f1;
+    backface-visibility:hidden;
+    background:white;
+    box-shadow:0 8px 18px rgba(31,88,117,.08);
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+  }
+  .face.back{
+    transform:rotateY(180deg);
+    background:linear-gradient(180deg,#f9fdff,#eef8ff);
+  }
+  .riddle-num{
+    position:absolute;
+    top:14px; left:14px;
+    width:40px;height:40px;
+    border-radius:50%;
+    display:grid; place-items:center;
+    background:#22a0ed;
+    color:white;
+    font-weight:900;
+  }
+  .face .question-mark{font-size:28px;margin-bottom:10px}
+  .face .icon-big{font-size:72px; margin-bottom:8px}
+  .face .answer{font-size:30px; font-weight:900; color:#117dbf}
+  .face .riddle-text{font-size:20px; line-height:1.35}
+  .face .tap-hint{margin-top:12px; color:#6b8ca2; font-size:15px}
+
+  /* Final */
+  .final-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+    margin-bottom:18px;
+  }
+  .task{
+    background:white;
+    border:2px solid #d9e8f1;
+    border-radius:26px;
+    padding:14px;
+  }
+  .task h4{
+    margin:0 0 10px;
+    font-size:19px;
+    color:#1180c0;
+    line-height:1.35;
+  }
+  .task-scene{
+    min-height:160px;
+    border:3px dashed #c1ddec;
+    border-radius:20px;
+    background:linear-gradient(180deg,#fbfeff,#eff9ff);
+    padding:10px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-content:flex-start;
+    justify-content:center;
+  }
+  .task-missing{
+    margin-top:12px;
+    min-height:94px;
+    border:3px dashed #bddbea;
+    background:#fbfeff;
+    border-radius:20px;
+    padding:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:#7b95a8;
+    font-weight:800;
+  }
+  .task-missing.filled{
+    border-style:solid;
+    color:var(--ink);
+    background:#fff;
+  }
+  .mini-device{
+    width:90px;
+    min-height:80px;
+    border:2px solid #d8e7f1;
+    background:white;
+    border-radius:18px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:4px;
+    text-align:center;
+    font-size:13px;
+    font-weight:800;
+    padding:6px;
+  }
+  .mini-device .icon{font-size:30px}
+
+  .victory{
+    display:none;
+    margin-top:18px;
+    background:linear-gradient(180deg,#f4fde9,#ffffff);
+    border:3px solid #8ac960;
+    border-radius:30px;
+    padding:24px;
+    text-align:center;
+  }
+  .victory.show{display:block}
+  .victory .huge{font-size:68px}
+  .victory h3{
+    margin:10px 0 6px;
+    font-size:36px;
+    color:#3b912f;
+  }
+  .victory p{
+    margin:0;
+    font-size:20px;
+    line-height:1.4;
+  }
+
+  @media (max-width:1140px){
+    .hero-grid{grid-template-columns:150px 1fr}
+    .speech{grid-column:1 / -1}
+    .mission1-layout{grid-template-columns:1fr}
+    .mission3-layout{grid-template-columns:1fr}
+    .final-grid{grid-template-columns:1fr}
+  }
+  @media (max-width:860px){
+    .tabs{grid-template-columns:repeat(2,1fr)}
+    .zones-top{grid-template-columns:1fr}
+    .situation-grid{grid-template-columns:1fr}
+    .flip-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="robot-card">
+        <div class="robot-face">🤖</div>
+        <div class="robot-name">Байт</div>
+      </div>
+
+      <div class="hero-title">
+        <h1>Компьютерная миссия с роботом Байтом</h1>
+        <p>Помоги Байту разобраться, какие устройства компьютера <b>основные</b>, а какие <b>дополнительные</b>. За каждую выполненную миссию будет открываться следующая!</p>
+        <div class="mini-tags">
+          <div class="mini-tag">2 класс</div>
+          <div class="mini-tag">Тема: устройства компьютера</div>
+          <div class="mini-tag">Сквозная тема: семья и друзья</div>
+        </div>
+      </div>
+
+      <div class="speech">
+        <div class="speech-title">Сообщение от Байта</div>
+        <div class="speech-text" id="globalSpeech">
+          Привет, друг! Мне подарили компьютер, но я пока путаюсь в устройствах. Помоги мне пройти все миссии!
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0 / 5</div>
+    </div>
+  </section>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="1">🛠️ Миссия 1</button>
+    <button class="tab locked" data-tab="2">📦 Миссия 2</button>
+    <button class="tab locked" data-tab="3">👨‍👩‍👧 Миссия 3</button>
+    <button class="tab locked" data-tab="4">❓ Миссия 4</button>
+    <button class="tab locked" data-tab="5">🏆 Финальный босс</button>
+  </nav>
+
+  <!-- MISSION 1 -->
+  <section class="panel active" id="panel1">
+    <div class="title-row">
+      <div class="badge">🛠️</div>
+      <div><h2>Миссия 1. Собери компьютер Байта</h2></div>
+    </div>
+    <p class="instruction">Перетаскивай устройства на стол. Нужно выбрать <b>4 основных устройства</b>, без которых компьютер не сможет нормально работать.</p>
+    <div class="hint-ribbon">Подсказка: подумай, что нужно почти каждому компьютеру.</div>
+
+    <div class="mission1-layout">
+      <aside class="bank">
+        <h3>Устройства</h3>
+        <div class="device-grid" id="bankMission1"></div>
+      </aside>
+
+      <div class="table-scene">
+        <div class="scene-title">Компьютерный стол Байта</div>
+        <div class="desk-drop" id="deskDrop">
+          <div class="drop-hint" id="deskHint">Перетащи сюда 4 основных устройства</div>
+        </div>
+        <div class="scene-robot">
+          <div class="emoji">🤖</div>
+          <div class="name">Байт</div>
+        </div>
+        <div class="computer-table"></div>
+      </div>
+
+      <aside class="side-box">
+        <h3>Что говорит Байт?</h3>
+        <div class="robot-chat" id="mission1Speech">
+          <b>Байт:</b><br>Начнём! Если ты выберешь правильное устройство, я обязательно тебя похвалю.
+        </div>
+      </aside>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="checkMission1">Проверить миссию</button>
+      <button class="btn light" id="resetMission1">Сбросить</button>
+    </div>
+    <div class="feedback" id="feedback1"></div>
+  </section>
+
+  <!-- MISSION 2 -->
+  <section class="panel" id="panel2">
+    <div class="title-row">
+      <div class="badge">📦</div>
+      <div><h2>Миссия 2. Две команды</h2></div>
+    </div>
+    <p class="instruction">Теперь распределим все устройства по двум командам. Перетаскивай карточки в нужную область.</p>
+
+    <div class="zones-top">
+      <div class="zone blue" id="zoneMain">
+        <div class="zone-title">🟦 Основные устройства</div>
+        <div class="zone-sub">Без которых компьютер <b>не будет работать как обычно</b>.</div>
+        <div class="zone-items"></div>
+      </div>
+      <div class="zone green" id="zoneExtra">
+        <div class="zone-title">🟩 Дополнительные устройства <span style="font-size:16px;font-weight:700;">(периферийные)</span></div>
+        <div class="zone-sub">Без которых компьютер <b>может работать</b>, но для некоторых задач они нужны.</div>
+        <div class="zone-items"></div>
+      </div>
+    </div>
+
+    <div class="bank">
+      <h3>Карточки устройств</h3>
+      <div class="device-grid" id="bankMission2"></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="checkMission2">Проверить миссию</button>
+      <button class="btn light" id="resetMission2">Сбросить</button>
+    </div>
+    <div class="feedback" id="feedback2"></div>
+  </section>
+
+  <!-- MISSION 3 -->
+  <section class="panel" id="panel3">
+    <div class="title-row">
+      <div class="badge">👨‍👩‍👧</div>
+      <div><h2>Миссия 3. Что нужно семье Байта?</h2></div>
+    </div>
+    <p class="instruction">Для каждой карточки выбери и перетащи подходящее устройство. В некоторых ситуациях понадобятся <b>два устройства</b>.</p>
+
+    <div class="mission3-layout">
+      <aside class="palette">
+        <h3>Выбор устройств</h3>
+        <div class="device-grid" id="paletteMission3"></div>
+        <div class="small-note" style="margin-top:12px;">Если нужно изменить ответ — просто нажми на карточку внутри окошка ответа.</div>
+      </aside>
+
+      <div>
+        <div class="situation-grid" id="mission3Cards"></div>
+        <div class="actions">
+          <button class="btn" id="checkMission3">Проверить миссию</button>
+          <button class="btn light" id="resetMission3">Сбросить</button>
+        </div>
+        <div class="feedback" id="feedback3"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISSION 4 -->
+  <section class="panel" id="panel4">
+    <div class="title-row">
+      <div class="badge">❓</div>
+      <div><h2>Миссия 4. Угадай устройство</h2></div>
+    </div>
+    <p class="instruction">Нажимай на карточки-загадки. Когда дети назовут ответ, переверни карточку и проверь себя.</p>
+
+    <div class="flip-grid" id="flipGrid"></div>
+
+    <div class="actions">
+      <button class="btn" id="checkMission4">Проверить миссию</button>
+      <button class="btn light" id="resetMission4">Сбросить</button>
+    </div>
+    <div class="feedback" id="feedback4"></div>
+  </section>
+
+  <!-- FINAL -->
+  <section class="panel" id="panel5">
+    <div class="title-row">
+      <div class="badge">🏆</div>
+      <div><h2>Финальный босс — Ремонтная мастерская Байта</h2></div>
+    </div>
+    <p class="instruction">В каждом задании нужно найти, какого устройства не хватает, и перетащить правильный ответ в пустое место.</p>
+
+    <div class="final-grid" id="finalTasks"></div>
+
+    <div class="final-bank">
+      <h3>Устройства для ремонта</h3>
+      <div class="device-grid" id="finalPalette"></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn secondary" id="checkFinal">Завершить испытание</button>
+      <button class="btn light" id="resetFinal">Сбросить</button>
+    </div>
+    <div class="feedback" id="feedback5"></div>
+
+    <div class="victory" id="victoryBox">
+      <div class="huge">🤖🏅✨</div>
+      <h3>Ты — Мастер компьютерных устройств!</h3>
+      <p>Все задания пройдены. Байт гордится тобой и благодарит за помощь!</p>
+    </div>
+  </section>
+</div>
+
+<script>
+const state = {
+  unlocked: 1,
+  completed: new Set(),
+  m1Placed: [],
+  m3Answers: {},
+  m4Flipped: new Set(),
+  finalAnswers: {}
+};
+
+const DEVICE_MAP = {
+  monitor:{name:'Монитор', icon:'🖥️', type:'main'},
+  system:{name:'Системный блок', icon:'🧠', type:'main'},
+  keyboard:{name:'Клавиатура', icon:'⌨️', type:'main'},
+  mouse:{name:'Мышь', icon:'🖱️', type:'main'},
+  printer:{name:'Принтер', icon:'🖨️', type:'extra'},
+  headphones:{name:'Наушники', icon:'🎧', type:'extra'},
+  speakers:{name:'Колонки', icon:'🔊', type:'extra'},
+  microphone:{name:'Микрофон', icon:'🎤', type:'extra'},
+  webcam:{name:'Веб-камера', icon:'📷', type:'extra'},
+  scanner:{name:'Сканер', icon:'📠', type:'extra'}
+};
+const ALL_DEVICES = ['printer','monitor','webcam','keyboard','headphones','system','scanner','mouse','microphone','speakers'];
+let currentDrag = null;
+
+const tabs = [...document.querySelectorAll('.tab')];
+const panels = [...document.querySelectorAll('.panel')];
+
+function setSpeech(text){
+  document.getElementById('globalSpeech').textContent = text;
+}
+function setM1Speech(text){
+  document.getElementById('mission1Speech').innerHTML = '<b>Байт:</b><br>' + text;
+}
+function showTab(n){
+  if(n > state.unlocked) return;
+  tabs.forEach(t => t.classList.toggle('active', Number(t.dataset.tab) === n));
+  panels.forEach(p => p.classList.toggle('active', p.id === 'panel' + n));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+tabs.forEach(t => t.addEventListener('click', () => showTab(Number(t.dataset.tab))));
+
+function completeMission(n, text){
+  state.completed.add(n);
+  if(n < 5) state.unlocked = Math.max(state.unlocked, n + 1);
+
+  tabs.forEach(tab => {
+    const num = Number(tab.dataset.tab);
+    tab.classList.toggle('locked', num > state.unlocked);
+    tab.classList.toggle('done', state.completed.has(num));
+  });
+
+  document.getElementById('progressFill').style.width = ((state.completed.size / 5) * 100) + '%';
+  document.getElementById('progressLabel').textContent = `${state.completed.size} / 5`;
+  if(text) setSpeech(text);
+
+  if(n < 5){
+    setTimeout(() => showTab(n + 1), 800);
+  }
+}
+
+function deviceHTML(key, mini=false){
+  const d = DEVICE_MAP[key];
+  return `<div class="${mini ? 'mini-device' : 'device'}" draggable="${mini ? 'false':'true'}" data-device="${key}">
+      <div class="icon">${d.icon}</div>
+      <div>${d.name}</div>
+    </div>`;
+}
+
+document.addEventListener('dragstart', e => {
+  const dev = e.target.closest('[data-device]');
+  if(!dev || dev.classList.contains('mini-device')) return;
+  currentDrag = {
+    key: dev.dataset.device,
+    sourceEl: dev,
+    sourceParent: dev.parentElement
+  };
+  e.dataTransfer.setData('text/plain', dev.dataset.device);
+});
+
+/* MISSION 1 */
+function renderMission1Bank(){
+  document.getElementById('bankMission1').innerHTML = ALL_DEVICES.map(d => deviceHTML(d)).join('');
+}
+renderMission1Bank();
+
+const deskDrop = document.getElementById('deskDrop');
+deskDrop.addEventListener('dragover', e => e.preventDefault());
+deskDrop.addEventListener('drop', e => {
+  e.preventDefault();
+  if(!currentDrag) return;
+  const key = currentDrag.key;
+  const hint = document.getElementById('deskHint');
+
+  if(state.m1Placed.includes(key)){
+    setM1Speech('Это устройство уже стоит на столе. Попробуй выбрать другое.');
+    return;
+  }
+
+  if(DEVICE_MAP[key].type === 'main'){
+    state.m1Placed.push(key);
+    const placed = document.createElement('div');
+    placed.className = 'device correct placed';
+    placed.draggable = false;
+    placed.dataset.device = key;
+    placed.innerHTML = `<div class="icon">${DEVICE_MAP[key].icon}</div><div>${DEVICE_MAP[key].name}</div>`;
+    deskDrop.appendChild(placed);
+    currentDrag.sourceEl.style.opacity = '.35';
+    currentDrag.sourceEl.style.pointerEvents = 'none';
+    setM1Speech('Верно! Без этого устройства компьютер не сможет работать. Ты отлично помогаешь мне!');
+    if(state.m1Placed.length > 0) hint.style.display = 'none';
+  } else {
+    setM1Speech('Это полезное устройство, но без него компьютер всё равно может работать. Подумай ещё!');
+  }
+});
+
+document.getElementById('checkMission1').addEventListener('click', () => {
+  const fb = document.getElementById('feedback1');
+  if(state.m1Placed.length === 4){
+    fb.className = 'feedback good';
+    fb.textContent = '✅ Отлично! Компьютер Байта собран. Миссия 1 выполнена!';
+    completeMission(1, 'Ура! Мы собрали мой компьютер. Теперь давай распределим все устройства по командам!');
+  } else {
+    fb.className = 'feedback bad';
+    fb.textContent = 'Нужно поставить на стол все 4 основных устройства.';
+    setM1Speech('Кажется, не все основные устройства найдены. Попробуй ещё раз — у тебя точно получится!');
+  }
+});
+
+document.getElementById('resetMission1').addEventListener('click', () => {
+  state.m1Placed = [];
+  deskDrop.innerHTML = '<div class="drop-hint" id="deskHint">Перетащи сюда 4 основных устройства</div>';
+  renderMission1Bank();
+  document.getElementById('feedback1').textContent = '';
+  setM1Speech('Начнём заново! Выбирай только те устройства, без которых компьютер не сможет работать.');
+});
+
+/* MISSION 2 */
+function renderMission2Bank(){
+  document.getElementById('bankMission2').innerHTML = ALL_DEVICES.map(d => deviceHTML(d)).join('');
+}
+renderMission2Bank();
+
+function makeDropTarget(wrapper, innerSelector=null){
+  wrapper.addEventListener('dragover', e => e.preventDefault());
+  wrapper.addEventListener('drop', e => {
+    e.preventDefault();
+    if(!currentDrag) return;
+    const target = innerSelector ? wrapper.querySelector(innerSelector) : wrapper;
+    target.appendChild(currentDrag.sourceEl);
+  });
+}
+makeDropTarget(document.getElementById('bankMission2'));
+makeDropTarget(document.getElementById('zoneMain'), '.zone-items');
+makeDropTarget(document.getElementById('zoneExtra'), '.zone-items');
+
+document.getElementById('checkMission2').addEventListener('click', () => {
+  const fb = document.getElementById('feedback2');
+  const main = [...document.querySelectorAll('#zoneMain .zone-items .device')];
+  const extra = [...document.querySelectorAll('#zoneExtra .zone-items .device')];
+  if(main.length + extra.length !== ALL_DEVICES.length){
+    fb.className = 'feedback bad';
+    fb.textContent = 'Сначала распредели все устройства по командам.';
+    return;
+  }
+  let ok = true;
+  main.forEach(el => {
+    const good = DEVICE_MAP[el.dataset.device].type === 'main';
+    el.classList.remove('correct','wrong');
+    el.classList.add(good ? 'correct' : 'wrong');
+    if(!good) ok = false;
+  });
+  extra.forEach(el => {
+    const good = DEVICE_MAP[el.dataset.device].type === 'extra';
+    el.classList.remove('correct','wrong');
+    el.classList.add(good ? 'correct' : 'wrong');
+    if(!good) ok = false;
+  });
+
+  if(ok){
+    fb.className = 'feedback good';
+    fb.textContent = '🎉 Все устройства нашли свою команду. Миссия 2 выполнена!';
+    completeMission(2, 'Здорово! Теперь нужно помочь моей семье выбрать устройства для разных дел.');
+  } else {
+    fb.className = 'feedback bad';
+    fb.textContent = 'Есть ошибки. Исправь красные карточки и попробуй ещё раз.';
+  }
+});
+
+document.getElementById('resetMission2').addEventListener('click', () => {
+  renderMission2Bank();
+  document.querySelector('#zoneMain .zone-items').innerHTML = '';
+  document.querySelector('#zoneExtra .zone-items').innerHTML = '';
+  document.getElementById('feedback2').textContent = '';
+});
+
+/* MISSION 3 */
+const mission3Devices = ['webcam','microphone','speakers','headphones','printer','scanner'];
+function renderMission3Palette(){
+  document.getElementById('paletteMission3').innerHTML = mission3Devices.map(d => deviceHTML(d)).join('');
+  document.querySelectorAll('#paletteMission3 .device').forEach(dev => {
+    dev.addEventListener('dragstart', e => {
+      currentDrag = { key: dev.dataset.device, sourceEl: dev, paletteClone:true };
+      e.dataTransfer.setData('text/plain', dev.dataset.device);
+    });
+  });
+}
+renderMission3Palette();
+
+const mission3Data = [
+  { id:'s1', title:'Ситуация 1', text:'Байт хочет поговорить с бабушкой по видеосвязи.', slots:[
+    {id:'a', accept:['webcam'], label:'Перетащи нужное устройство'},
+    {id:'b', accept:['microphone'], label:'Перетащи нужное устройство'}
+  ]},
+  { id:'s2', title:'Ситуация 2', text:'Семья Байта хочет послушать музыку.', slots:[
+    {id:'a', accept:['speakers','headphones'], label:'Перетащи нужное устройство'}
+  ]},
+  { id:'s3', title:'Ситуация 3', text:'Байт сделал открытку для мамы и хочет получить её на бумаге.', slots:[
+    {id:'a', accept:['printer'], label:'Перетащи нужное устройство'}
+  ]},
+  { id:'s4', title:'Ситуация 4', text:'Байт хочет записать голосовое поздравление для друга.', slots:[
+    {id:'a', accept:['microphone'], label:'Перетащи нужное устройство'}
+  ]},
+  { id:'s5', title:'Ситуация 5', text:'У семьи есть бумажная фотография. Они хотят перенести её в компьютер.', slots:[
+    {id:'a', accept:['scanner'], label:'Перетащи нужное устройство'}
+  ]}
+];
+
+function renderMission3Cards(){
+  document.getElementById('mission3Cards').innerHTML = mission3Data.map(item => `
+    <div class="situation">
+      <h4>${item.title}</h4>
+      <p>${item.text}</p>
+      <div class="answer-row">
+        ${item.slots.map(slot => `<div class="slot" data-situation="${item.id}" data-slot="${slot.id}">${slot.label}</div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  document.querySelectorAll('#mission3Cards .slot').forEach(slot => {
+    slot.addEventListener('dragover', e => e.preventDefault());
+    slot.addEventListener('drop', e => {
+      e.preventDefault();
+      if(!currentDrag) return;
+      const key = currentDrag.key;
+      slot.classList.add('filled');
+      slot.innerHTML = `<div class="answer-chip" data-device="${key}" title="Нажми, чтобы убрать">${DEVICE_MAP[key].icon} ${DEVICE_MAP[key].name}</div>`;
+      state.m3Answers[slot.dataset.situation + '_' + slot.dataset.slot] = key;
+    });
+  });
+}
+renderMission3Cards();
+
+document.getElementById('mission3Cards').addEventListener('click', e => {
+  const chip = e.target.closest('.answer-chip');
+  if(!chip) return;
+  const slot = chip.parentElement;
+  const conf = mission3Data.find(x => x.id === slot.dataset.situation).slots.find(y => y.id === slot.dataset.slot);
+  slot.classList.remove('filled');
+  slot.innerHTML = conf.label;
+  delete state.m3Answers[slot.dataset.situation + '_' + slot.dataset.slot];
+});
+
+document.getElementById('checkMission3').addEventListener('click', () => {
+  const fb = document.getElementById('feedback3');
+  let allFilled = true;
+  let allOk = true;
+
+  mission3Data.forEach(item => {
+    item.slots.forEach(slotConf => {
+      const keyName = item.id + '_' + slotConf.id;
+      const slot = document.querySelector(`.slot[data-situation="${item.id}"][data-slot="${slotConf.id}"]`);
+      const value = state.m3Answers[keyName];
+      if(!value){
+        allFilled = false;
+        allOk = false;
+        return;
+      }
+      const chip = slot.querySelector('.answer-chip');
+      const ok = slotConf.accept.includes(value);
+      chip.classList.remove('correct','wrong');
+      chip.classList.add(ok ? 'correct' : 'wrong');
+      if(!ok) allOk = false;
+    });
+  });
+
+  if(!allFilled){
+    fb.className = 'feedback bad';
+    fb.textContent = 'Сначала заполни все карточки.';
+    return;
+  }
+  if(allOk){
+    fb.className = 'feedback good';
+    fb.textContent = '✅ Всё верно! Семья Байта получила нужные устройства. Миссия 3 выполнена!';
+    completeMission(3, 'Спасибо! Теперь давай отгадаем устройства по описанию.');
+  } else {
+    fb.className = 'feedback bad';
+    fb.textContent = 'Есть ошибки. Исправь красные ответы.';
+  }
+});
+
+document.getElementById('resetMission3').addEventListener('click', () => {
+  state.m3Answers = {};
+  renderMission3Palette();
+  renderMission3Cards();
+  document.getElementById('feedback3').textContent = '';
+});
+
+/* MISSION 4 */
+const riddles = [
+  {q:'Я показываю картинки, видео и текст. Что я?', a:'Монитор', icon:'🖥️'},
+  {q:'На мне много букв и цифр. С моей помощью можно печатать текст. Что я?', a:'Клавиатура', icon:'⌨️'},
+  {q:'Я печатаю текст и картинки на бумаге. Что я?', a:'Принтер', icon:'🖨️'},
+  {q:'Через меня компьютер может услышать твой голос. Что я?', a:'Микрофон', icon:'🎤'},
+  {q:'С моей помощью можно увидеть друга во время видеозвонка. Что я?', a:'Веб-камера', icon:'📷'},
+  {q:'Я помогаю двигать указатель по экрану. Что я?', a:'Мышь', icon:'🖱️'}
+];
+
+function renderMission4(){
+  document.getElementById('flipGrid').innerHTML = riddles.map((r,i) => `
+    <div class="flip-card" data-id="${i}">
+      <div class="flip-inner">
+        <div class="face front">
+          <div class="riddle-num">${i+1}</div>
+          <div class="question-mark">❓</div>
+          <div class="riddle-text">${r.q}</div>
+          <div class="tap-hint">Нажми, чтобы перевернуть карточку</div>
+        </div>
+        <div class="face back">
+          <div class="riddle-num">${i+1}</div>
+          <div class="icon-big">${r.icon}</div>
+          <div class="answer">${r.a}</div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+renderMission4();
+
+document.getElementById('flipGrid').addEventListener('click', e => {
+  const card = e.target.closest('.flip-card');
+  if(!card) return;
+  card.classList.toggle('flipped');
+  if(card.classList.contains('flipped')) state.m4Flipped.add(card.dataset.id);
+  else state.m4Flipped.delete(card.dataset.id);
+});
+
+document.getElementById('checkMission4').addEventListener('click', () => {
+  const fb = document.getElementById('feedback4');
+  if(state.m4Flipped.size === riddles.length){
+    fb.className = 'feedback good';
+    fb.textContent = '🎉 Все загадки открыты. Миссия 4 выполнена!';
+    completeMission(4, 'Ух ты! Ты справился со всеми загадками. Остался только финальный босс!');
+  } else {
+    fb.className = 'feedback bad';
+    fb.textContent = 'Нужно открыть все 6 карточек.';
+  }
+});
+
+document.getElementById('resetMission4').addEventListener('click', () => {
+  state.m4Flipped = new Set();
+  renderMission4();
+  document.getElementById('feedback4').textContent = '';
+});
+
+/* FINAL */
+const finalData = [
+  {id:'f1', q:'Компьютер №1. Какого основного устройства не хватает?', scene:['monitor','keyboard','mouse','headphones'], accept:['system']},
+  {id:'f2', q:'Компьютер №2. Какого основного устройства не хватает?', scene:['monitor','system','keyboard','printer'], accept:['mouse']},
+  {id:'f3', q:'Задача №3. Байт хочет распечатать семейное фото. Какое устройство выбрать?', scene:['headphones','microphone'], accept:['printer']}
+];
+
+function renderFinalTasks(){
+  document.getElementById('finalTasks').innerHTML = finalData.map((task, idx) => `
+    <div class="task">
+      <h4>${task.q}</h4>
+      <div class="task-scene">
+        ${task.scene.map(d => deviceHTML(d, true)).join('')}
+      </div>
+      <div class="task-missing" data-final="${task.id}">Перетащи ответ сюда</div>
+    </div>`).join('');
+  document.querySelectorAll('.task-missing').forEach(slot => {
+    slot.addEventListener('dragover', e => e.preventDefault());
+    slot.addEventListener('drop', e => {
+      e.preventDefault();
+      if(!currentDrag) return;
+      const key = currentDrag.key;
+      slot.classList.add('filled');
+      slot.innerHTML = `<div class="answer-chip" data-device="${key}" title="Нажми, чтобы убрать">${DEVICE_MAP[key].icon} ${DEVICE_MAP[key].name}</div>`;
+      state.finalAnswers[slot.dataset.final] = key;
+    });
+  });
+}
+renderFinalTasks();
+
+function renderFinalPalette(){
+  document.getElementById('finalPalette').innerHTML = ['system','mouse','printer'].map(d => deviceHTML(d)).join('');
+  document.querySelectorAll('#finalPalette .device').forEach(dev => {
+    dev.addEventListener('dragstart', e => {
+      currentDrag = { key: dev.dataset.device, sourceEl: dev, paletteClone:true };
+      e.dataTransfer.setData('text/plain', dev.dataset.device);
+    });
+  });
+}
+renderFinalPalette();
+
+document.getElementById('finalTasks').addEventListener('click', e => {
+  const chip = e.target.closest('.task-missing .answer-chip');
+  if(!chip) return;
+  const slot = chip.parentElement;
+  slot.classList.remove('filled');
+  slot.textContent = 'Перетащи ответ сюда';
+  delete state.finalAnswers[slot.dataset.final];
+});
+
+document.getElementById('checkFinal').addEventListener('click', () => {
+  const fb = document.getElementById('feedback5');
+  let allFilled = true;
+  let allOk = true;
+
+  finalData.forEach(task => {
+    const slot = document.querySelector(`.task-missing[data-final="${task.id}"]`);
+    const value = state.finalAnswers[task.id];
+    if(!value){
+      allFilled = false;
+      allOk = false;
+      return;
+    }
+    const chip = slot.querySelector('.answer-chip');
+    const ok = task.accept.includes(value);
+    chip.classList.remove('correct','wrong');
+    chip.classList.add(ok ? 'correct' : 'wrong');
+    if(!ok) allOk = false;
+  });
+
+  if(!allFilled){
+    fb.className = 'feedback bad';
+    fb.textContent = 'Нужно выполнить все 3 задания.';
+    return;
+  }
+  if(allOk){
+    fb.className = 'feedback good';
+    fb.textContent = '🏆 Испытание пройдено! Байт очень гордится тобой!';
+    document.getElementById('victoryBox').classList.add('show');
+    completeMission(5, 'Победа! Ты настоящий Мастер компьютерных устройств!');
+  } else {
+    fb.className = 'feedback bad';
+    fb.textContent = 'Есть ошибка. Исправь красный ответ и попробуй ещё раз.';
+  }
+});
+
+document.getElementById('resetFinal').addEventListener('click', () => {
+  state.finalAnswers = {};
+  renderFinalTasks();
+  renderFinalPalette();
+  document.getElementById('feedback5').textContent = '';
+  document.getElementById('victoryBox').classList.remove('show');
+});
+</script>
+</body>
+</html>

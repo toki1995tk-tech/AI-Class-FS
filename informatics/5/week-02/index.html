@@ -281,18 +281,23 @@ function checkMulti(which){let ok=0;const cards=document.querySelectorAll('#'+wh
 
 // M4
 const m4data=[
- ['Фото','Рисунок','Схема','Песня',3],['15','1000 ₸','18 °C','Мультфильм',3],['Сообщение','Объявление','Инструкция','Сирена',3],['Мультфильм','Видеозвонок','Ролик','Карта',3],['Музыка','Звонок','Речь','Диаграмма',3],['Карта','Фото','Эмодзи','14:30',3]
+ ['Фото','Песня','Рисунок','Схема',1],
+ ['Мультфильм','15','1000 ₸','18 °C',0],
+ ['Сообщение','Объявление','Сирена','Инструкция',2],
+ ['Мультфильм','Карта','Видеозвонок','Ролик',1],
+ ['Диаграмма','Музыка','Звонок','Речь',0],
+ ['Карта','Фото','14:30','Эмодзи',2]
 ];
 const m4cards=document.getElementById('m4cards');m4data.forEach((d,i)=>{m4cards.innerHTML+=`<div class="odd-card" data-answer="${d[4]}"><h3>Раунд ${i+1}</h3><div class="choice-row">${d.slice(0,4).map((x,j)=>`<button class="opt" data-index="${j}" onclick="pickOne(this,'${j}')">${x}</button>`).join('')}</div></div>`});
 function checkM4(){let ok=0;document.querySelectorAll('#m4 .odd-card').forEach(c=>{const s=c.querySelector('.selected');if(s&&s.dataset.pick===c.dataset.answer){ok++;s.classList.add('correct')}else if(s)s.classList.add('wrong')});const f=document.getElementById('m4feedback');if(ok===m4data.length){f.textContent='Самозванцы найдены!';f.className='feedback ok';document.getElementById('m4next').disabled=false}else{f.textContent=`Верно ${ok} из ${m4data.length}. Попробуй ещё.`;f.className='feedback bad'}}
 
 // M5
 const m5data=[
- {q:'«Завтра будет дождь»',opts:['🌧️ Картинка с дождём','📚 Учебник математики','🔔 Звонок'],a:0},
- {q:'Температура 37 °C',opts:['🌡️ Изображение термометра','🎵 Песня','🎬 Мультфильм'],a:0},
+ {q:'«Завтра будет дождь»',opts:['📚 Учебник математики','🌧️ Картинка с дождём','🔔 Звонок'],a:1},
+ {q:'Температура 37 °C',opts:['🎵 Песня','🎬 Мультфильм','🌡️ Изображение термометра'],a:2},
  {q:'Сообщение «Урок начался»',opts:['🔊 Голосовое объявление','🧩 Схема метро','💰 Ценник'],a:0},
- {q:'Фото школьного автобуса',opts:['📝 Текст «Школьный автобус»','🎵 Мелодия без смысла','🔢 Число 999'],a:0},
- {q:'Видео прогноза погоды',opts:['📝 Текстовый прогноз','🎮 Игра','📦 Пустая коробка'],a:0},
+ {q:'Фото школьного автобуса',opts:['🎵 Мелодия без смысла','📝 Текст «Школьный автобус»','🔢 Число 999'],a:1},
+ {q:'Видео прогноза погоды',opts:['🎮 Игра','📦 Пустая коробка','📝 Текстовый прогноз'],a:2},
  {q:'Цена 2500 ₸',opts:['🏷️ Ценник с надписью','🔊 Школьный звонок','🎬 Фильм'],a:0}
 ];
 const m5cards=document.getElementById('m5cards');m5data.forEach((d,i)=>{m5cards.innerHTML+=`<div class="translate-card" data-answer="${d.a}"><h3>${d.q}</h3><div class="choice-row">${d.opts.map((x,j)=>`<button class="opt" onclick="pickOne(this,'${j}')">${x}</button>`).join('')}</div></div>`});

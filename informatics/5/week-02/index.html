@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5 класс — Информация вокруг нас</title>
+  <style>
+    :root{
+      --blue:#1976f3;
+      --blue2:#5bbcff;
+      --navy:#102a67;
+      --bg:#eaf7ff;
+      --card:#ffffff;
+      --green:#21b66f;
+      --red:#ff5e6c;
+      --orange:#ffab3c;
+      --purple:#8b5cf6;
+      --muted:#92a6bd;
+      --shadow:0 18px 45px rgba(36,96,160,.14);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter,Segoe UI,Arial,sans-serif;
+      background:linear-gradient(180deg,#dff4ff 0%,#f7fbff 100%);
+      color:var(--navy);
+      min-height:100vh;
+    }
+    .wrap{max-width:1180px;margin:0 auto;padding:24px}
+    .hero{
+      background:linear-gradient(135deg,#1697ff,#55c3ff);
+      border-radius:30px;
+      padding:28px;
+      color:#fff;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero:after{
+      content:"";position:absolute;right:-80px;top:-70px;width:260px;height:260px;
+      border-radius:50%;background:rgba(255,255,255,.14)
+    }
+    .hero h1{margin:0 0 8px;font-size:42px;line-height:1.05}
+    .hero p{margin:0;font-size:19px;opacity:.96}
+    .topbar{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:20px}
+    .progress{flex:1;min-width:260px;background:rgba(255,255,255,.25);height:14px;border-radius:999px;overflow:hidden}
+    .progress > div{height:100%;width:0%;background:#fff;border-radius:999px;transition:.35s}
+    .score{font-weight:800;background:rgba(255,255,255,.22);padding:10px 16px;border-radius:999px}
+
+    .nav{
+      display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin:22px 0;
+    }
+    .nav button{
+      border:none;border-radius:16px;padding:14px 10px;font-weight:800;cursor:pointer;
+      background:#fff;color:var(--navy);box-shadow:0 8px 18px rgba(20,80,130,.08);
+      transition:.2s;font-size:14px
+    }
+    .nav button:hover:not(:disabled){transform:translateY(-2px)}
+    .nav button.active{background:var(--blue);color:#fff}
+    .nav button:disabled{opacity:.45;cursor:not-allowed}
+
+    .mission{
+      display:none;background:#fff;border-radius:28px;padding:28px;box-shadow:var(--shadow);margin-bottom:24px
+    }
+    .mission.active{display:block}
+    .mission h2{font-size:30px;margin:0 0 6px}
+    .mission .desc{color:#536b87;font-size:17px;margin-bottom:22px}
+    .badge{display:inline-block;padding:7px 12px;border-radius:999px;background:#e6f4ff;color:var(--blue);font-weight:800;margin-bottom:10px}
+
+    .card-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+    .qcard,.sort-card,.detective-card,.odd-card,.translate-card{
+      background:#f8fbff;border:2px solid #e2eef8;border-radius:20px;padding:18px;
+    }
+    .qcard h3,.detective-card h3,.odd-card h3,.translate-card h3{margin:0 0 12px;font-size:20px}
+    .big-icon{font-size:46px;margin-bottom:10px}
+    .options{display:flex;gap:10px;flex-wrap:wrap}
+    .opt{
+      border:2px solid #d7e6f5;background:#fff;padding:10px 14px;border-radius:14px;cursor:pointer;font-weight:700;color:var(--navy)
+    }
+    .opt.selected{border-color:var(--blue);background:#e9f4ff;color:var(--blue)}
+    .opt.correct{border-color:var(--green);background:#e9fff4;color:#0f8c55}
+    .opt.wrong{border-color:var(--red);background:#fff0f2;color:#d83d4e}
+
+    .sort-layout{display:grid;grid-template-columns:1fr 1.5fr;gap:20px}
+    .bank{background:#f8fbff;border-radius:20px;padding:16px;min-height:300px}
+    .bank h3{margin-top:0}
+    .chip{display:inline-block;margin:6px;padding:10px 12px;background:#fff;border:2px solid #dbe9f5;border-radius:14px;cursor:grab;font-weight:700;user-select:none}
+    .zones{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .zone{min-height:135px;border:2px dashed #a9c8e7;border-radius:18px;padding:12px;background:#fbfdff}
+    .zone h4{margin:0 0 8px}
+    .zone.over{background:#eaf6ff;border-color:var(--blue)}
+    .zone[data-type="text"] h4{color:#1477e9}.zone[data-type="graphic"] h4{color:#23a55a}.zone[data-type="number"] h4{color:#ef8b16}.zone[data-type="sound"] h4{color:#7c4fe6}.zone[data-type="video"] h4{color:#ef4d63}
+
+    .choice-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .checkline{margin-top:14px}
+    .feedback{margin-top:12px;font-weight:800;min-height:24px}
+    .feedback.ok{color:#11925a}.feedback.bad{color:#d44352}
+
+    .btnrow{display:flex;gap:12px;justify-content:flex-end;margin-top:24px;flex-wrap:wrap}
+    .btn{border:none;border-radius:16px;padding:13px 20px;font-weight:800;cursor:pointer;font-size:15px}
+    .btn.primary{background:var(--blue);color:white}.btn.secondary{background:#eef5fb;color:var(--navy)}
+    .btn.success{background:var(--green);color:#fff}
+    .btn:disabled{opacity:.45;cursor:not-allowed}
+
+    .boss-phone{
+      max-width:430px;margin:0 auto;background:#17233f;border-radius:34px;padding:18px;box-shadow:0 20px 55px rgba(0,0,0,.18)
+    }
+    .phone-screen{background:linear-gradient(180deg,#dff4ff,#f9fcff);border-radius:24px;padding:20px;min-height:520px}
+    .phone-top{display:flex;justify-content:space-between;font-weight:800;margin-bottom:20px}
+    .phone-photo{background:linear-gradient(135deg,#5db8ff,#8de1ff);height:180px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:75px;position:relative}
+    .mini-video{position:absolute;right:12px;bottom:12px;background:#ff4b67;color:white;border-radius:12px;padding:10px 12px;font-size:16px;font-weight:800}
+    .message{margin-top:16px;background:white;border-radius:18px;padding:15px;font-size:20px;font-weight:800}
+    .phone-icons{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;text-align:center}
+    .phone-icons div{background:white;border-radius:16px;padding:14px;font-weight:800}
+
+    .result{text-align:center;padding:12px}
+    .result .trophy{font-size:90px}
+    .result h2{font-size:38px}
+    .stars{font-size:38px;letter-spacing:4px}
+    .hidden{display:none!important}
+
+    @media(max-width:900px){
+      .nav{grid-template-columns:repeat(3,1fr)}
+      .card-grid{grid-template-columns:1fr 1fr}
+      .sort-layout{grid-template-columns:1fr}
+    }
+    @media(max-width:600px){
+      .wrap{padding:14px}.hero h1{font-size:32px}.card-grid{grid-template-columns:1fr}.zones{grid-template-columns:1fr}.nav{grid-template-columns:repeat(2,1fr)}
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <h1>Информация вокруг нас</h1>
+    <p>5 класс • Урок 1 • Пройди 6 миссий и стань информационным детективом</p>
+    <div class="topbar">
+      <div class="progress"><div id="progressBar"></div></div>
+      <div class="score" id="scoreBox">⭐ 0 / 6</div>
+    </div>
+  </section>
+
+  <div class="nav" id="missionNav"></div>
+
+  <section class="mission active" id="m1">
+    <div class="badge">Миссия 1</div>
+    <h2>Информация или нет?</h2>
+    <div class="desc">Выбери: получает ли человек из объекта какое-либо сообщение или сведения?</div>
+    <div class="card-grid" id="m1cards"></div>
+    <div class="feedback" id="m1feedback"></div>
+    <div class="btnrow"><button class="btn primary" onclick="checkM1()">Проверить</button><button class="btn success" id="m1next" disabled onclick="completeMission(1)">Дальше →</button></div>
+  </section>
+
+  <section class="mission" id="m2">
+    <div class="badge">Миссия 2</div>
+    <h2>Информационный сортировщик</h2>
+    <div class="desc">Перетащи карточки по пяти формам информации.</div>
+    <div class="sort-layout">
+      <div class="bank"><h3>Карточки</h3><div id="sortBank"></div></div>
+      <div class="zones">
+        <div class="zone" data-type="text"><h4>📝 Текст</h4></div>
+        <div class="zone" data-type="graphic"><h4>🖼️ Графика</h4></div>
+        <div class="zone" data-type="number"><h4>🔢 Число</h4></div>
+        <div class="zone" data-type="sound"><h4>🔊 Звук</h4></div>
+        <div class="zone" data-type="video"><h4>🎬 Видео</h4></div>
+      </div>
+    </div>
+    <div class="feedback" id="m2feedback"></div>
+    <div class="btnrow"><button class="btn secondary" onclick="resetSort()">Перемешать заново</button><button class="btn primary" onclick="checkM2()">Проверить</button><button class="btn success" id="m2next" disabled onclick="completeMission(2)">Дальше →</button></div>
+  </section>
+
+  <section class="mission" id="m3">
+    <div class="badge">Миссия 3</div>
+    <h2>Информационный детектив</h2>
+    <div class="desc">В одном объекте может быть сразу несколько форм информации. Отметь все подходящие варианты.</div>
+    <div class="card-grid" id="m3cards"></div>
+    <div class="feedback" id="m3feedback"></div>
+    <div class="btnrow"><button class="btn primary" onclick="checkMulti('m3')">Проверить</button><button class="btn success" id="m3next" disabled onclick="completeMission(3)">Дальше →</button></div>
+  </section>
+
+  <section class="mission" id="m4">
+    <div class="badge">Миссия 4</div>
+    <h2>Самозванец</h2>
+    <div class="desc">В каждой четвёрке один объект относится к другой форме информации. Найди лишний.</div>
+    <div class="card-grid" id="m4cards"></div>
+    <div class="feedback" id="m4feedback"></div>
+    <div class="btnrow"><button class="btn primary" onclick="checkM4()">Проверить</button><button class="btn success" id="m4next" disabled onclick="completeMission(4)">Дальше →</button></div>
+  </section>
+
+  <section class="mission" id="m5">
+    <div class="badge">Миссия 5</div>
+    <h2>Переводчик информации</h2>
+    <div class="desc">Выбери другой способ передать ту же самую информацию.</div>
+    <div class="card-grid" id="m5cards"></div>
+    <div class="feedback" id="m5feedback"></div>
+    <div class="btnrow"><button class="btn primary" onclick="checkM5()">Проверить</button><button class="btn success" id="m5next" disabled onclick="completeMission(5)">Дальше →</button></div>
+  </section>
+
+  <section class="mission" id="m6">
+    <div class="badge">Миссия 6 • BOSS LEVEL</div>
+    <h2>Что скрывается в смартфоне?</h2>
+    <div class="desc">Посмотри на экран смартфона и отметь все формы информации, которые там встречаются.</div>
+    <div class="boss-phone">
+      <div class="phone-screen">
+        <div class="phone-top"><span>14:35</span><span>78%</span></div>
+        <div class="phone-photo">🐱 <span class="mini-video">▶ Видео</span></div>
+        <div class="message">Мама: «Буду дома в 18:00»</div>
+        <div class="phone-icons"><div>🔊 Звук</div><div>🖼️ Фото</div><div>🔢 78%</div></div>
+      </div>
+    </div>
+    <div class="choice-row" style="justify-content:center;margin-top:20px" id="bossChoices">
+      <button class="opt" data-value="text">Текст</button>
+      <button class="opt" data-value="graphic">Графика</button>
+      <button class="opt" data-value="number">Число</button>
+      <button class="opt" data-value="sound">Звук</button>
+      <button class="opt" data-value="video">Видео</button>
+    </div>
+    <div class="feedback" id="m6feedback" style="text-align:center"></div>
+    <div class="btnrow"><button class="btn primary" onclick="checkBoss()">Проверить</button><button class="btn success" id="m6next" disabled onclick="completeMission(6)">Завершить урок 🏆</button></div>
+  </section>
+
+  <section class="mission" id="result">
+    <div class="result">
+      <div class="trophy">🏆</div>
+      <h2>Информационный детектив!</h2>
+      <div class="stars">⭐⭐⭐⭐⭐⭐</div>
+      <p style="font-size:20px">Ты прошёл все миссии и умеешь различать формы информации.</p>
+      <p style="font-size:18px;color:#536b87"><b>Тизер следующего урока:</b> почему компьютер любит только 0 и 1?</p>
+      <button class="btn primary" onclick="location.reload()">Пройти ещё раз</button>
+    </div>
+  </section>
+</div>
+
+<script>
+const forms=['text','graphic','number','sound','video'];
+const labels={text:'Текст',graphic:'Графика',number:'Число',sound:'Звук',video:'Видео'};
+let unlocked=1, completed=0;
+
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function updateNav(){
+  const nav=document.getElementById('missionNav'); nav.innerHTML='';
+  for(let i=1;i<=6;i++){
+    const b=document.createElement('button'); b.textContent=`Миссия ${i}`; b.disabled=i>unlocked;
+    b.onclick=()=>showMission(i); if(document.getElementById('m'+i).classList.contains('active')) b.classList.add('active'); nav.appendChild(b)
+  }
+}
+function showMission(n){document.querySelectorAll('.mission').forEach(x=>x.classList.remove('active'));document.getElementById('m'+n).classList.add('active');updateNav();scrollTo({top:0,behavior:'smooth'})}
+function completeMission(n){completed=Math.max(completed,n); unlocked=Math.max(unlocked,n+1); document.getElementById('progressBar').style.width=(completed/6*100)+'%'; document.getElementById('scoreBox').textContent=`⭐ ${completed} / 6`; if(n<6) showMission(n+1); else {document.querySelectorAll('.mission').forEach(x=>x.classList.remove('active'));document.getElementById('result').classList.add('active');updateNav();}}
+
+// M1
+const m1data=shuffle([
+  ['🚦 Красный сигнал светофора',1],['📄 Пустой белый лист',0],['🔔 Звук школьного звонка',1],['💬 Сообщение «Привет»',1],['🗺️ Карта города',1],['📱 Тёмный экран телефона без сообщений',0],['😊 Улыбка человека',1],['💰 Цена 2500 ₸',1],['🎵 Музыка',1]
+]);
+const m1cards=document.getElementById('m1cards');
+m1data.forEach((d,i)=>{m1cards.innerHTML+=`<div class="qcard" data-answer="${d[1]}"><div class="big-icon">${d[0].split(' ')[0]}</div><h3>${d[0].substring(d[0].indexOf(' ')+1)}</h3><div class="options"><button class="opt" onclick="pickOne(this,'1')">Есть информация</button><button class="opt" onclick="pickOne(this,'0')">Нет информации</button></div></div>`});
+function pickOne(btn,val){btn.parentElement.querySelectorAll('.opt').forEach(x=>x.classList.remove('selected'));btn.classList.add('selected');btn.dataset.pick=val}
+function checkM1(){let ok=0,all=true;document.querySelectorAll('#m1 .qcard').forEach(c=>{const s=c.querySelector('.selected');if(!s){all=false;return} const right=s.dataset.pick===c.dataset.answer;s.classList.add(right?'correct':'wrong');if(right)ok++});const f=document.getElementById('m1feedback');if(!all){f.textContent='Ответь на все карточки.';f.className='feedback bad';return}if(ok===m1data.length){f.textContent='Отлично! Все ответы верны.';f.className='feedback ok';document.getElementById('m1next').disabled=false}else{f.textContent=`Верно ${ok} из ${m1data.length}. Исправь ошибки и проверь ещё раз.`;f.className='feedback bad'}}
+
+// M2 drag drop
+const sortData=shuffle([
+ ['Сообщение в чате','text'],['Объявление','text'],['Инструкция','text'],['Фотография','graphic'],['Карта','graphic'],['Эмодзи','graphic'],['25 °C','number'],['1500 ₸','number'],['14:30','number'],['Музыка','sound'],['Сирена','sound'],['Голосовое сообщение','sound'],['Мультфильм','video'],['Видеозвонок','video'],['Обучающий ролик','video']
+]);
+function setupSort(){const bank=document.getElementById('sortBank');bank.innerHTML='';document.querySelectorAll('.zone').forEach(z=>z.querySelectorAll('.chip').forEach(c=>c.remove()));shuffle(sortData).forEach((d,i)=>{const c=document.createElement('span');c.className='chip';c.draggable=true;c.textContent=d[0];c.dataset.type=d[1];c.id='chip'+i;c.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',c.id));bank.appendChild(c)});}
+document.querySelectorAll('.zone').forEach(z=>{z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('over')});z.addEventListener('dragleave',()=>z.classList.remove('over'));z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('over');const id=e.dataTransfer.getData('text/plain');z.appendChild(document.getElementById(id))})});
+document.getElementById('sortBank').addEventListener('dragover',e=>e.preventDefault());document.getElementById('sortBank').addEventListener('drop',e=>{e.preventDefault();document.getElementById('sortBank').appendChild(document.getElementById(e.dataTransfer.getData('text/plain')))})
+function resetSort(){setupSort();document.getElementById('m2feedback').textContent='';document.getElementById('m2next').disabled=true}
+function checkM2(){let total=0,ok=0;document.querySelectorAll('.zone .chip').forEach(c=>{total++;const z=c.closest('.zone');c.style.borderColor=(c.dataset.type===z.dataset.type)?'#21b66f':'#ff5e6c';if(c.dataset.type===z.dataset.type)ok++});const f=document.getElementById('m2feedback');if(total<sortData.length){f.textContent='Разложи все карточки по категориям.';f.className='feedback bad';return}if(ok===sortData.length){f.textContent='Сортировка идеальна!';f.className='feedback ok';document.getElementById('m2next').disabled=false}else{f.textContent=`Верно ${ok} из ${sortData.length}. Некоторые карточки нужно перенести.`;f.className='feedback bad'}}
+setupSort();
+
+// M3
+const m3data=[
+ {title:'🌦️ Прогноз погоды: «Дождь, 18 °C»',ans:['text','graphic','number']},
+ {title:'🎬 YouTube-ролик с субтитрами',ans:['video','sound','text']},
+ {title:'🎫 Электронный билет с QR-кодом и ценой',ans:['text','number','graphic']},
+ {title:'📞 Видеозвонок',ans:['video','sound']},
+ {title:'😂 Мем с картинкой и подписью',ans:['graphic','text']},
+ {title:'📅 Скриншот расписания уроков',ans:['text','number','graphic']}
+];
+const m3cards=document.getElementById('m3cards');m3data.forEach((d,i)=>{m3cards.innerHTML+=`<div class="detective-card" data-ans="${d.ans.join(',')}"><h3>${d.title}</h3><div class="choice-row">${forms.map(f=>`<button class="opt" data-value="${f}" onclick="this.classList.toggle('selected')">${labels[f]}</button>`).join('')}</div></div>`});
+function checkMulti(which){let ok=0;const cards=document.querySelectorAll('#'+which+' .detective-card');cards.forEach(c=>{const got=[...c.querySelectorAll('.selected')].map(x=>x.dataset.value).sort().join(',');const ans=c.dataset.ans.split(',').sort().join(',');if(got===ans){ok++;c.style.borderColor='#21b66f'}else c.style.borderColor='#ff5e6c'});const f=document.getElementById(which+'feedback');if(ok===cards.length){f.textContent='Все кейсы расследованы правильно!';f.className='feedback ok';document.getElementById(which+'next').disabled=false}else{f.textContent=`Верно ${ok} из ${cards.length}. Помни: в одном объекте может быть несколько форм.`;f.className='feedback bad'}}
+
+// M4
+const m4data=[
+ ['Фото','Рисунок','Схема','Песня',3],['15','1000 ₸','18 °C','Мультфильм',3],['Сообщение','Объявление','Инструкция','Сирена',3],['Мультфильм','Видеозвонок','Ролик','Карта',3],['Музыка','Звонок','Речь','Диаграмма',3],['Карта','Фото','Эмодзи','14:30',3]
+];
+const m4cards=document.getElementById('m4cards');m4data.forEach((d,i)=>{m4cards.innerHTML+=`<div class="odd-card" data-answer="${d[4]}"><h3>Раунд ${i+1}</h3><div class="choice-row">${d.slice(0,4).map((x,j)=>`<button class="opt" data-index="${j}" onclick="pickOne(this,'${j}')">${x}</button>`).join('')}</div></div>`});
+function checkM4(){let ok=0;document.querySelectorAll('#m4 .odd-card').forEach(c=>{const s=c.querySelector('.selected');if(s&&s.dataset.pick===c.dataset.answer){ok++;s.classList.add('correct')}else if(s)s.classList.add('wrong')});const f=document.getElementById('m4feedback');if(ok===m4data.length){f.textContent='Самозванцы найдены!';f.className='feedback ok';document.getElementById('m4next').disabled=false}else{f.textContent=`Верно ${ok} из ${m4data.length}. Попробуй ещё.`;f.className='feedback bad'}}
+
+// M5
+const m5data=[
+ {q:'«Завтра будет дождь»',opts:['🌧️ Картинка с дождём','📚 Учебник математики','🔔 Звонок'],a:0},
+ {q:'Температура 37 °C',opts:['🌡️ Изображение термометра','🎵 Песня','🎬 Мультфильм'],a:0},
+ {q:'Сообщение «Урок начался»',opts:['🔊 Голосовое объявление','🧩 Схема метро','💰 Ценник'],a:0},
+ {q:'Фото школьного автобуса',opts:['📝 Текст «Школьный автобус»','🎵 Мелодия без смысла','🔢 Число 999'],a:0},
+ {q:'Видео прогноза погоды',opts:['📝 Текстовый прогноз','🎮 Игра','📦 Пустая коробка'],a:0},
+ {q:'Цена 2500 ₸',opts:['🏷️ Ценник с надписью','🔊 Школьный звонок','🎬 Фильм'],a:0}
+];
+const m5cards=document.getElementById('m5cards');m5data.forEach((d,i)=>{m5cards.innerHTML+=`<div class="translate-card" data-answer="${d.a}"><h3>${d.q}</h3><div class="choice-row">${d.opts.map((x,j)=>`<button class="opt" onclick="pickOne(this,'${j}')">${x}</button>`).join('')}</div></div>`});
+function checkM5(){let ok=0;document.querySelectorAll('#m5 .translate-card').forEach(c=>{const s=c.querySelector('.selected');if(s&&s.dataset.pick===c.dataset.answer){ok++;s.classList.add('correct')}else if(s)s.classList.add('wrong')});const f=document.getElementById('m5feedback');if(ok===m5data.length){f.textContent='Отлично! Ты умеешь менять форму информации, сохраняя смысл.';f.className='feedback ok';document.getElementById('m5next').disabled=false}else{f.textContent=`Верно ${ok} из ${m5data.length}. Ищи вариант, который передаёт тот же смысл.`;f.className='feedback bad'}}
+
+// Boss
+[...document.querySelectorAll('#bossChoices .opt')].forEach(b=>b.onclick=()=>b.classList.toggle('selected'));
+function checkBoss(){const got=[...document.querySelectorAll('#bossChoices .selected')].map(x=>x.dataset.value).sort().join(',');const ans=forms.slice().sort().join(',');const f=document.getElementById('m6feedback');if(got===ans){f.textContent='BOSS LEVEL пройден! На экране есть все 5 форм информации.';f.className='feedback ok';document.getElementById('m6next').disabled=false}else{f.textContent='Посмотри внимательнее: на смартфоне спрятаны все 5 форм информации.';f.className='feedback bad'}}
+
+updateNav();
+</script>
+</body>
+</html>

@@ -297,35 +297,202 @@
   </section>
 
   <!-- MISSION 3 -->
-  <section class="mission" id="mission3">
-    <div class="mission-head">
-      <div>
-        <span class="tag">⚔️ MISSION 3</span>
-        <h2>PROMPT BATTLE</h2>
-        <div class="subtitle">Создай сильный запрос для необычного персонажа компьютерной игры. Собери 4–5 ⭐.</div>
+<section class="mission" id="mission3">
+
+  <div class="mission-head">
+    <div>
+      <span class="tag">⚔️ MISSION 3</span>
+      <h2>PROMPT BATTLE</h2>
+      <div class="subtitle">
+        Собери сильный prompt по частям.
+        Заполни каждое поле — в конце сайт сам объединит всё в один POWER PROMPT.
       </div>
-      <div class="xp-reward">+200 XP</div>
     </div>
-    <div class="card">
-      <div class="prompt">🎮 Задача: попроси AI придумать необычного персонажа для компьютерной игры.</div>
-      <textarea id="battlePrompt" placeholder="Например, уточни жанр игры, кто персонаж, какие детали описать, формат ответа, ограничения..."></textarea>
-      <div class="criteria" id="battleCriteria">
-        <div class="criterion" data-c="task">🎯 Задача</div>
-        <div class="criterion" data-c="details">✨ Детали</div>
-        <div class="criterion" data-c="purpose">👥 Для кого / зачем</div>
-        <div class="criterion" data-c="format">📋 Формат</div>
-        <div class="criterion" data-c="limits">🚧 Ограничения</div>
-      </div>
-      <div class="scorebar" id="battleStars">
-        <span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span><span class="star">⭐</span>
-      </div>
-      <div class="feedback" id="battleFeedback">Пока 0/5. Добавляй конкретику.</div>
+
+    <div class="xp-reward">+200 XP</div>
+  </div>
+
+
+  <div class="card">
+
+    <div class="prompt">
+      🎮 Задача: попроси AI придумать необычного персонажа для компьютерной игры.
     </div>
-    <div class="mission-footer">
-      <div class="counter">Минимум для победы: 4 ⭐</div>
-      <button class="btn btn-primary" onclick="scoreBattle()">ОЦЕНИТЬ PROMPT</button>
+
+    <p class="subtitle">
+      Не пиши весь prompt сразу. Сначала собери его как конструктор.
+    </p>
+
+
+    <!-- 1 -->
+    <div style="margin-top:24px">
+
+      <div class="tag">⭐ 1. ЗАДАЧА</div>
+
+      <p>
+        Что именно должен сделать AI?
+      </p>
+
+      <textarea
+        id="battleTask"
+        placeholder="Например: Придумай необычного персонажа для компьютерной игры."
+      ></textarea>
+
     </div>
-  </section>
+
+
+    <!-- 2 -->
+    <div style="margin-top:24px">
+
+      <div class="tag">⭐ 2. ДЕТАЛИ</div>
+
+      <p>
+        Что обязательно должно быть у персонажа?
+      </p>
+
+      <textarea
+        id="battleDetails"
+        placeholder="Например: придумай имя, внешний вид, характер и суперспособность."
+      ></textarea>
+
+    </div>
+
+
+    <!-- 3 -->
+    <div style="margin-top:24px">
+
+      <div class="tag">⭐ 3. ДЛЯ ЧЕГО</div>
+
+      <p>
+        Для какой игры или ситуации нужен персонаж?
+      </p>
+
+      <textarea
+        id="battlePurpose"
+        placeholder="Например: персонаж нужен для приключенческой компьютерной игры."
+      ></textarea>
+
+    </div>
+
+
+    <!-- 4 -->
+    <div style="margin-top:24px">
+
+      <div class="tag">⭐ 4. ФОРМАТ</div>
+
+      <p>
+        В каком виде AI должен дать ответ?
+      </p>
+
+      <textarea
+        id="battleFormat"
+        placeholder="Например: оформи ответ в виде 4 коротких пунктов."
+      ></textarea>
+
+    </div>
+
+
+    <!-- 5 -->
+    <div style="margin-top:24px">
+
+      <div class="tag">⭐ 5. ОГРАНИЧЕНИЯ</div>
+
+      <p>
+        Добавь необычное правило или ограничение.
+      </p>
+
+      <textarea
+        id="battleLimits"
+        placeholder="Например: персонаж не должен быть человеком и не должен уметь летать."
+      ></textarea>
+
+    </div>
+
+
+    <div class="scorebar" id="constructorStars">
+
+      <span class="star">⭐</span>
+      <span class="star">⭐</span>
+      <span class="star">⭐</span>
+      <span class="star">⭐</span>
+      <span class="star">⭐</span>
+
+    </div>
+
+
+    <div class="feedback" id="constructorFeedback">
+      Заполни элементы своего prompt.
+    </div>
+
+
+    <button
+      class="btn btn-primary"
+      style="margin-top:16px"
+      onclick="buildBattlePrompt()"
+    >
+      🧩 СОБРАТЬ PROMPT
+    </button>
+
+  </div>
+
+
+  <!-- ГОТОВЫЙ PROMPT -->
+
+  <div
+    class="card"
+    id="battleResultCard"
+    style="margin-top:20px; display:none;"
+  >
+
+    <div class="tag">
+      🚀 ТВОЙ POWER PROMPT
+    </div>
+
+    <div
+      id="battleResult"
+      style="
+        margin-top:16px;
+        padding:18px;
+        background:#eef5ff;
+        border-radius:18px;
+        font-size:19px;
+        line-height:1.6;
+        font-weight:700;
+        white-space:pre-wrap;
+      "
+    ></div>
+
+
+    <div
+      style="
+        display:flex;
+        gap:10px;
+        flex-wrap:wrap;
+        margin-top:16px;
+      "
+    >
+
+      <button
+        class="btn btn-ghost"
+        onclick="copyBattlePrompt()"
+      >
+        📋 СКОПИРОВАТЬ
+      </button>
+
+
+      <button
+        class="btn btn-primary"
+        id="battleNext"
+        onclick="completeMission(3,200)"
+      >
+        PROMPT ГОТОВ →
+      </button>
+
+    </div>
+
+  </div>
+
+</section>
 
   <!-- MISSION 4 -->
   <section class="mission" id="mission4">
@@ -479,7 +646,7 @@
 </div>
 
 <script>
-  const STORAGE_KEY = "aiclassfs_prompt5_week02_v1";
+  const STORAGE_KEY = "aiclassfs_prompt5_week02_v2";
   const state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{"xp":0,"completed":[],"current":1,"bonus":false}');
   const maxBaseXp = 1000;
 
@@ -612,26 +779,105 @@
     }
   }
 
-  function scoreBattle(){
-    const text=document.getElementById("battlePrompt").value.trim();
-    const t=text.toLowerCase();
-    const hits={
-      task:/персонаж|геро|создай|придумай/.test(t),
-      details:/внеш|характер|способност|имя|животн|изобрет|маг|робот|вид/.test(t),
-      purpose:/игр|приключ|для/.test(t),
-      format:/пункт|спис|таблиц|опиши|предлож|формат/.test(t),
-      limits:/\d|корот|не более|только|без|необыч/.test(t)
-    };
-    let score=Object.values(hits).filter(Boolean).length;
-    document.querySelectorAll("#battleCriteria .criterion").forEach(el=>el.classList.toggle("hit",hits[el.dataset.c]));
-    document.querySelectorAll("#battleStars .star").forEach((s,i)=>s.classList.toggle("on",i<score));
-    const f=document.getElementById("battleFeedback");
-    if(score>=4 && text.length>=45){
-      f.textContent=`🔥 ${score}/5! Это POWER PROMPT.`;
-      completeMission(3,200);
-    }else{
-      f.textContent=`${score}/5. Нужно минимум 4 ⭐. Добавь недостающие элементы.`;
+  function buildBattlePrompt(){
+    const fields = [
+      document.getElementById("battleTask"),
+      document.getElementById("battleDetails"),
+      document.getElementById("battlePurpose"),
+      document.getElementById("battleFormat"),
+      document.getElementById("battleLimits")
+    ];
+
+    const stars = document.querySelectorAll("#constructorStars .star");
+    let filled = 0;
+
+    fields.forEach((field,index)=>{
+      const value = field.value.trim();
+
+      if(value.length >= 5){
+        filled++;
+        stars[index].classList.add("on");
+        field.style.borderColor = "#69d98b";
+        field.style.background = "#f2fff6";
+      }else{
+        stars[index].classList.remove("on");
+        field.style.borderColor = "#ffb0b0";
+        field.style.background = "#fff8f8";
+      }
+    });
+
+    const feedback = document.getElementById("constructorFeedback");
+
+    if(filled < 4){
+      feedback.textContent = `Сейчас заполнено ${filled}/5 элементов. Нужно минимум 4 ⭐`;
+      document.getElementById("battleResultCard").style.display = "none";
+      return;
     }
+
+    const labels = [
+      "ЗАДАЧА",
+      "ДЕТАЛИ",
+      "ДЛЯ ЧЕГО",
+      "ФОРМАТ",
+      "ОГРАНИЧЕНИЯ"
+    ];
+
+    const parts = fields
+      .map((field,index)=>({
+        label: labels[index],
+        value: field.value.trim()
+      }))
+      .filter(item=>item.value.length > 0);
+
+    const finalPrompt = parts
+      .map(item=>item.value.replace(/[.!?]+$/,""))
+      .join(". ") + ".";
+
+    document.getElementById("battleResult").textContent = finalPrompt;
+    document.getElementById("battleResultCard").style.display = "block";
+
+    feedback.textContent = `🔥 Отлично! Собрано ${filled}/5 элементов. Твой POWER PROMPT готов.`;
+
+    document.getElementById("battleResultCard").scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+  }
+
+  function copyBattlePrompt(){
+    const text = document.getElementById("battleResult").textContent.trim();
+
+    if(!text){
+      toast("Сначала собери prompt");
+      return;
+    }
+
+    if(navigator.clipboard && window.isSecureContext){
+      navigator.clipboard.writeText(text)
+        .then(()=>toast("Prompt скопирован! 📋"))
+        .catch(()=>fallbackCopy(text));
+    }else{
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text){
+    const area = document.createElement("textarea");
+    area.value = text;
+    area.style.position = "fixed";
+    area.style.opacity = "0";
+    document.body.appendChild(area);
+    area.focus();
+    area.select();
+
+    try{
+      document.execCommand("copy");
+      toast("Prompt скопирован! 📋");
+    }catch(e){
+      toast("Не удалось скопировать автоматически");
+    }
+
+    area.remove();
   }
 
   function checkTestLab(){

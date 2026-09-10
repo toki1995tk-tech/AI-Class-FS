@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2 класс — Неделя 2 | Какая бывает информация?</title>
+  <style>
+    :root{
+      --blue:#2f80ed;
+      --blue2:#56a5ff;
+      --navy:#12356b;
+      --sky:#eef7ff;
+      --card:#ffffff;
+      --green:#2dbf71;
+      --orange:#ff9f43;
+      --purple:#8b5cf6;
+      --pink:#ef4f9a;
+      --yellow:#ffd54a;
+      --red:#ef5b5b;
+      --shadow:0 14px 34px rgba(39,93,151,.14);
+      --radius:24px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--navy);
+      background:
+        radial-gradient(circle at 10% 15%, rgba(86,165,255,.18), transparent 22%),
+        radial-gradient(circle at 90% 10%, rgba(45,191,113,.10), transparent 25%),
+        linear-gradient(180deg,#f7fbff 0%,#eef7ff 100%);
+      min-height:100vh;
+    }
+
+    button,input{font:inherit}
+    button{cursor:pointer}
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      backdrop-filter:blur(10px);
+      background:rgba(247,251,255,.88);
+      border-bottom:1px solid rgba(47,128,237,.12);
+    }
+    .topbar-inner{
+      max-width:1180px;
+      margin:auto;
+      padding:12px 18px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .nav-left{display:flex;gap:10px;flex-wrap:wrap}
+    .nav-btn{
+      border:0;
+      text-decoration:none;
+      color:var(--navy);
+      background:#fff;
+      padding:10px 14px;
+      border-radius:999px;
+      font-weight:800;
+      box-shadow:0 5px 16px rgba(40,90,145,.10);
+    }
+    .nav-btn:hover{transform:translateY(-1px)}
+    .progress-wrap{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:240px;
+    }
+    .progress{
+      height:12px;
+      flex:1;
+      background:#dbeeff;
+      border-radius:999px;
+      overflow:hidden;
+    }
+    .progress > div{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,var(--blue),var(--green));
+      transition:.35s ease;
+    }
+    #progressText{font-weight:900;white-space:nowrap}
+
+    .page{
+      max-width:1180px;
+      margin:auto;
+      padding:28px 18px 60px;
+    }
+
+    .hero{
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(135deg,#ffffff 0%,#f6fbff 100%);
+      border:3px solid rgba(47,128,237,.22);
+      box-shadow:var(--shadow);
+      border-radius:34px;
+      padding:28px;
+      display:grid;
+      grid-template-columns:1fr 300px;
+      gap:22px;
+      align-items:center;
+      margin-bottom:24px;
+    }
+    .hero:before{
+      content:"";
+      position:absolute;
+      width:260px;height:260px;
+      border-radius:50%;
+      background:rgba(86,165,255,.10);
+      right:-90px;top:-80px;
+    }
+    .eyebrow{
+      display:inline-block;
+      background:#e8f3ff;
+      color:#1d65b8;
+      font-weight:900;
+      padding:8px 12px;
+      border-radius:999px;
+      margin-bottom:10px;
+    }
+    h1{
+      margin:0;
+      font-size:clamp(34px,5vw,62px);
+      line-height:.98;
+      color:#12356b;
+    }
+    .hero p{
+      font-size:20px;
+      line-height:1.5;
+      margin:16px 0 0;
+      max-width:760px;
+    }
+
+    .byte-scene{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      position:relative;
+      z-index:2;
+    }
+    .robot{
+      width:190px;
+      height:225px;
+      position:relative;
+      margin-top:6px;
+    }
+    .antenna{
+      position:absolute;left:50%;top:0;
+      width:6px;height:34px;background:#164a88;
+      transform:translateX(-50%);
+      border-radius:6px;
+    }
+    .antenna:before{
+      content:"";position:absolute;left:50%;top:-14px;
+      width:26px;height:26px;border-radius:50%;
+      background:var(--yellow);transform:translateX(-50%);
+      border:4px solid #e1aa20;
+    }
+    .head{
+      position:absolute;left:25px;top:28px;
+      width:140px;height:92px;border-radius:30px;
+      background:#fff;border:7px solid var(--blue);
+      box-shadow:0 9px 22px rgba(47,128,237,.18);
+    }
+    .face{
+      position:absolute;inset:13px 15px;
+      border-radius:22px;background:#102b55;
+    }
+    .eye{
+      position:absolute;top:22px;width:18px;height:25px;
+      background:#6fe6ff;border-radius:50%;
+      box-shadow:0 0 10px #6fe6ff;
+    }
+    .eye.l{left:23px}.eye.r{right:23px}
+    .mouth{
+      position:absolute;left:50%;bottom:14px;transform:translateX(-50%);
+      width:34px;height:16px;border-bottom:5px solid #fff;border-radius:0 0 30px 30px;
+    }
+    .body{
+      position:absolute;left:44px;top:125px;
+      width:102px;height:78px;
+      border-radius:22px;background:linear-gradient(180deg,#3b8ef5,#226dcc);
+      border:5px solid #1260bd;color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:1000;font-size:25px;
+      box-shadow:0 9px 18px rgba(47,128,237,.2);
+    }
+    .arm,.leg{
+      position:absolute;background:#173f73;border-radius:999px;
+    }
+    .arm{width:52px;height:12px;top:145px}
+    .arm.l{left:5px;transform:rotate(-25deg)}
+    .arm.r{right:5px;transform:rotate(25deg)}
+    .leg{width:14px;height:42px;top:198px}
+    .leg.l{left:62px}.leg.r{right:62px}
+    .foot{
+      position:absolute;width:38px;height:15px;border-radius:999px;
+      background:#2f80ed;top:230px;
+    }
+    .foot.l{left:45px}.foot.r{right:45px}
+    .bubble{
+      margin-top:14px;
+      background:#fff;
+      border:3px solid #a9d4ff;
+      border-radius:22px;
+      padding:12px 16px;
+      text-align:center;
+      font-weight:900;
+      box-shadow:0 7px 20px rgba(42,94,150,.08);
+    }
+
+    .intro-note{
+      background:#fff9d9;
+      border:2px solid #ffe58f;
+      padding:16px 18px;
+      border-radius:22px;
+      margin:0 0 24px;
+      font-size:17px;
+      font-weight:750;
+    }
+
+    .mission{
+      background:#fff;
+      border-radius:30px;
+      box-shadow:var(--shadow);
+      padding:24px;
+      margin:22px 0;
+      border:3px solid rgba(47,128,237,.10);
+      transition:.3s ease;
+    }
+    .mission.locked{
+      opacity:.56;
+      filter:grayscale(.25);
+      pointer-events:none;
+      position:relative;
+    }
+    .mission.locked:after{
+      content:"🔒 Сначала заверши предыдущую миссию";
+      position:absolute;inset:0;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(245,250,255,.82);
+      border-radius:27px;
+      font-size:22px;font-weight:1000;
+      text-align:center;padding:20px;
+      color:#234f86;
+    }
+    .mission-head{
+      display:flex;gap:14px;align-items:center;margin-bottom:10px;
+    }
+    .mission-badge{
+      width:58px;height:58px;border-radius:18px;
+      display:grid;place-items:center;
+      color:white;font-size:28px;font-weight:1000;
+      flex:0 0 auto;
+    }
+    .m1{background:var(--blue)}
+    .m2{background:var(--green)}
+    .m3{background:var(--orange)}
+    .m4{background:var(--purple)}
+    .mf{background:linear-gradient(135deg,#ffad33,#ff6f61)}
+    .mission h2{margin:0;font-size:30px}
+    .mission .sub{margin:5px 0 18px;color:#55759a;font-size:17px}
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:14px;
+    }
+    .card{
+      user-select:none;
+      background:#f8fbff;
+      border:2px solid #d9ecff;
+      border-radius:20px;
+      padding:16px;
+      text-align:center;
+      font-weight:900;
+      min-height:88px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:.18s ease;
+      box-shadow:0 6px 16px rgba(52,99,150,.07);
+    }
+    .card:hover{transform:translateY(-2px)}
+    .card.selected{outline:4px solid #9ad0ff;background:#edf7ff}
+    .card.good{background:#e9fff3;border-color:#72d7a5}
+    .card.bad{background:#fff0f0;border-color:#ff9a9a}
+
+    .sort-wrap{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+    }
+    .bank{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+    }
+    .draggable{
+      background:#f8fbff;border:2px solid #d7eaff;
+      border-radius:18px;padding:13px;text-align:center;
+      font-weight:900;cursor:grab;
+      min-height:70px;display:flex;align-items:center;justify-content:center;
+    }
+    .zones{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:12px;
+    }
+    .zone{
+      min-height:150px;
+      border:3px dashed #a9d2ff;
+      border-radius:22px;
+      padding:12px;
+      background:#f9fcff;
+    }
+    .zone h3{margin:0 0 10px;text-align:center}
+    .zone .draggable{margin:8px 0;background:#fff}
+    .zone.over{background:#eaf6ff}
+    .zone[data-type="text"]{border-color:#6fb3ff}
+    .zone[data-type="image"]{border-color:#65d69e}
+    .zone[data-type="sound"]{border-color:#ffbe68}
+    .zone[data-type="video"]{border-color:#b193ff}
+
+    .question{
+      background:#f7fbff;border:2px solid #d8ebff;
+      border-radius:22px;padding:16px;margin:14px 0;
+    }
+    .question-title{font-weight:1000;font-size:20px;margin-bottom:12px}
+    .options{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+    }
+    .option{
+      border:2px solid #d7e9fb;background:#fff;border-radius:16px;
+      padding:12px;font-weight:850;color:#183e70;
+    }
+    .option:hover{background:#f1f8ff}
+    .option.correct{background:#e6fff1;border-color:#42c983}
+    .option.wrong{background:#fff0f0;border-color:#ef7777}
+
+    .check-row{
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px;
+    }
+    .primary{
+      border:0;border-radius:16px;
+      padding:12px 18px;background:linear-gradient(135deg,var(--blue),#176bc8);
+      color:#fff;font-weight:1000;
+      box-shadow:0 7px 18px rgba(47,128,237,.25);
+    }
+    .secondary{
+      border:0;border-radius:16px;
+      padding:12px 18px;background:#edf6ff;color:#1a5ea8;
+      font-weight:900;
+    }
+    .feedback{
+      min-height:26px;
+      font-weight:1000;
+      margin-top:12px;
+    }
+    .ok{color:#15945a}
+    .no{color:#d64f4f}
+
+    .final-card{
+      text-align:center;
+      padding:28px 18px;
+      background:linear-gradient(135deg,#eef9ff,#f5fff8);
+      border-radius:28px;border:3px solid #a7d7ff;
+    }
+    .final-card h2{font-size:38px;margin:0 0 10px}
+    .secret{
+      display:none;
+      margin-top:18px;
+      background:#fff7dc;border:2px solid #ffd770;
+      border-radius:24px;padding:18px;
+    }
+    .secret.show{display:block}
+
+    .done-screen{
+      display:none;
+      text-align:center;
+      margin-top:24px;
+      background:linear-gradient(135deg,#fff9d9,#eefeff);
+      border:3px solid #8ecbff;
+      border-radius:30px;
+      padding:28px;
+      box-shadow:var(--shadow);
+    }
+    .done-screen.show{display:block}
+    .done-screen h2{font-size:40px;margin:0}
+    .stars{font-size:34px;letter-spacing:4px;margin:10px 0}
+
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr}
+      .byte-scene{order:-1}
+      .grid,.bank,.zones{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    @media(max-width:580px){
+      .grid,.bank,.zones,.options{grid-template-columns:1fr}
+      .mission{padding:18px}
+      .hero{padding:20px}
+      .progress-wrap{width:100%}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="nav-left">
+        <a class="nav-btn" href="../">← К неделям</a>
+        <a class="nav-btn" href="../../../informatics/">← К предметам</a>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress"><div id="progressBar"></div></div>
+        <span id="progressText">0 / 5</span>
+      </div>
+    </div>
+  </div>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">2 класс · Неделя 2</div>
+        <h1>Какая бывает информация?</h1>
+        <p>Байт впервые отправляется в Интернет. Помоги ему разобраться, какую информацию мы видим, слышим и как её можно представить.</p>
+      </div>
+
+      <div class="byte-scene">
+        <div class="robot" aria-label="Робот Байт">
+          <div class="antenna"></div>
+          <div class="head">
+            <div class="face">
+              <span class="eye l"></span>
+              <span class="eye r"></span>
+              <span class="mouth"></span>
+            </div>
+          </div>
+          <div class="body">Байт</div>
+          <div class="arm l"></div><div class="arm r"></div>
+          <div class="leg l"></div><div class="leg r"></div>
+          <div class="foot l"></div><div class="foot r"></div>
+        </div>
+        <div class="bubble">Готов к компьютерной миссии? 🚀</div>
+      </div>
+    </section>
+
+    <div class="intro-note">
+      💡 Выполняй задания по порядку. После успешной проверки откроется следующая миссия.
+      Если ошибся — ничего страшного: исправь ответ и попробуй ещё раз.
+    </div>
+
+    <!-- МИССИЯ 1 -->
+    <section class="mission" id="mission1">
+      <div class="mission-head">
+        <div class="mission-badge m1">1</div>
+        <div>
+          <h2>Миссия 1. Разбери сообщения Байта</h2>
+          <div class="sub">Перетащи карточки в правильную группу.</div>
+        </div>
+      </div>
+
+      <div class="sort-wrap">
+        <div class="bank" id="bank1"></div>
+
+        <div class="zones">
+          <div class="zone" data-type="text"><h3>📝 Текст</h3></div>
+          <div class="zone" data-type="image"><h3>🖼️ Изображение</h3></div>
+          <div class="zone" data-type="sound"><h3>🔊 Звук</h3></div>
+          <div class="zone" data-type="video"><h3>🎬 Видео</h3></div>
+        </div>
+      </div>
+
+      <div class="check-row">
+        <button class="primary" onclick="checkMission1()">Проверить миссию</button>
+        <button class="secondary" onclick="resetMission1()">Начать заново</button>
+      </div>
+      <div class="feedback" id="feedback1"></div>
+    </section>
+
+    <!-- МИССИЯ 2 -->
+    <section class="mission locked" id="mission2">
+      <div class="mission-head">
+        <div class="mission-badge m2">2</div>
+        <div>
+          <h2>Миссия 2. Как мы это узнаём?</h2>
+          <div class="sub">Выбери орган чувств, который помогает получить информацию.</div>
+        </div>
+      </div>
+
+      <div id="mission2Questions"></div>
+      <div class="check-row">
+        <button class="primary" onclick="checkMission2()">Проверить миссию</button>
+      </div>
+      <div class="feedback" id="feedback2"></div>
+    </section>
+
+    <!-- МИССИЯ 3 -->
+    <section class="mission locked" id="mission3">
+      <div class="mission-head">
+        <div class="mission-badge m3">3</div>
+        <div>
+          <h2>Миссия 3. Что лучше выбрать?</h2>
+          <div class="sub">Подбери самый удобный способ представления информации.</div>
+        </div>
+      </div>
+
+      <div id="mission3Questions"></div>
+      <div class="check-row">
+        <button class="primary" onclick="checkMission3()">Проверить миссию</button>
+      </div>
+      <div class="feedback" id="feedback3"></div>
+    </section>
+
+    <!-- МИССИЯ 4 -->
+    <section class="mission locked" id="mission4">
+      <div class="mission-head">
+        <div class="mission-badge m4">4</div>
+        <div>
+          <h2>Миссия 4. Информационный детектив</h2>
+          <div class="sub">Определи сразу два признака: вид информации и как мы её воспринимаем.</div>
+        </div>
+      </div>
+
+      <div id="mission4Questions"></div>
+      <div class="check-row">
+        <button class="primary" onclick="checkMission4()">Проверить миссию</button>
+      </div>
+      <div class="feedback" id="feedback4"></div>
+    </section>
+
+    <!-- ФИНАЛ -->
+    <section class="mission locked" id="mission5">
+      <div class="mission-head">
+        <div class="mission-badge mf">🏆</div>
+        <div>
+          <h2>Финальное испытание. Пропуск в Интернет</h2>
+          <div class="sub">Последняя проверка перед путешествием Байта.</div>
+        </div>
+      </div>
+
+      <div class="final-card">
+        <div id="finalQuestions"></div>
+        <div class="check-row" style="justify-content:center">
+          <button class="primary" onclick="checkFinal()">Получить пропуск</button>
+        </div>
+        <div class="feedback" id="feedback5"></div>
+      </div>
+
+      <div class="secret" id="secret">
+        <h3>⭐ Секретный челлендж для быстрых</h3>
+        <p><strong>Можно ли одну и ту же информацию представить разными способами?</strong></p>
+        <p>Представь сообщение: <strong>«Завтра будет холодно».</strong> Назови устно учителю или соседу минимум <strong>три</strong> разных способа, как это можно сообщить.</p>
+      </div>
+    </section>
+
+    <section class="done-screen" id="doneScreen">
+      <div class="stars">⭐ ⭐ ⭐</div>
+      <h2>Миссия выполнена!</h2>
+      <p style="font-size:20px;font-weight:800">Байт научился различать информацию.</p>
+      <p style="font-size:22px;font-weight:1000">Но вся ли информация в Интернете безопасна? 🤔</p>
+      <div class="bubble" style="display:inline-block">Продолжение следует…</div>
+    </section>
+  </main>
+
+  <script>
+    const state = {
+      completed:[false,false,false,false,false],
+      answers:{}
+    };
+
+    const mission1Items = [
+      {text:"Фотография собаки", type:"image"},
+      {text:"Голосовое сообщение", type:"sound"},
+      {text:"Привет, Байт!", type:"text"},
+      {text:"Мультфильм", type:"video"},
+      {text:"Рисунок радуги", type:"image"},
+      {text:"Школьный звонок", type:"sound"},
+      {text:"Урок начинается", type:"text"},
+      {text:"Песня", type:"sound"},
+      {text:"Видеозвонок", type:"video"},
+      {text:"Карта города", type:"image"},
+      {text:"Электронное письмо", type:"text"},
+      {text:"Видеоурок", type:"video"}
+    ];
+
+    const q2 = [
+      {q:"Ты видишь фотографию.", options:["👀 Глаза","👂 Уши","👃 Нос","✋ Кожа"], correct:"👀 Глаза"},
+      {q:"Ты слышишь музыку.", options:["👃 Нос","👂 Уши","✋ Кожа","👀 Глаза"], correct:"👂 Уши"},
+      {q:"Ты чувствуешь запах цветка.", options:["👂 Уши","👀 Глаза","👃 Нос","👅 Язык"], correct:"👃 Нос"},
+      {q:"Ты касаешься холодного льда.", options:["✋ Кожа","👂 Уши","👀 Глаза","👃 Нос"], correct:"✋ Кожа"},
+      {q:"Ты смотришь видео со звуком.", options:["👀 Глаза","👂 Уши","👀 + 👂 Глаза и уши","👃 Нос"], correct:"👀 + 👂 Глаза и уши"}
+    ];
+
+    const q3 = [
+      {q:"Байт хочет показать другу своего кота.", options:["🎵 Музыка","📷 Фотография","🔔 Звонок","🔢 Число"], correct:"📷 Фотография"},
+      {q:"Байт хочет показать танцевальное движение.", options:["🎬 Видео","📝 Текст","🎵 Музыка","🗺️ Карта"], correct:"🎬 Видео"},
+      {q:"Байт хочет объяснить, как произносится новое слово.", options:["🎧 Аудио","📷 Фото","🗺️ Карта","📝 Одно число"], correct:"🎧 Аудио"},
+      {q:"Байт хочет сообщить: «Встречаемся в 15:00».", options:["🎵 Музыка","📝 Текстовое сообщение","🎬 Видео","🖼️ Рисунок"], correct:"📝 Текстовое сообщение"}
+    ];
+
+    const q4 = [
+      {
+        q:"Байт читает сообщение от друга.",
+        groups:[
+          {label:"Какой это вид?", options:["Текстовая","Графическая","Звуковая","Видео"], correct:"Текстовая"},
+          {label:"Как воспринимает?", options:["Глазами","Ушами","Носом","Кожей"], correct:"Глазами"}
+        ]
+      },
+      {
+        q:"Байт слушает голосовое сообщение.",
+        groups:[
+          {label:"Какой это вид?", options:["Видео","Звуковая","Графическая","Текстовая"], correct:"Звуковая"},
+          {label:"Как воспринимает?", options:["Глазами","Ушами","Носом","Языком"], correct:"Ушами"}
+        ]
+      },
+      {
+        q:"Байт смотрит видеоролик со звуком.",
+        groups:[
+          {label:"Какой это вид?", options:["Текстовая","Звуковая","Видео","Графическая"], correct:"Видео"},
+          {label:"Как воспринимает?", options:["Только глазами","Только ушами","Глазами и ушами","Носом"], correct:"Глазами и ушами"}
+        ]
+      }
+    ];
+
+    const q5 = [
+      {q:"Что является графической информацией?", options:["Песня","Фотография","Голос","Звонок"], correct:"Фотография"},
+      {q:"С помощью чего мы прежде всего воспринимаем музыку?", options:["Глаз","Ушей","Носа","Кожи"], correct:"Ушей"},
+      {q:"Что лучше использовать, если нужно показать человеку, как выполнить движение?", options:["Число","Видео","Звук дождя","Одно слово"], correct:"Видео"},
+      {q:"Можно ли одну и ту же информацию представить разными способами?", options:["Да","Нет"], correct:"Да"}
+    ];
+
+    function shuffle(arr){
+      return [...arr].sort(()=>Math.random()-.5);
+    }
+
+    function setProgress(){
+      const done = state.completed.filter(Boolean).length;
+      document.getElementById("progressText").textContent = `${done} / 5`;
+      document.getElementById("progressBar").style.width = `${done/5*100}%`;
+    }
+
+    function unlock(n){
+      document.getElementById(`mission${n}`).classList.remove("locked");
+      setTimeout(()=>document.getElementById(`mission${n}`).scrollIntoView({behavior:"smooth",block:"start"}),250);
+    }
+
+    function completeMission(i){
+      if(!state.completed[i]){
+        state.completed[i]=true;
+        setProgress();
+      }
+      if(i<4) unlock(i+2);
+      if(i===4){
+        document.getElementById("secret").classList.add("show");
+        document.getElementById("doneScreen").classList.add("show");
+        setTimeout(()=>document.getElementById("doneScreen").scrollIntoView({behavior:"smooth"}),350);
+      }
+    }
+
+    // Drag & Drop mission 1
+    function renderMission1(){
+      const bank=document.getElementById("bank1");
+      bank.innerHTML="";
+      document.querySelectorAll(".zone").forEach(z=>{
+        z.querySelectorAll(".draggable").forEach(x=>x.remove());
+      });
+      shuffle(mission1Items).forEach((item,i)=>{
+        const el=document.createElement("div");
+        el.className="draggable";
+        el.draggable=true;
+        el.textContent=item.text;
+        el.dataset.type=item.type;
+        el.id="drag-"+i+"-"+Date.now();
+        addDrag(el);
+        bank.appendChild(el);
+      });
+    }
+
+    function addDrag(el){
+      el.addEventListener("dragstart",e=>{
+        e.dataTransfer.setData("text/plain",el.id);
+      });
+    }
+
+    document.querySelectorAll(".zone, #bank1").forEach(zone=>{
+      zone.addEventListener("dragover",e=>{e.preventDefault(); zone.classList?.add("over")});
+      zone.addEventListener("dragleave",()=>zone.classList?.remove("over"));
+      zone.addEventListener("drop",e=>{
+        e.preventDefault();
+        zone.classList?.remove("over");
+        const id=e.dataTransfer.getData("text/plain");
+        const el=document.getElementById(id);
+        if(el) zone.appendChild(el);
+      });
+    });
+
+    function checkMission1(){
+      const cards=[...document.querySelectorAll("#mission1 .draggable")];
+      const allInZones=cards.every(c=>c.parentElement.classList.contains("zone"));
+      if(!allInZones){
+        feedback("feedback1","Сначала разложи все карточки по группам 🙂",false);
+        return;
+      }
+      const ok=cards.every(c=>c.parentElement.dataset.type===c.dataset.type);
+      if(ok){
+        feedback("feedback1","✅ Отлично! Байт научился различать виды информации.",true);
+        completeMission(0);
+      }else{
+        feedback("feedback1","Почти! Некоторые карточки попали не в свою группу. Проверь ещё раз.",false);
+      }
+    }
+    function resetMission1(){
+      renderMission1();
+      feedback("feedback1","",true);
+    }
+
+    function renderSimpleQuestions(containerId, questions, prefix){
+      const root=document.getElementById(containerId);
+      root.innerHTML="";
+      questions.forEach((item,qi)=>{
+        const q=document.createElement("div");
+        q.className="question";
+        q.innerHTML=`<div class="question-title">${qi+1}. ${item.q}</div>`;
+        const opts=document.createElement("div");
+        opts.className="options";
+        shuffle(item.options).forEach(op=>{
+          const b=document.createElement("button");
+          b.className="option";
+          b.textContent=op;
+          b.onclick=()=>{
+            [...opts.children].forEach(x=>x.classList.remove("selected"));
+            b.classList.add("selected");
+            state.answers[`${prefix}-${qi}`]=op;
+          };
+          opts.appendChild(b);
+        });
+        q.appendChild(opts);
+        root.appendChild(q);
+      });
+    }
+
+    function checkSimple(questions,prefix,feedbackId,missionIndex){
+      let complete=true, correct=true;
+      questions.forEach((item,qi)=>{
+        const a=state.answers[`${prefix}-${qi}`];
+        if(!a) complete=false;
+        if(a!==item.correct) correct=false;
+      });
+      if(!complete){
+        feedback(feedbackId,"Ответь на все вопросы 🙂",false);
+        return;
+      }
+      if(correct){
+        feedback(feedbackId,"✅ Супер! Всё правильно.",true);
+        completeMission(missionIndex);
+      }else{
+        feedback(feedbackId,"Есть ошибка. Попробуй ещё раз — у тебя получится!",false);
+      }
+    }
+
+    function checkMission2(){checkSimple(q2,"m2","feedback2",1)}
+    function checkMission3(){checkSimple(q3,"m3","feedback3",2)}
+
+    function renderMission4(){
+      const root=document.getElementById("mission4Questions");
+      root.innerHTML="";
+      q4.forEach((item,qi)=>{
+        const block=document.createElement("div");
+        block.className="question";
+        block.innerHTML=`<div class="question-title">${qi+1}. ${item.q}</div>`;
+        item.groups.forEach((g,gi)=>{
+          const lab=document.createElement("div");
+          lab.style.cssText="font-weight:900;margin:12px 0 8px";
+          lab.textContent=g.label;
+          block.appendChild(lab);
+          const opts=document.createElement("div");
+          opts.className="options";
+          shuffle(g.options).forEach(op=>{
+            const b=document.createElement("button");
+            b.className="option";
+            b.textContent=op;
+            b.onclick=()=>{
+              [...opts.children].forEach(x=>x.classList.remove("selected"));
+              b.classList.add("selected");
+              state.answers[`m4-${qi}-${gi}`]=op;
+            };
+            opts.appendChild(b);
+          });
+          block.appendChild(opts);
+        });
+        root.appendChild(block);
+      });
+    }
+
+    function checkMission4(){
+      let complete=true, correct=true;
+      q4.forEach((item,qi)=>{
+        item.groups.forEach((g,gi)=>{
+          const a=state.answers[`m4-${qi}-${gi}`];
+          if(!a) complete=false;
+          if(a!==g.correct) correct=false;
+        });
+      });
+      if(!complete){feedback("feedback4","Выбери ответы во всех заданиях 🙂",false);return;}
+      if(correct){
+        feedback("feedback4","✅ Детектив Байт доволен! Все признаки определены верно.",true);
+        completeMission(3);
+      }else{
+        feedback("feedback4","Где-то спряталась ошибка. Перепроверь вид информации и орган чувств.",false);
+      }
+    }
+
+    function checkFinal(){
+      checkSimple(q5,"m5","feedback5",4);
+    }
+
+    function feedback(id,text,isOk){
+      const el=document.getElementById(id);
+      el.textContent=text;
+      el.className="feedback "+(isOk?"ok":"no");
+    }
+
+    renderMission1();
+    renderSimpleQuestions("mission2Questions",q2,"m2");
+    renderSimpleQuestions("mission3Questions",q3,"m3");
+    renderMission4();
+    renderSimpleQuestions("finalQuestions",q5,"m5");
+    setProgress();
+  </script>
+</body>
+</html>

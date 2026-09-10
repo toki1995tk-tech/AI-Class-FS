@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>6 класс — Неделя 1 — Безопасность в интернете</title>
+<style>
+:root{
+  --bg:#f4fffb;--panel:#fff;--ink:#0b2740;--muted:#627588;--green:#12b76a;
+  --teal:#18a6a6;--mint:#dff8ed;--line:#d8eee5;--bad:#b42318;--ok:#087443;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);
+  background:radial-gradient(circle at 90% 0%,rgba(24,166,166,.16),transparent 24%),
+             linear-gradient(180deg,#fbfffd,#effcf7);min-height:100vh;
+}
+.wrap{max-width:1180px;margin:auto;padding:22px 18px 70px}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+.nav{display:flex;gap:10px;flex-wrap:wrap}
+.nav a{text-decoration:none;color:var(--ink);background:#fff;border:1px solid var(--line);padding:10px 14px;border-radius:14px;font-weight:800}
+.badge{background:linear-gradient(135deg,var(--green),var(--teal));color:#fff;padding:10px 16px;border-radius:999px;font-weight:900}
+.hero{background:linear-gradient(135deg,#fff,#e8fbf3);border:1px solid var(--line);border-radius:28px;padding:26px;box-shadow:0 14px 34px rgba(7,68,76,.10)}
+.kicker{color:#079455;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:900}
+h1{font-size:clamp(30px,5vw,54px);margin:8px 0 8px;line-height:1.02}
+.hero p{color:var(--muted);font-size:18px;line-height:1.5;max-width:880px}
+.panel{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 12px 28px rgba(7,68,76,.09)}
+.panel h2{margin:0 0 6px;font-size:28px}
+.hint{color:var(--muted);margin:0 0 16px}
+.wordsearch-wrap{display:flex;justify-content:center;overflow:auto;padding:10px 0 4px}
+.wordsearch{
+  display:grid;grid-template-columns:repeat(22,30px);gap:2px;padding:12px;background:#eefaf5;
+  border:1px solid #cfe8dd;border-radius:18px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.8);
+}
+.cell{
+  width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:#fff;
+  border-radius:6px;font-weight:900;font-size:15px;user-select:none;
+}
+.legend{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;color:var(--muted);margin-top:12px;font-size:14px}
+.definition-row{
+  display:grid;grid-template-columns:36px minmax(170px,250px) 24px 1fr;gap:10px;align-items:center;
+  padding:12px;border-bottom:1px solid #ebf3ef;
+}
+.num{width:32px;height:32px;border-radius:10px;background:var(--mint);display:flex;align-items:center;justify-content:center;font-weight:900;color:#087443}
+.definition-row input{
+  width:100%;padding:11px 12px;border:1px solid #cfe5dc;border-radius:12px;font:inherit;font-weight:750;outline:none;
+}
+.definition-row input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(18,183,106,.12)}
+.definition-row.correct input{border-color:#56c596;background:#effbf5}
+.definition-row.wrong input{border-color:#f2a3a3;background:#fff4f4}
+.dash{text-align:center;font-weight:900}
+.definition{line-height:1.42}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+button{border:0;border-radius:14px;padding:12px 18px;font-size:16px;font-weight:900;cursor:pointer}
+.primary{background:linear-gradient(135deg,var(--green),var(--teal));color:#fff}
+.secondary{background:#eef8f4;color:var(--ink);border:1px solid var(--line)}
+.feedback{display:none;margin-top:14px;padding:14px;border-radius:14px;font-weight:800}
+.feedback.ok{display:block;background:#e8f9f0;color:var(--ok)}
+.feedback.bad{display:block;background:#fff0f0;color:var(--bad)}
+.note{margin-top:15px;padding:14px 16px;border-radius:14px;background:#f8fffc;border:1px dashed #bfe4d4;color:var(--muted)}
+@media(max-width:760px){
+  .definition-row{grid-template-columns:34px 1fr;}
+  .dash{display:none}
+  .definition{grid-column:2}
+  .wordsearch{grid-template-columns:repeat(22,25px)}
+  .cell{width:25px;height:25px;font-size:13px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="nav">
+      <a href="../">← К неделям</a>
+      <a href="/informatics/">← К предмету</a>
+    </div>
+    <div class="badge">6 класс · Неделя 1</div>
+  </div>
+
+  <section class="hero">
+    <div class="kicker">Безопасность и ответственность при работе в сети Интернет</div>
+    <h1>Найди 20 слов</h1>
+    <p>Сначала найди все термины в квадрате. Слова могут идти <b>по горизонтали, вертикали и диагонали</b>, в прямом или обратном направлении. Затем сопоставь каждый найденный термин с его определением ниже.</p>
+  </section>
+
+  <section class="panel">
+    <h2>🔎 Поиск слов</h2>
+    <p class="hint">В поле спрятано ровно 20 терминов по теме урока.</p>
+    <div class="wordsearch-wrap"><div class="wordsearch"><div class="cell">Р</div><div class="cell">Г</div><div class="cell">Н</div><div class="cell">И</div><div class="cell">Л</div><div class="cell">Л</div><div class="cell">У</div><div class="cell">Б</div><div class="cell">Р</div><div class="cell">Е</div><div class="cell">Б</div><div class="cell">И</div><div class="cell">К</div><div class="cell">А</div><div class="cell">М</div><div class="cell">К</div><div class="cell">Ы</div><div class="cell">Н</div><div class="cell">Я</div><div class="cell">Ю</div><div class="cell">О</div><div class="cell">Т</div><div class="cell">Ш</div><div class="cell">Т</div><div class="cell">Е</div><div class="cell">Н</div><div class="cell">Р</div><div class="cell">Е</div><div class="cell">Т</div><div class="cell">Н</div><div class="cell">И</div><div class="cell">Ш</div><div class="cell">Ц</div><div class="cell">И</div><div class="cell">Ф</div><div class="cell">Р</div><div class="cell">О</div><div class="cell">В</div><div class="cell">О</div><div class="cell">Й</div><div class="cell">С</div><div class="cell">Л</div><div class="cell">Е</div><div class="cell">Д</div><div class="cell">Т</div><div class="cell">Э</div><div class="cell">Ф</div><div class="cell">З</div><div class="cell">Р</div><div class="cell">З</div><div class="cell">И</div><div class="cell">О</div><div class="cell">Р</div><div class="cell">А</div><div class="cell">Н</div><div class="cell">Л</div><div class="cell">Ц</div><div class="cell">Ц</div><div class="cell">Э</div><div class="cell">Н</div><div class="cell">Ш</div><div class="cell">Е</div><div class="cell">Ю</div><div class="cell">П</div><div class="cell">Д</div><div class="cell">Ф</div><div class="cell">Т</div><div class="cell">А</div><div class="cell">Н</div><div class="cell">У</div><div class="cell">У</div><div class="cell">Ц</div><div class="cell">А</div><div class="cell">В</div><div class="cell">О</div><div class="cell">В</div><div class="cell">А</div><div class="cell">Р</div><div class="cell">П</div><div class="cell">Е</div><div class="cell">О</div><div class="cell">К</div><div class="cell">С</div><div class="cell">Р</div><div class="cell">О</div><div class="cell">Т</div><div class="cell">В</div><div class="cell">А</div><div class="cell">Х</div><div class="cell">О</div><div class="cell">Д</div><div class="cell">Я</div><div class="cell">В</div><div class="cell">И</div><div class="cell">Р</div><div class="cell">У</div><div class="cell">С</div><div class="cell">С</div><div class="cell">У</div><div class="cell">Р</div><div class="cell">И</div><div class="cell">В</div><div class="cell">И</div><div class="cell">Т</div><div class="cell">Н</div><div class="cell">А</div><div class="cell">П</div><div class="cell">Е</div><div class="cell">Б</div><div class="cell">Ь</div><div class="cell">П</div><div class="cell">Е</div><div class="cell">Р</div><div class="cell">С</div><div class="cell">О</div><div class="cell">Н</div><div class="cell">А</div><div class="cell">Л</div><div class="cell">Ь</div><div class="cell">Н</div><div class="cell">Ы</div><div class="cell">Е</div><div class="cell">Д</div><div class="cell">А</div><div class="cell">Н</div><div class="cell">Н</div><div class="cell">Ы</div><div class="cell">Е</div><div class="cell">И</div><div class="cell">Н</div><div class="cell">Л</div><div class="cell">Л</div><div class="cell">Ж</div><div class="cell">П</div><div class="cell">Л</div><div class="cell">Л</div><div class="cell">Ы</div><div class="cell">Т</div><div class="cell">Н</div><div class="cell">У</div><div class="cell">А</div><div class="cell">К</div><div class="cell">К</div><div class="cell">А</div><div class="cell">Н</div><div class="cell">И</div><div class="cell">Ы</div><div class="cell">Ю</div><div class="cell">О</div><div class="cell">И</div><div class="cell">О</div><div class="cell">О</div><div class="cell">Ю</div><div class="cell">В</div><div class="cell">Р</div><div class="cell">А</div><div class="cell">Ш</div><div class="cell">Т</div><div class="cell">Б</div><div class="cell">М</div><div class="cell">З</div><div class="cell">Х</div><div class="cell">В</div><div class="cell">Ы</div><div class="cell">Х</div><div class="cell">Б</div><div class="cell">Ы</div><div class="cell">А</div><div class="cell">З</div><div class="cell">Ж</div><div class="cell">Ю</div><div class="cell">Т</div><div class="cell">Р</div><div class="cell">А</div><div class="cell">Ф</div><div class="cell">Д</div><div class="cell">З</div><div class="cell">Д</div><div class="cell">П</div><div class="cell">Л</div><div class="cell">А</div><div class="cell">Г</div><div class="cell">И</div><div class="cell">А</div><div class="cell">Т</div><div class="cell">Р</div><div class="cell">Ц</div><div class="cell">Г</div><div class="cell">У</div><div class="cell">Ж</div><div class="cell">П</div><div class="cell">Ч</div><div class="cell">В</div><div class="cell">А</div><div class="cell">И</div><div class="cell">Ы</div><div class="cell">М</div><div class="cell">Е</div><div class="cell">Ф</div><div class="cell">Ь</div><div class="cell">Ф</div><div class="cell">Ш</div><div class="cell">Г</div><div class="cell">Н</div><div class="cell">И</div><div class="cell">Ш</div><div class="cell">И</div><div class="cell">Ф</div><div class="cell">Ч</div><div class="cell">Г</div><div class="cell">Ы</div><div class="cell">Ю</div><div class="cell">Е</div><div class="cell">Е</div><div class="cell">П</div><div class="cell">К</div><div class="cell">Г</div><div class="cell">У</div><div class="cell">А</div><div class="cell">К</div><div class="cell">У</div><div class="cell">Т</div><div class="cell">Ц</div><div class="cell">Н</div><div class="cell">Н</div><div class="cell">Ч</div><div class="cell">Ж</div><div class="cell">В</div><div class="cell">У</div><div class="cell">Ч</div><div class="cell">Ю</div><div class="cell">Х</div><div class="cell">З</div><div class="cell">Г</div><div class="cell">Т</div><div class="cell">Ч</div><div class="cell">Ы</div><div class="cell">К</div><div class="cell">Я</div><div class="cell">Ц</div><div class="cell">Ф</div><div class="cell">Э</div><div class="cell">Г</div><div class="cell">С</div><div class="cell">Э</div><div class="cell">У</div><div class="cell">М</div><div class="cell">О</div><div class="cell">Ш</div><div class="cell">Е</div><div class="cell">Н</div><div class="cell">Н</div><div class="cell">И</div><div class="cell">Ч</div><div class="cell">Е</div><div class="cell">С</div><div class="cell">Т</div><div class="cell">В</div><div class="cell">О</div><div class="cell">Э</div><div class="cell">Б</div><div class="cell">М</div><div class="cell">Т</div><div class="cell">О</div><div class="cell">Ц</div><div class="cell">О</div><div class="cell">М</div><div class="cell">В</div><div class="cell">С</div><div class="cell">Х</div><div class="cell">Л</div><div class="cell">А</div><div class="cell">Я</div><div class="cell">О</div><div class="cell">Ю</div><div class="cell">Р</div><div class="cell">Т</div><div class="cell">Г</div><div class="cell">О</div><div class="cell">М</div><div class="cell">Х</div><div class="cell">Ю</div><div class="cell">С</div><div class="cell">П</div><div class="cell">Ч</div><div class="cell">Д</div><div class="cell">О</div><div class="cell">Н</div><div class="cell">Е</div><div class="cell">С</div><div class="cell">С</div><div class="cell">Ы</div><div class="cell">Л</div><div class="cell">К</div><div class="cell">А</div><div class="cell">Ш</div><div class="cell">С</div><div class="cell">В</div><div class="cell">Х</div><div class="cell">И</div><div class="cell">Ф</div><div class="cell">Э</div><div class="cell">Т</div><div class="cell">Ы</div><div class="cell">Р</div><div class="cell">П</div><div class="cell">П</div><div class="cell">О</div><div class="cell">Ю</div><div class="cell">С</div><div class="cell">Ш</div><div class="cell">У</div><div class="cell">И</div><div class="cell">Л</div><div class="cell">Я</div><div class="cell">З</div><div class="cell">Ю</div><div class="cell">В</div><div class="cell">Е</div><div class="cell">И</div><div class="cell">П</div><div class="cell">З</div><div class="cell">Ы</div><div class="cell">Л</div><div class="cell">О</div><div class="cell">Г</div><div class="cell">И</div><div class="cell">Н</div><div class="cell">А</div><div class="cell">П</div><div class="cell">У</div><div class="cell">А</div><div class="cell">Ф</div><div class="cell">Ц</div><div class="cell">Н</div><div class="cell">Л</div><div class="cell">А</div><div class="cell">Р</div><div class="cell">Я</div><div class="cell">Н</div><div class="cell">Л</div><div class="cell">Е</div><div class="cell">Р</div><div class="cell">Ж</div><div class="cell">М</div><div class="cell">Э</div><div class="cell">И</div><div class="cell">Л</div><div class="cell">И</div><div class="cell">Ф</div><div class="cell">Ч</div><div class="cell">М</div><div class="cell">И</div><div class="cell">П</div><div class="cell">Т</div><div class="cell">А</div><div class="cell">С</div><div class="cell">Ж</div><div class="cell">В</div><div class="cell">З</div><div class="cell">Н</div><div class="cell">Ш</div><div class="cell">О</div><div class="cell">Р</div><div class="cell">Т</div><div class="cell">Ы</div><div class="cell">З</div><div class="cell">Ч</div><div class="cell">Р</div><div class="cell">Х</div><div class="cell">Ч</div><div class="cell">Р</div><div class="cell">П</div><div class="cell">Э</div><div class="cell">А</div><div class="cell">О</div><div class="cell">В</div><div class="cell">К</div><div class="cell">Ь</div><div class="cell">Т</div><div class="cell">С</div><div class="cell">О</div><div class="cell">Н</div><div class="cell">Ь</div><div class="cell">Л</div><div class="cell">А</div><div class="cell">И</div><div class="cell">Ц</div><div class="cell">Н</div><div class="cell">Е</div><div class="cell">Д</div><div class="cell">И</div><div class="cell">Ф</div><div class="cell">Н</div><div class="cell">О</div><div class="cell">К</div><div class="cell">З</div><div class="cell">З</div><div class="cell">Н</div><div class="cell">Ч</div><div class="cell">З</div><div class="cell">К</div><div class="cell">С</div><div class="cell">Ц</div><div class="cell">У</div><div class="cell">М</div><div class="cell">Р</div><div class="cell">Т</div><div class="cell">А</div><div class="cell">К</div><div class="cell">В</div><div class="cell">О</div><div class="cell">Р</div><div class="cell">И</div><div class="cell">К</div><div class="cell">О</div><div class="cell">Л</div><div class="cell">Б</div><div class="cell">С</div><div class="cell">Е</div><div class="cell">М</div><div class="cell">О</div><div class="cell">Ш</div><div class="cell">Т</div><div class="cell">Т</div><div class="cell">Л</div><div class="cell">М</div><div class="cell">Ч</div><div class="cell">П</div><div class="cell">И</div><div class="cell">К</div><div class="cell">И</div><div class="cell">З</div><div class="cell">Г</div><div class="cell">Ш</div><div class="cell">Ж</div><div class="cell">Л</div><div class="cell">Г</div><div class="cell">Ш</div><div class="cell">Т</div><div class="cell">Ы</div><div class="cell">Б</div><div class="cell">Ч</div><div class="cell">Е</div><div class="cell">Ь</div><div class="cell">Ж</div><div class="cell">Ж</div><div class="cell">Ш</div><div class="cell">Р</div><div class="cell">И</div><div class="cell">Ш</div><div class="cell">У</div><div class="cell">Ы</div><div class="cell">С</div><div class="cell">Ф</div><div class="cell">К</div><div class="cell">Г</div><div class="cell">Ю</div><div class="cell">Ж</div><div class="cell">К</div><div class="cell">З</div><div class="cell">М</div><div class="cell">Е</div><div class="cell">К</div><div class="cell">А</div><div class="cell">Ч</div><div class="cell">Т</div><div class="cell">Д</div><div class="cell">И</div><div class="cell">Б</div><div class="cell">Б</div><div class="cell">Т</div><div class="cell">К</div><div class="cell">Ч</div><div class="cell">Д</div><div class="cell">Н</div><div class="cell">Е</div><div class="cell">Т</div><div class="cell">И</div><div class="cell">К</div><div class="cell">Е</div><div class="cell">Т</div><div class="cell">Х</div><div class="cell">Я</div></div></div>
+    <div class="legend"><span>↔ горизонталь</span><span>↕ вертикаль</span><span>⤢ диагональ</span><span>⇄ слова могут быть наоборот</span></div>
+  </section>
+
+  <section class="panel">
+    <h2>🧠 Сопоставь термин и определение</h2>
+    <p class="hint">Впиши в пустое поле найденное слово. Регистр букв не важен: «Плагиат» и «плагиат» будут засчитаны одинаково.</p>
+    <div id="definitions">
+    <div class="definition-row" data-answer="Мошенничество">
+      <div class="num">1</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Обман ради получения денег, данных или другой выгоды.</div>
+    </div>
+    <div class="definition-row" data-answer="Антивирус">
+      <div class="num">2</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Программа для обнаружения и удаления вредоносных программ.</div>
+    </div>
+    <div class="definition-row" data-answer="Ссылка">
+      <div class="num">3</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Элемент, по которому можно перейти на другую страницу, сайт или файл.</div>
+    </div>
+    <div class="definition-row" data-answer="Плагиат">
+      <div class="num">4</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Использование чужой работы или идеи без указания автора.</div>
+    </div>
+    <div class="definition-row" data-answer="Цифровой след">
+      <div class="num">5</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Информация, которая остаётся в интернете после действий пользователя.</div>
+    </div>
+    <div class="definition-row" data-answer="Вирус">
+      <div class="num">6</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Вредоносная программа, которая может повредить устройство или данные.</div>
+    </div>
+    <div class="definition-row" data-answer="Персональные данные">
+      <div class="num">7</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Информация, по которой можно определить или узнать конкретного человека.</div>
+    </div>
+    <div class="definition-row" data-answer="Безопасность">
+      <div class="num">8</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Защита пользователя, устройства и информации от угроз.</div>
+    </div>
+    <div class="definition-row" data-answer="Кибербуллинг">
+      <div class="num">9</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Оскорбление, травля или преследование человека в интернете.</div>
+    </div>
+    <div class="definition-row" data-answer="Логин">
+      <div class="num">10</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Имя пользователя, которое используется для входа в аккаунт.</div>
+    </div>
+    <div class="definition-row" data-answer="Ответственность">
+      <div class="num">11</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Готовность отвечать за свои действия и поступки в интернете.</div>
+    </div>
+    <div class="definition-row" data-answer="Пароль">
+      <div class="num">12</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Секретная комбинация символов для защиты доступа к аккаунту.</div>
+    </div>
+    <div class="definition-row" data-answer="Конфиденциальность">
+      <div class="num">13</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Защита личной информации от доступа посторонних.</div>
+    </div>
+    <div class="definition-row" data-answer="Нетикет">
+      <div class="num">14</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Правила вежливого и уважительного общения в интернете.</div>
+    </div>
+    <div class="definition-row" data-answer="Фишинг">
+      <div class="num">15</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Обманный способ получить пароль, банковские данные или другую личную информацию.</div>
+    </div>
+    <div class="definition-row" data-answer="Блокировка">
+      <div class="num">16</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Ограничение или запрет доступа к аккаунту, сайту или ресурсу.</div>
+    </div>
+    <div class="definition-row" data-answer="Спам">
+      <div class="num">17</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Массовые нежелательные сообщения, которые пользователь не просил отправлять.</div>
+    </div>
+    <div class="definition-row" data-answer="Интернет">
+      <div class="num">18</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Всемирная сеть, которая соединяет компьютеры и устройства по всему миру.</div>
+    </div>
+    <div class="definition-row" data-answer="Аккаунт">
+      <div class="num">19</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Личная учётная запись пользователя в сервисе или на сайте.</div>
+    </div>
+    <div class="definition-row" data-answer="Авторское право">
+      <div class="num">20</div>
+      <input type="text" autocomplete="off" spellcheck="false" placeholder="Впиши найденное слово">
+      <div class="dash">—</div>
+      <div class="definition">Права создателя на своё произведение, текст, изображение, музыку или другой материал.</div>
+    </div></div>
+
+    <div class="actions">
+      <button class="primary" onclick="checkAnswers()">Проверить ответы</button>
+      <button class="secondary" onclick="clearWrong()">Очистить ошибки</button>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="note">💡 Подсказка: для терминов из двух слов можно вводить ответ с пробелом или без него — проверка всё равно распознает правильный термин.</div>
+  </section>
+</div>
+
+<script>
+function normalizeAnswer(s){
+  return s
+    .toLocaleLowerCase('ru-RU')
+    .replace(/ё/g,'е')
+    .replace(/[^а-яa-z0-9]/g,'')
+    .trim();
+}
+
+function checkAnswers(){
+  const rows=[...document.querySelectorAll('.definition-row')];
+  let correct=0, empty=0;
+  rows.forEach(row=>{
+    row.classList.remove('correct','wrong');
+    const input=row.querySelector('input');
+    const expected=normalizeAnswer(row.dataset.answer);
+    const got=normalizeAnswer(input.value);
+    if(!got){empty++; return;}
+    if(got===expected){
+      row.classList.add('correct');correct++;
+    } else {
+      row.classList.add('wrong');
+    }
+  });
+  const f=document.getElementById('feedback');
+  if(correct===rows.length){
+    f.className='feedback ok';
+    f.innerHTML='🏆 Отлично! Все 20 терминов найдены и сопоставлены правильно.';
+  } else {
+    f.className='feedback bad';
+    const wrong=rows.length-correct-empty;
+    f.innerHTML='Правильно: <b>'+correct+' из '+rows.length+'</b>. Ошибок: <b>'+wrong+'</b>. Пустых полей: <b>'+empty+'</b>. Проверь отмеченные строки.';
+  }
+}
+function clearWrong(){
+  document.querySelectorAll('.definition-row.wrong').forEach(row=>{
+    row.querySelector('input').value='';
+    row.classList.remove('wrong');
+  });
+  const f=document.getElementById('feedback');
+  f.className='feedback';f.textContent='';
+}
+</script>
+</body>
+</html>

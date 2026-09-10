@@ -344,8 +344,33 @@
       padding:12px;font-weight:850;color:#183e70;
     }
     .option:hover{background:#f1f8ff}
-    .option.correct{background:#e6fff1;border-color:#42c983}
-    .option.wrong{background:#fff0f0;border-color:#ef7777}
+    .option.selected{
+      background:#e7f3ff;
+      border-color:#2f80ed;
+      color:#0f4f96;
+      box-shadow:0 0 0 4px rgba(47,128,237,.18);
+      transform:translateY(-1px);
+    }
+    .option.correct{
+      background:#e6fff1 !important;
+      border-color:#2dbf71 !important;
+      color:#117344 !important;
+      box-shadow:0 0 0 4px rgba(45,191,113,.16);
+    }
+    .option.correct::after{
+      content:"  ✓";
+      font-weight:1000;
+    }
+    .option.wrong{
+      background:#fff0f0 !important;
+      border-color:#ef5b5b !important;
+      color:#b53636 !important;
+      box-shadow:0 0 0 4px rgba(239,91,91,.14);
+    }
+    .option.wrong::after{
+      content:"  ✕";
+      font-weight:1000;
+    }
 
     .check-row{
       display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px;
@@ -737,8 +762,11 @@
           b.className="option";
           b.textContent=op;
           b.onclick=()=>{
-            [...opts.children].forEach(x=>x.classList.remove("selected"));
+            [...opts.children].forEach(x=>{
+              x.classList.remove("selected","correct","wrong");
+            });
             b.classList.add("selected");
+            b.dataset.value = op;
             state.answers[`${prefix}-${qi}`]=op;
           };
           opts.appendChild(b);
@@ -750,20 +778,45 @@
 
     function checkSimple(questions,prefix,feedbackId,missionIndex){
       let complete=true, correct=true;
+
       questions.forEach((item,qi)=>{
-        const a=state.answers[`${prefix}-${qi}`];
-        if(!a) complete=false;
-        if(a!==item.correct) correct=false;
+        const answer=state.answers[`${prefix}-${qi}`];
+        if(!answer) complete=false;
+        if(answer!==item.correct) correct=false;
+
+        const questionBlock =
+          document.querySelectorAll(
+            prefix==="m2" ? "#mission2Questions .question" :
+            prefix==="m3" ? "#mission3Questions .question" :
+            "#finalQuestions .question"
+          )[qi];
+
+        if(questionBlock){
+          questionBlock.querySelectorAll(".option").forEach(btn=>{
+            btn.classList.remove("correct","wrong");
+
+            // после проверки зелёным показываем правильный ответ;
+            // выбранный неправильный — красным
+            if(btn.textContent.trim() === item.correct){
+              btn.classList.add("correct");
+            }
+            if(answer && btn.textContent.trim() === answer && answer !== item.correct){
+              btn.classList.add("wrong");
+            }
+          });
+        }
       });
+
       if(!complete){
         feedback(feedbackId,"Ответь на все вопросы 🙂",false);
         return;
       }
+
       if(correct){
         feedback(feedbackId,"✅ Супер! Всё правильно.",true);
         completeMission(missionIndex);
       }else{
-        feedback(feedbackId,"Есть ошибка. Попробуй ещё раз — у тебя получится!",false);
+        feedback(feedbackId,"❌ Есть ошибка. Красный ответ исправь, зелёный показывает правильный вариант.",false);
       }
     }
 
@@ -789,8 +842,11 @@
             b.className="option";
             b.textContent=op;
             b.onclick=()=>{
-              [...opts.children].forEach(x=>x.classList.remove("selected"));
+              [...opts.children].forEach(x=>{
+                x.classList.remove("selected","correct","wrong");
+              });
               b.classList.add("selected");
+              b.dataset.value = op;
               state.answers[`m4-${qi}-${gi}`]=op;
             };
             opts.appendChild(b);
@@ -803,19 +859,41 @@
 
     function checkMission4(){
       let complete=true, correct=true;
+
       q4.forEach((item,qi)=>{
+        const questionBlock = document.querySelectorAll("#mission4Questions .question")[qi];
+        const optionGroups = questionBlock ? questionBlock.querySelectorAll(".options") : [];
+
         item.groups.forEach((g,gi)=>{
-          const a=state.answers[`m4-${qi}-${gi}`];
-          if(!a) complete=false;
-          if(a!==g.correct) correct=false;
+          const answer=state.answers[`m4-${qi}-${gi}`];
+          if(!answer) complete=false;
+          if(answer!==g.correct) correct=false;
+
+          const group = optionGroups[gi];
+          if(group){
+            group.querySelectorAll(".option").forEach(btn=>{
+              btn.classList.remove("correct","wrong");
+              if(btn.textContent.trim() === g.correct){
+                btn.classList.add("correct");
+              }
+              if(answer && btn.textContent.trim() === answer && answer !== g.correct){
+                btn.classList.add("wrong");
+              }
+            });
+          }
         });
       });
-      if(!complete){feedback("feedback4","Выбери ответы во всех заданиях 🙂",false);return;}
+
+      if(!complete){
+        feedback("feedback4","Выбери ответы во всех заданиях 🙂",false);
+        return;
+      }
+
       if(correct){
         feedback("feedback4","✅ Детектив Байт доволен! Все признаки определены верно.",true);
         completeMission(3);
       }else{
-        feedback("feedback4","Где-то спряталась ошибка. Перепроверь вид информации и орган чувств.",false);
+        feedback("feedback4","❌ Есть ошибка. Красным отмечен выбранный неправильный ответ, зелёным — правильный.",false);
       }
     }
 

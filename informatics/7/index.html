@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7 класс — Информатика и искусственный интеллект</title>
+
+<style>
+:root{
+  --bg:#07152c;
+  --panel:#0d2242;
+  --panel2:#102b50;
+  --line:#1e88e5;
+  --cyan:#36d9ff;
+  --blue:#4b8dff;
+  --orange:#ffad42;
+  --text:#f5f8ff;
+  --muted:#9db1cf;
+  --green:#34d399;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 80% 10%,rgba(54,217,255,.12),transparent 25%),
+    linear-gradient(135deg,#061126,#092044 60%,#07152c);
+  min-height:100vh;
+}
+
+.wrap{
+  width:min(1180px,92%);
+  margin:auto;
+  padding:34px 0 60px;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:28px;
+  flex-wrap:wrap;
+}
+
+.back{
+  text-decoration:none;
+  color:white;
+  padding:11px 17px;
+  border:1px solid rgba(54,217,255,.55);
+  border-radius:14px;
+  background:rgba(13,34,66,.8);
+  transition:.2s;
+}
+
+.back:hover{
+  transform:translateY(-2px);
+  border-color:var(--cyan);
+}
+
+.badge{
+  color:var(--cyan);
+  border:1px solid rgba(54,217,255,.45);
+  padding:10px 18px;
+  border-radius:999px;
+  font-weight:800;
+}
+
+.hero{
+  padding:32px;
+  border-radius:26px;
+  border:1px solid rgba(54,217,255,.24);
+  background:linear-gradient(135deg,rgba(16,43,80,.95),rgba(8,25,51,.95));
+  box-shadow:0 20px 50px rgba(0,0,0,.22);
+}
+
+.hero h1{
+  margin:0;
+  font-size:clamp(34px,6vw,60px);
+}
+
+.hero h1 span{color:var(--cyan)}
+
+.hero p{
+  color:var(--muted);
+  font-size:18px;
+  line-height:1.6;
+  margin-bottom:0;
+}
+
+.weeks{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-top:28px;
+}
+
+.week{
+  min-height:145px;
+  padding:22px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(13,34,66,.78);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  position:relative;
+  overflow:hidden;
+}
+
+.week strong{
+  font-size:22px;
+}
+
+.week span{
+  color:var(--muted);
+  line-height:1.45;
+}
+
+.tag{
+  margin-top:auto;
+  align-self:flex-start;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.5px;
+  padding:7px 10px;
+  border-radius:999px;
+}
+
+.week.locked{
+  opacity:.62;
+}
+
+.week.locked .tag{
+  background:rgba(255,255,255,.08);
+  color:#c4cede;
+}
+
+.week.no-practice{
+  opacity:.78;
+  border-color:rgba(255,173,66,.28);
+}
+
+.week.no-practice .tag{
+  color:var(--orange);
+  background:rgba(255,173,66,.11);
+}
+
+.week.active{
+  text-decoration:none;
+  color:white;
+  border-color:rgba(54,217,255,.65);
+  background:
+    linear-gradient(135deg,rgba(19,62,106,.98),rgba(9,34,68,.98));
+  box-shadow:0 12px 32px rgba(36,162,255,.12);
+  transition:.2s;
+}
+
+.week.active:hover{
+  transform:translateY(-4px);
+  box-shadow:0 18px 40px rgba(36,162,255,.2);
+}
+
+.week.active:before{
+  content:"";
+  position:absolute;
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  background:rgba(54,217,255,.13);
+  right:-30px;
+  top:-35px;
+}
+
+.week.active .tag{
+  color:#031727;
+  background:var(--cyan);
+}
+
+@media(max-width:900px){
+  .weeks{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:580px){
+  .weeks{grid-template-columns:1fr}
+  .hero{padding:24px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <div class="top">
+    <a class="back" href="/informatics/">← К классам</a>
+    <div class="badge">7 класс</div>
+  </div>
+
+  <section class="hero">
+    <h1>7 <span>класс</span></h1>
+    <p>
+      Информатика и искусственный интеллект ·
+      материалы и практические задания по неделям
+    </p>
+  </section>
+
+  <div class="weeks">
+
+    <div class="week no-practice">
+      <strong>Неделя 1</strong>
+      <span>Практические занятия на сайте не предусмотрены.</span>
+      <div class="tag">БЕЗ ПРАКТИКИ</div>
+    </div>
+
+    <a class="week active" href="/informatics/7/week-02/">
+      <strong>Неделя 2</strong>
+      <span>Единицы измерения информации · Системы счисления</span>
+      <div class="tag">ОТКРЫТЬ →</div>
+    </a>
+
+    <div class="week locked"><strong>Неделя 3</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 4</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 5</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 6</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 7</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 8</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 9</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 10</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 11</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 12</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 13</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 14</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 15</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 16</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 17</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 18</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 19</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 20</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 21</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 22</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 23</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 24</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 25</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 26</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 27</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 28</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 29</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 30</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 31</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 32</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 33</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+    <div class="week locked"><strong>Неделя 34</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
+
+  </div>
+</div>
+
+</body>
+</html>

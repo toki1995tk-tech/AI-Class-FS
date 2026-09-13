@@ -3,191 +3,328 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>7 класс — Информатика и искусственный интеллект</title>
+
+<title>7 класс — Неделя 2 — Системы счисления</title>
 
 <style>
+
 :root{
-  --bg:#07152c;
-  --panel:#0d2242;
-  --panel2:#102b50;
-  --line:#1e88e5;
-  --cyan:#36d9ff;
-  --blue:#4b8dff;
+  --bg:#061326;
+  --panel:#0c2342;
+  --panel2:#102e56;
+  --cyan:#38dcff;
+  --blue:#4d8eff;
   --orange:#ffad42;
-  --text:#f5f8ff;
-  --muted:#9db1cf;
-  --green:#34d399;
+  --green:#3ddc97;
+  --red:#ff6474;
+  --text:#f7f9ff;
+  --muted:#9eb2ce;
 }
 
 *{box-sizing:border-box}
 
 body{
   margin:0;
-  font-family:Inter,Arial,sans-serif;
-  color:var(--text);
-  background:
-    radial-gradient(circle at 80% 10%,rgba(54,217,255,.12),transparent 25%),
-    linear-gradient(135deg,#061126,#092044 60%,#07152c);
   min-height:100vh;
+  color:var(--text);
+  font-family:Inter,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 85% 5%,rgba(56,220,255,.13),transparent 28%),
+    radial-gradient(circle at 10% 60%,rgba(77,142,255,.08),transparent 35%),
+    linear-gradient(135deg,#061225,#092045 65%,#061326);
 }
 
 .wrap{
-  width:min(1180px,92%);
+  width:min(1050px,92%);
   margin:auto;
-  padding:34px 0 60px;
+  padding:28px 0 70px;
 }
 
-.top{
+.nav{
   display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  margin-bottom:28px;
+  gap:10px;
   flex-wrap:wrap;
+  margin-bottom:24px;
 }
 
-.back{
+.nav a{
   text-decoration:none;
   color:white;
-  padding:11px 17px;
-  border:1px solid rgba(54,217,255,.55);
-  border-radius:14px;
-  background:rgba(13,34,66,.8);
-  transition:.2s;
-}
-
-.back:hover{
-  transform:translateY(-2px);
-  border-color:var(--cyan);
-}
-
-.badge{
-  color:var(--cyan);
-  border:1px solid rgba(54,217,255,.45);
-  padding:10px 18px;
-  border-radius:999px;
-  font-weight:800;
+  border:1px solid rgba(56,220,255,.35);
+  border-radius:13px;
+  padding:10px 15px;
+  background:rgba(10,31,60,.82);
 }
 
 .hero{
-  padding:32px;
+  padding:30px;
   border-radius:26px;
-  border:1px solid rgba(54,217,255,.24);
-  background:linear-gradient(135deg,rgba(16,43,80,.95),rgba(8,25,51,.95));
-  box-shadow:0 20px 50px rgba(0,0,0,.22);
+  background:linear-gradient(135deg,rgba(15,47,87,.98),rgba(7,27,56,.98));
+  border:1px solid rgba(56,220,255,.28);
+  margin-bottom:20px;
+}
+
+.kicker{
+  color:var(--cyan);
+  font-size:14px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:1px;
 }
 
 .hero h1{
-  margin:0;
-  font-size:clamp(34px,6vw,60px);
+  font-size:clamp(32px,6vw,56px);
+  margin:8px 0 10px;
 }
-
-.hero h1 span{color:var(--cyan)}
 
 .hero p{
   color:var(--muted);
   font-size:18px;
-  line-height:1.6;
-  margin-bottom:0;
+  line-height:1.55;
 }
 
-.weeks{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-  margin-top:28px;
+.notebook{
+  margin-top:20px;
+  padding:14px 16px;
+  border-left:4px solid var(--orange);
+  border-radius:12px;
+  background:rgba(255,173,66,.09);
+  color:#ffe2b6;
+  font-weight:700;
 }
 
-.week{
-  min-height:145px;
-  padding:22px;
-  border-radius:20px;
-  border:1px solid rgba(255,255,255,.09);
+.progress-wrap{
+  margin:22px 0;
+  padding:18px;
   background:rgba(13,34,66,.78);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:18px;
+}
+
+.progress-text{
   display:flex;
-  flex-direction:column;
+  justify-content:space-between;
   gap:10px;
-  position:relative;
+  margin-bottom:10px;
+}
+
+.progress{
+  height:12px;
+  background:#061327;
+  border-radius:999px;
   overflow:hidden;
 }
 
-.week strong{
-  font-size:22px;
+.progress-bar{
+  width:0;
+  height:100%;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));
+  transition:.3s;
 }
 
-.week span{
+.mission{
+  margin-top:22px;
+  padding:26px;
+  background:rgba(10,31,60,.87);
+  border:1px solid rgba(56,220,255,.18);
+  border-radius:24px;
+}
+
+.mission h2{
+  margin:0 0 8px;
+  font-size:30px;
+}
+
+.mission-description{
   color:var(--muted);
-  line-height:1.45;
+  line-height:1.55;
+  margin-bottom:24px;
 }
 
-.tag{
-  margin-top:auto;
-  align-self:flex-start;
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:.5px;
-  padding:7px 10px;
-  border-radius:999px;
-}
-
-.week.locked{
-  opacity:.62;
-}
-
-.week.locked .tag{
-  background:rgba(255,255,255,.08);
-  color:#c4cede;
-}
-
-.week.no-practice{
-  opacity:.78;
-  border-color:rgba(255,173,66,.28);
-}
-
-.week.no-practice .tag{
-  color:var(--orange);
-  background:rgba(255,173,66,.11);
-}
-
-.week.active{
-  text-decoration:none;
-  color:white;
-  border-color:rgba(54,217,255,.65);
-  background:
-    linear-gradient(135deg,rgba(19,62,106,.98),rgba(9,34,68,.98));
-  box-shadow:0 12px 32px rgba(36,162,255,.12);
+.question{
+  padding:20px;
+  border-radius:18px;
+  background:rgba(17,46,86,.72);
+  border:1px solid rgba(255,255,255,.08);
+  margin:14px 0;
   transition:.2s;
 }
 
-.week.active:hover{
-  transform:translateY(-4px);
-  box-shadow:0 18px 40px rgba(36,162,255,.2);
+.question-title{
+  font-size:19px;
+  font-weight:800;
+  margin-bottom:13px;
+  line-height:1.4;
 }
 
-.week.active:before{
-  content:"";
-  position:absolute;
-  width:120px;
-  height:120px;
-  border-radius:50%;
-  background:rgba(54,217,255,.13);
-  right:-30px;
-  top:-35px;
+.options{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
 }
 
-.week.active .tag{
-  color:#031727;
-  background:var(--cyan);
+.option{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:13px;
+  padding:13px;
+  transition:.2s;
 }
 
-@media(max-width:900px){
-  .weeks{grid-template-columns:repeat(2,1fr)}
+.option:hover{
+  border-color:var(--cyan);
 }
 
-@media(max-width:580px){
-  .weeks{grid-template-columns:1fr}
-  .hero{padding:24px}
+.option:has(input:checked){
+  border-color:var(--cyan);
+  background:rgba(56,220,255,.11);
 }
+
+input[type="radio"]{
+  accent-color:var(--cyan);
+  transform:scale(1.15);
+}
+
+.answer-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.expression{
+  font-size:27px;
+  font-weight:900;
+  letter-spacing:.5px;
+}
+
+.answer-input{
+  width:160px;
+  max-width:100%;
+  padding:12px 14px;
+  font-size:20px;
+  border-radius:12px;
+  border:2px solid rgba(255,255,255,.13);
+  outline:none;
+  background:#07182d;
+  color:white;
+  text-align:center;
+  transition:.2s;
+}
+
+.answer-input:focus{
+  border-color:var(--cyan);
+}
+
+.feedback{
+  min-height:22px;
+  margin-top:10px;
+  font-weight:800;
+}
+
+.correct{
+  border-color:rgba(61,220,151,.75)!important;
+  background:rgba(61,220,151,.08)!important;
+}
+
+.correct .feedback{color:var(--green)}
+
+.wrong{
+  border-color:rgba(255,100,116,.75)!important;
+  background:rgba(255,100,116,.07)!important;
+}
+
+.wrong .feedback{color:var(--red)}
+
+.unanswered{
+  border-color:rgba(255,100,116,.65)!important;
+}
+
+.unanswered .feedback{color:#ff9aa4}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+  font-weight:900;
+  font-size:16px;
+  border-radius:13px;
+  padding:13px 20px;
+}
+
+.check{
+  color:#041424;
+  background:linear-gradient(90deg,var(--cyan),#6deaff);
+}
+
+.check:hover{
+  filter:brightness(1.06);
+}
+
+.mission-result{
+  margin-top:16px;
+  padding:15px;
+  border-radius:14px;
+  display:none;
+}
+
+.success{
+  color:#c8ffe9;
+  background:rgba(61,220,151,.11);
+  border:1px solid rgba(61,220,151,.34);
+}
+
+.retry{
+  color:#ffd3d8;
+  background:rgba(255,100,116,.1);
+  border:1px solid rgba(255,100,116,.3);
+}
+
+.finish{
+  display:none;
+  margin-top:28px;
+  padding:34px;
+  text-align:center;
+  border-radius:26px;
+  background:
+    radial-gradient(circle at 50% 0,rgba(56,220,255,.17),transparent 40%),
+    rgba(13,34,66,.92);
+  border:1px solid rgba(56,220,255,.35);
+}
+
+.finish .icon{
+  font-size:55px;
+}
+
+.finish h2{
+  font-size:34px;
+  margin:10px 0;
+}
+
+.finish p{
+  color:var(--muted);
+  font-size:18px;
+}
+
+sub{
+  font-size:.57em;
+}
+
+@media(max-width:650px){
+  .options{grid-template-columns:1fr}
+  .mission{padding:19px}
+  .hero{padding:22px}
+}
+
 </style>
 </head>
 
@@ -195,68 +332,500 @@ body{
 
 <div class="wrap">
 
-  <div class="top">
-    <a class="back" href="/informatics/">← К классам</a>
-    <div class="badge">7 класс</div>
+  <div class="nav">
+    <a href="/informatics/7/">← К неделям</a>
+    <a href="/informatics/">← К предметам</a>
   </div>
 
   <section class="hero">
-    <h1>7 <span>класс</span></h1>
+    <div class="kicker">7 класс · Неделя 2</div>
+
+    <h1>Системы счисления</h1>
+
     <p>
-      Информатика и искусственный интеллект ·
-      материалы и практические задания по неделям
+      Проверь, умеешь ли ты определять допустимые цифры
+      и переводить числа между десятичной, двоичной,
+      восьмеричной и шестнадцатеричной системами.
+    </p>
+
+    <div class="notebook">
+      📝 Все вычисления выполняй в тетради.
+      На сайт вводи только итоговый ответ.
+    </div>
+  </section>
+
+  <div class="progress-wrap">
+    <div class="progress-text">
+      <strong>Прогресс</strong>
+      <span id="progressText">0 из 3 миссий</span>
+    </div>
+
+    <div class="progress">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+  </div>
+
+
+  <!-- МИССИЯ 1 -->
+
+  <section class="mission" id="mission1">
+
+    <h2>Миссия 1 · Разберись с системой</h2>
+
+    <div class="mission-description">
+      Определи, какие записи допустимы и что означает основание системы счисления.
+    </div>
+
+    <div class="question radio-question" data-answer="no">
+      <div class="question-title">1. Можно ли записать число 102<sub>2</sub>?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q1" value="yes"> Да</label>
+        <label class="option"><input type="radio" name="q1" value="no"> Нет</label>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question radio-question" data-answer="yes">
+      <div class="question-title">2. Корректна ли запись 735<sub>8</sub>?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q2" value="yes"> Да</label>
+        <label class="option"><input type="radio" name="q2" value="no"> Нет</label>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question radio-question" data-answer="no">
+      <div class="question-title">3. Можно ли записать число 89<sub>8</sub>?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q3" value="yes"> Да</label>
+        <label class="option"><input type="radio" name="q3" value="no"> Нет</label>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question radio-question" data-answer="yes">
+      <div class="question-title">4. Корректна ли запись 2F<sub>16</sub>?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q4" value="yes"> Да</label>
+        <label class="option"><input type="radio" name="q4" value="no"> Нет</label>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question radio-question" data-answer="no">
+      <div class="question-title">5. Можно ли записать число 1G<sub>16</sub>?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q5" value="yes"> Да</label>
+        <label class="option"><input type="radio" name="q5" value="no"> Нет</label>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question radio-question" data-answer="2">
+      <div class="question-title">6. Какое основание у числа 101101<sub>2</sub>?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q6" value="10"> 10</label>
+        <label class="option"><input type="radio" name="q6" value="2"> 2</label>
+        <label class="option"><input type="radio" name="q6" value="16"> 16</label>
+        <label class="option"><input type="radio" name="q6" value="8"> 8</label>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question radio-question" data-answer="10">
+      <div class="question-title">7. Основание какой системы обычно не указывают рядом с числом?</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q7" value="16"> 16</label>
+        <label class="option"><input type="radio" name="q7" value="10"> 10</label>
+        <label class="option"><input type="radio" name="q7" value="2"> 2</label>
+        <label class="option"><input type="radio" name="q7" value="8"> 8</label>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="actions">
+      <button class="check" onclick="checkMission1()">Проверить миссию</button>
+    </div>
+
+    <div id="result1" class="mission-result"></div>
+
+  </section>
+
+
+  <!-- МИССИЯ 2 -->
+
+  <section class="mission" id="mission2">
+
+    <h2>Миссия 2 · В десятичную</h2>
+
+    <div class="mission-description">
+      Реши каждый пример в тетради.
+      В поле введи только число без индекса системы счисления.
+    </div>
+
+    <div class="question input-question" data-answer="21">
+      <div class="question-title">1. Переведи в десятичную систему</div>
+      <div class="answer-row">
+        <div class="expression">10101<sub>2</sub> =</div>
+        <input class="answer-input" inputmode="numeric" autocomplete="off">
+        <div class="expression"><sub>10</sub></div>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question input-question" data-answer="27">
+      <div class="question-title">2. Переведи в десятичную систему</div>
+      <div class="answer-row">
+        <div class="expression">11011<sub>2</sub> =</div>
+        <input class="answer-input" inputmode="numeric" autocomplete="off">
+        <div class="expression"><sub>10</sub></div>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question input-question" data-answer="47">
+      <div class="question-title">3. Переведи в десятичную систему</div>
+      <div class="answer-row">
+        <div class="expression">57<sub>8</sub> =</div>
+        <input class="answer-input" inputmode="numeric" autocomplete="off">
+        <div class="expression"><sub>10</sub></div>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question input-question" data-answer="102">
+      <div class="question-title">4. Переведи в десятичную систему</div>
+      <div class="answer-row">
+        <div class="expression">146<sub>8</sub> =</div>
+        <input class="answer-input" inputmode="numeric" autocomplete="off">
+        <div class="expression"><sub>10</sub></div>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question input-question" data-answer="58">
+      <div class="question-title">5. Переведи в десятичную систему</div>
+      <div class="answer-row">
+        <div class="expression">3A<sub>16</sub> =</div>
+        <input class="answer-input" autocomplete="off">
+        <div class="expression"><sub>10</sub></div>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="actions">
+      <button class="check" onclick="checkInputMission('mission2','result2',2)">
+        Проверить миссию
+      </button>
+    </div>
+
+    <div id="result2" class="mission-result"></div>
+
+  </section>
+
+
+  <!-- МИССИЯ 3 -->
+
+  <section class="mission" id="mission3">
+
+    <h2>Миссия 3 · Из десятичной</h2>
+
+    <div class="mission-description">
+      Используй деление на основание новой системы.
+      Не забудь прочитать остатки снизу вверх.
+    </div>
+
+    <div class="question input-question" data-answer="10011">
+      <div class="question-title">1. Переведи число</div>
+      <div class="answer-row">
+        <div class="expression">19<sub>10</sub> =</div>
+        <input class="answer-input" inputmode="numeric" autocomplete="off">
+        <div class="expression"><sub>2</sub></div>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question input-question" data-answer="101101">
+      <div class="question-title">2. Переведи число</div>
+      <div class="answer-row">
+        <div class="expression">45<sub>10</sub> =</div>
+        <input class="answer-input" inputmode="numeric" autocomplete="off">
+        <div class="expression"><sub>2</sub></div>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question input-question" data-answer="111">
+      <div class="question-title">3. Переведи число</div>
+      <div class="answer-row">
+        <div class="expression">73<sub>10</sub> =</div>
+        <input class="answer-input" inputmode="numeric" autocomplete="off">
+        <div class="expression"><sub>8</sub></div>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question input-question" data-answer="234">
+      <div class="question-title">4. Переведи число</div>
+      <div class="answer-row">
+        <div class="expression">156<sub>10</sub> =</div>
+        <input class="answer-input" inputmode="numeric" autocomplete="off">
+        <div class="expression"><sub>8</sub></div>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="question input-question" data-answer="5E">
+      <div class="question-title">5. Переведи число</div>
+      <div class="answer-row">
+        <div class="expression">94<sub>10</sub> =</div>
+        <input class="answer-input" autocomplete="off">
+        <div class="expression"><sub>16</sub></div>
+      </div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="actions">
+      <button class="check" onclick="checkInputMission('mission3','result3',3)">
+        Проверить миссию
+      </button>
+    </div>
+
+    <div id="result3" class="mission-result"></div>
+
+  </section>
+
+
+  <section class="finish" id="finish">
+    <div class="icon">🏆</div>
+    <h2>Тренировка завершена!</h2>
+    <p>
+      Ты справился со всеми тремя миссиями и выполнил
+      10 вычислений с системами счисления.
+    </p>
+    <p>
+      На следующем уроке мы научимся выполнять некоторые
+      переводы намного быстрее.
     </p>
   </section>
 
-  <div class="weeks">
-
-    <div class="week no-practice">
-      <strong>Неделя 1</strong>
-      <span>Практические занятия на сайте не предусмотрены.</span>
-      <div class="tag">БЕЗ ПРАКТИКИ</div>
-    </div>
-
-    <a class="week active" href="/informatics/7/week-02/">
-      <strong>Неделя 2</strong>
-      <span>Единицы измерения информации · Системы счисления</span>
-      <div class="tag">ОТКРЫТЬ →</div>
-    </a>
-
-    <div class="week locked"><strong>Неделя 3</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 4</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 5</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 6</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 7</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 8</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 9</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 10</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 11</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 12</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 13</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 14</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 15</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 16</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 17</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 18</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 19</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 20</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 21</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 22</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 23</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 24</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 25</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 26</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 27</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 28</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 29</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 30</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 31</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 32</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 33</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-    <div class="week locked"><strong>Неделя 34</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div></div>
-
-  </div>
 </div>
+
+
+<script>
+
+const completed = new Set();
+
+function updateProgress(){
+  const count = completed.size;
+
+  document.getElementById("progressText").textContent =
+    count + " из 3 миссий";
+
+  document.getElementById("progressBar").style.width =
+    (count / 3 * 100) + "%";
+
+  if(count === 3){
+    document.getElementById("finish").style.display = "block";
+    document.getElementById("finish").scrollIntoView({
+      behavior:"smooth",
+      block:"center"
+    });
+  }
+}
+
+
+/* ---------- МИССИЯ 1 ---------- */
+
+function checkMission1(){
+
+  const questions =
+    document.querySelectorAll("#mission1 .radio-question");
+
+  let allCorrect = true;
+  let hasEmpty = false;
+
+  questions.forEach(q=>{
+
+    q.classList.remove("correct","wrong","unanswered");
+
+    const feedback = q.querySelector(".feedback");
+    feedback.textContent = "";
+
+    const selected = q.querySelector("input:checked");
+
+    /* ВАЖНО:
+       если ученик ничего не выбрал,
+       правильный ответ НЕ показываем.
+    */
+
+    if(!selected){
+      q.classList.add("unanswered");
+      feedback.textContent = "Выбери ответ.";
+      hasEmpty = true;
+      allCorrect = false;
+      return;
+    }
+
+    if(selected.value === q.dataset.answer){
+      q.classList.add("correct");
+      feedback.textContent = "✓ Верно";
+    }else{
+      q.classList.add("wrong");
+      feedback.textContent = "✗ Подумай ещё.";
+      allCorrect = false;
+    }
+
+  });
+
+  const result = document.getElementById("result1");
+  result.style.display = "block";
+
+  if(allCorrect){
+
+    result.className = "mission-result success";
+    result.innerHTML =
+      "✅ Отлично! Миссия 1 выполнена.";
+
+    completed.add(1);
+    updateProgress();
+
+  }else{
+
+    result.className = "mission-result retry";
+
+    if(hasEmpty){
+      result.innerHTML =
+        "Заполни все вопросы и попробуй ещё раз.";
+    }else{
+      result.innerHTML =
+        "Есть ошибки. Исправь их и проверь миссию снова.";
+    }
+
+  }
+
+}
+
+
+/* ---------- МИССИИ 2 И 3 ---------- */
+
+function checkInputMission(missionId,resultId,missionNumber){
+
+  const questions =
+    document.querySelectorAll("#"+missionId+" .input-question");
+
+  let allCorrect = true;
+  let hasEmpty = false;
+
+  questions.forEach(q=>{
+
+    q.classList.remove("correct","wrong","unanswered");
+
+    const input = q.querySelector(".answer-input");
+    const feedback = q.querySelector(".feedback");
+
+    feedback.textContent = "";
+
+    let value = input.value.trim().toUpperCase();
+    let correctAnswer = q.dataset.answer.toUpperCase();
+
+    /*
+       Если поле пустое —
+       НЕ показываем правильный ответ.
+    */
+
+    if(value === ""){
+
+      q.classList.add("unanswered");
+      feedback.textContent =
+        "Сначала реши пример и введи ответ.";
+
+      hasEmpty = true;
+      allCorrect = false;
+      return;
+    }
+
+    if(value === correctAnswer){
+
+      q.classList.add("correct");
+      feedback.textContent = "✓ Верно";
+
+    }else{
+
+      q.classList.add("wrong");
+      feedback.textContent =
+        "✗ Пока неверно. Проверь решение в тетради.";
+
+      allCorrect = false;
+
+    }
+
+  });
+
+
+  const result = document.getElementById(resultId);
+  result.style.display = "block";
+
+  if(allCorrect){
+
+    result.className = "mission-result success";
+    result.innerHTML =
+      "✅ Отлично! Все 5 примеров решены правильно.";
+
+    completed.add(missionNumber);
+    updateProgress();
+
+  }else{
+
+    result.className = "mission-result retry";
+
+    if(hasEmpty){
+
+      result.innerHTML =
+        "Сначала заполни все примеры. Правильные ответы сайт не подсказывает.";
+
+    }else{
+
+      result.innerHTML =
+        "Есть ошибки. Пересчитай примеры в тетради и попробуй снова.";
+
+    }
+
+  }
+
+}
+
+
+/* При повторном вводе убираем старую красную/зелёную подсветку */
+
+document.querySelectorAll(".answer-input").forEach(input=>{
+
+  input.addEventListener("input",()=>{
+
+    const q = input.closest(".question");
+
+    q.classList.remove("correct","wrong","unanswered");
+    q.querySelector(".feedback").textContent = "";
+
+  });
+
+});
+
+
+document.querySelectorAll('input[type="radio"]').forEach(input=>{
+
+  input.addEventListener("change",()=>{
+
+    const q = input.closest(".question");
+
+    q.classList.remove("correct","wrong","unanswered");
+    q.querySelector(".feedback").textContent = "";
+
+  });
+
+});
+
+</script>
 
 </body>
 </html>

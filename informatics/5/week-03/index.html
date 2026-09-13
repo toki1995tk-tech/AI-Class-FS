@@ -1,0 +1,1237 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>5 класс — Информация вокруг нас — Урок 2</title>
+<style>
+  :root{
+    --bg1:#dbeafe;
+    --bg2:#93c5fd;
+    --bg3:#eff6ff;
+    --blue:#2563eb;
+    --blue2:#1d4ed8;
+    --blue3:#0f172a;
+    --green:#16a34a;
+    --red:#ef4444;
+    --yellow:#f59e0b;
+    --card:#ffffff;
+    --line:#c7ddff;
+    --text:#15305b;
+    --muted:#5d76a3;
+    --shadow:0 14px 35px rgba(37,99,235,.16);
+    --radius:24px;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(circle at top left, rgba(255,255,255,.7), transparent 25%),
+      radial-gradient(circle at bottom right, rgba(255,255,255,.5), transparent 25%),
+      linear-gradient(180deg, var(--bg1), var(--bg2));
+  }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:20px;
+  }
+
+  .topnav{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+  }
+
+  .navbtn{
+    text-decoration:none;
+    color:var(--blue2);
+    background:rgba(255,255,255,.9);
+    border:2px solid rgba(255,255,255,.8);
+    padding:10px 16px;
+    border-radius:16px;
+    font-weight:800;
+    box-shadow:var(--shadow);
+    transition:.18s ease;
+  }
+  .navbtn:hover{transform:translateY(-2px)}
+
+  .hero{
+    background:rgba(255,255,255,.93);
+    border-radius:30px;
+    padding:24px;
+    box-shadow:var(--shadow);
+    border:1px solid rgba(255,255,255,.75);
+    margin-bottom:18px;
+  }
+
+  .badge{
+    display:inline-block;
+    background:#e0ecff;
+    color:var(--blue2);
+    font-weight:800;
+    border-radius:999px;
+    padding:8px 14px;
+    margin-bottom:10px;
+  }
+
+  h1{
+    margin:0 0 8px;
+    color:var(--blue3);
+    font-size:clamp(28px,4vw,44px);
+    line-height:1.1;
+  }
+
+  .subtitle{
+    margin:0;
+    color:var(--muted);
+    font-size:17px;
+    line-height:1.5;
+  }
+
+  .progress-card{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-top:18px;
+    background:#f5f9ff;
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:16px;
+    flex-wrap:wrap;
+  }
+
+  .progress-title{
+    font-weight:800;
+    color:var(--blue2);
+  }
+
+  .progress-bar{
+    flex:1 1 320px;
+    height:16px;
+    border-radius:999px;
+    background:#dbeafe;
+    overflow:hidden;
+    border:1px solid #bfd7ff;
+  }
+
+  .progress-fill{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg, #22c55e, #2563eb);
+    transition:width .25s ease;
+  }
+
+  .mission{
+    background:rgba(255,255,255,.95);
+    border-radius:28px;
+    padding:22px;
+    box-shadow:var(--shadow);
+    margin:18px 0;
+    border:1px solid rgba(255,255,255,.8);
+    position:relative;
+  }
+
+  .mission.locked{
+    opacity:.56;
+    filter:saturate(.8);
+    pointer-events:none;
+  }
+
+  .mission.locked::after{
+    content:"🔒 Сначала выполни предыдущую миссию";
+    position:absolute;
+    top:16px;
+    right:16px;
+    background:#eef4ff;
+    color:var(--blue2);
+    padding:8px 12px;
+    border-radius:999px;
+    font-weight:800;
+    font-size:13px;
+    border:1px solid var(--line);
+  }
+
+  .mission.done{
+    border:2px solid #bbf7d0;
+    box-shadow:0 14px 35px rgba(34,197,94,.14);
+  }
+
+  .mission-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:14px;
+    flex-wrap:wrap;
+  }
+
+  .mission-tag{
+    background:#dbeafe;
+    color:var(--blue2);
+    font-weight:900;
+    padding:8px 14px;
+    border-radius:999px;
+    font-size:14px;
+  }
+
+  .mission h2{
+    margin:0;
+    color:var(--blue3);
+    font-size:28px;
+  }
+
+  .mission p.lead{
+    margin:8px 0 0;
+    color:var(--muted);
+    line-height:1.5;
+  }
+
+  .info-box{
+    background:#f6faff;
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:14px 16px;
+    margin:16px 0;
+  }
+
+  .info-box strong{color:var(--blue2)}
+
+  .question{
+    background:#f8fbff;
+    border:1px solid var(--line);
+    border-radius:22px;
+    padding:16px;
+    margin:14px 0;
+  }
+
+  .question.missing{
+    border:2px dashed var(--red);
+    background:#fff7f7;
+  }
+
+  .question-title{
+    font-weight:800;
+    color:var(--blue3);
+    margin-bottom:12px;
+    line-height:1.4;
+  }
+
+  .option-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(180px,1fr));
+    gap:12px;
+  }
+
+  .option{
+    border:2px solid var(--line);
+    background:#ffffff;
+    color:var(--text);
+    border-radius:18px;
+    padding:14px;
+    font-weight:800;
+    text-align:center;
+    cursor:pointer;
+    transition:.16s ease;
+    user-select:none;
+  }
+
+  .option:hover{
+    transform:translateY(-2px);
+    border-color:#9ec5ff;
+  }
+
+  .option.selected{
+    background:#dbeafe;
+    border-color:var(--blue);
+    color:var(--blue2);
+  }
+
+  .option.correct{
+    background:#dcfce7 !important;
+    border-color:var(--green) !important;
+    color:#166534 !important;
+  }
+
+  .option.wrong{
+    background:#fee2e2 !important;
+    border-color:var(--red) !important;
+    color:#991b1b !important;
+  }
+
+  .check-btn, .secondary-btn{
+    border:none;
+    border-radius:16px;
+    padding:13px 18px;
+    font-weight:900;
+    cursor:pointer;
+    transition:.16s ease;
+    margin-top:10px;
+  }
+
+  .check-btn{
+    background:var(--blue);
+    color:#fff;
+    box-shadow:0 10px 20px rgba(37,99,235,.2);
+  }
+
+  .check-btn:hover{transform:translateY(-2px)}
+  .secondary-btn{
+    background:#eaf2ff;
+    color:var(--blue2);
+    margin-left:8px;
+  }
+
+  .message{
+    margin-top:12px;
+    padding:12px 14px;
+    border-radius:16px;
+    font-weight:700;
+    display:none;
+  }
+  .message.show{display:block}
+  .message.ok{background:#dcfce7;color:#166534;border:1px solid #86efac}
+  .message.warn{background:#fff7ed;color:#9a3412;border:1px solid #fdba74}
+  .message.error{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}
+
+  .bit-target{
+    display:inline-block;
+    background:#eff6ff;
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:10px 14px;
+    font-size:26px;
+    font-weight:900;
+    letter-spacing:6px;
+    color:var(--blue2);
+    margin-bottom:10px;
+  }
+
+  .bit-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:12px 0;
+  }
+
+  .bit{
+    width:58px;
+    height:58px;
+    border-radius:18px;
+    border:2px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+    font-size:26px;
+    font-weight:900;
+    color:#64748b;
+    cursor:pointer;
+    transition:.16s ease;
+  }
+
+  .bit.on{
+    background:var(--blue);
+    border-color:var(--blue2);
+    color:#fff;
+  }
+
+  .code-table{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;
+    margin:12px 0 18px;
+  }
+
+  .code-cell{
+    background:#eef5ff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:16px;
+    text-align:center;
+    font-size:28px;
+    font-weight:900;
+    color:var(--blue2);
+  }
+
+  .pixel-wrap{
+    display:flex;
+    gap:24px;
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+
+  .pixel-code{
+    background:#f5faff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:14px 16px;
+    min-width:220px;
+  }
+
+  .pixel-code pre{
+    margin:10px 0 0;
+    font-size:18px;
+    font-weight:900;
+    color:var(--blue2);
+    line-height:1.5;
+  }
+
+  .pixel-grid{
+    display:grid;
+    grid-template-columns:repeat(6,42px);
+    gap:6px;
+    padding:12px;
+    background:#f5faff;
+    border-radius:20px;
+    border:1px solid var(--line);
+  }
+
+  .pixel{
+    width:42px;
+    height:42px;
+    border:2px solid #bfd7ff;
+    border-radius:10px;
+    background:#ffffff;
+    cursor:pointer;
+    transition:.12s ease;
+  }
+
+  .pixel.on{
+    background:var(--blue);
+    border-color:var(--blue2);
+  }
+
+  .pixel.extra{
+    background:#fecaca !important;
+    border-color:#ef4444 !important;
+  }
+
+  .pixel.miss{
+    box-shadow: inset 0 0 0 3px #ef4444;
+  }
+
+  .legend{
+    margin-top:12px;
+    display:flex;
+    gap:16px;
+    flex-wrap:wrap;
+    font-weight:800;
+    color:var(--muted);
+  }
+
+  .legend span{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .square{
+    width:18px;
+    height:18px;
+    display:inline-block;
+    border-radius:6px;
+    border:2px solid #bfd7ff;
+    background:#fff;
+  }
+
+  .square.fill{
+    background:var(--blue);
+    border-color:var(--blue2);
+  }
+
+  .select-grid{
+    display:grid;
+    gap:12px;
+  }
+
+  .select-row{
+    background:#f8fbff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:14px;
+  }
+
+  .select-row strong{display:block;margin-bottom:10px}
+
+  select{
+    width:100%;
+    padding:12px 14px;
+    border-radius:14px;
+    border:2px solid var(--line);
+    background:#fff;
+    font-size:16px;
+    color:var(--text);
+    font-weight:700;
+  }
+
+  select.correct{
+    border-color:var(--green);
+    background:#dcfce7;
+    color:#166534;
+  }
+
+  select.wrong{
+    border-color:var(--red);
+    background:#fee2e2;
+    color:#991b1b;
+  }
+
+  .challenge{
+    background:linear-gradient(180deg,#fff7ed,#ffffff);
+    border:2px dashed #fdba74;
+  }
+
+  textarea{
+    width:100%;
+    min-height:110px;
+    resize:vertical;
+    border-radius:16px;
+    border:2px solid var(--line);
+    padding:14px;
+    font:inherit;
+    color:var(--text);
+    margin-top:10px;
+  }
+
+  .final{
+    display:none;
+    background:linear-gradient(135deg,#e0f2fe,#eff6ff,#dcfce7);
+    border:2px solid #86efac;
+  }
+
+  .final.show{display:block}
+
+  .stars{
+    font-size:28px;
+    letter-spacing:4px;
+    color:#f59e0b;
+  }
+
+  @media (max-width:700px){
+    .wrap{padding:14px}
+    .hero,.mission{padding:18px}
+    .pixel-grid{grid-template-columns:repeat(6,36px)}
+    .pixel{width:36px;height:36px}
+    .bit{width:50px;height:50px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topnav">
+    <a class="navbtn" href="/informatics/5/">← К неделям</a>
+    <a class="navbtn" href="/informatics/">⌂ К классам</a>
+  </div>
+
+  <section class="hero">
+    <div class="badge">5 класс • Информатика</div>
+    <h1>Информация вокруг нас — урок 2</h1>
+    <p class="subtitle">
+      <strong>Тема:</strong> секретный язык компьютера. <br>
+      Сегодня узнаем, почему компьютер хранит <strong>текст, фото, звук, видео и числа</strong> с помощью <strong>0 и 1</strong>.
+    </p>
+
+    <div class="progress-card">
+      <div class="progress-title">Прогресс: <span id="progressText">0/8</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+  </section>
+
+  <!-- Миссия 1 -->
+  <section class="mission" id="mission1">
+    <div class="mission-head">
+      <div>
+        <div class="mission-tag">Миссия 1</div>
+        <h2>0 или 1?</h2>
+        <p class="lead">Договоримся: <strong>1</strong> — есть сигнал / включено / активно. <strong>0</strong> — нет сигнала / выключено / неактивно.</p>
+      </div>
+    </div>
+
+    <div class="question single" data-correct="1">
+      <div class="question-title">1) Лампа включена. Какой знак подойдёт?</div>
+      <div class="option-grid">
+        <div class="option" data-value="0">0</div>
+        <div class="option" data-value="1">1</div>
+      </div>
+    </div>
+
+    <div class="question single" data-correct="0">
+      <div class="question-title">2) Кнопка не нажата. Какой знак подойдёт?</div>
+      <div class="option-grid">
+        <div class="option" data-value="1">1</div>
+        <div class="option" data-value="0">0</div>
+      </div>
+    </div>
+
+    <div class="question single" data-correct="1">
+      <div class="question-title">3) Сигнал есть. Какой знак подойдёт?</div>
+      <div class="option-grid">
+        <div class="option" data-value="1">1</div>
+        <div class="option" data-value="0">0</div>
+      </div>
+    </div>
+
+    <div class="question single" data-correct="0">
+      <div class="question-title">4) Экран выключен. Какой знак подойдёт?</div>
+      <div class="option-grid">
+        <div class="option" data-value="1">1</div>
+        <div class="option" data-value="0">0</div>
+      </div>
+    </div>
+
+    <button class="check-btn" onclick="checkSingleMission('mission1',1,'mission2','msg1')">Проверить миссию 1</button>
+    <div class="message" id="msg1"></div>
+  </section>
+
+  <!-- Миссия 2 -->
+  <section class="mission locked" id="mission2">
+    <div class="mission-head">
+      <div>
+        <div class="mission-tag">Миссия 2</div>
+        <h2>Собери сигнал</h2>
+        <p class="lead">Сделай такую же последовательность из 0 и 1.</p>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Цель:</strong> собери код <span class="bit-target">1011001</span>
+    </div>
+
+    <div class="bit-row" id="bitRow"></div>
+
+    <button class="check-btn" onclick="checkBits()">Проверить миссию 2</button>
+    <button class="secondary-btn" onclick="resetBits()">Сбросить</button>
+    <div class="message" id="msg2"></div>
+  </section>
+
+  <!-- Миссия 3 -->
+  <section class="mission locked" id="mission3">
+    <div class="mission-head">
+      <div>
+        <div class="mission-tag">Миссия 3</div>
+        <h2>Секретный алфавит</h2>
+        <p class="lead">Используй простую таблицу кода и расшифруй сообщения.</p>
+      </div>
+    </div>
+
+    <div class="code-table">
+      <div class="code-cell">А = 00</div>
+      <div class="code-cell">Б = 01</div>
+      <div class="code-cell">В = 10</div>
+      <div class="code-cell">Г = 11</div>
+    </div>
+
+    <div class="question single" data-correct="vab">
+      <div class="question-title">1) Что означает код <strong>10 00 01</strong>?</div>
+      <div class="option-grid">
+        <div class="option" data-value="bag">БАГ</div>
+        <div class="option" data-value="vab">ВАБ</div>
+        <div class="option" data-value="avg">АВГ</div>
+      </div>
+    </div>
+
+    <div class="question single" data-correct="1101">
+      <div class="question-title">2) Какой код у слова <strong>ГБ</strong>?</div>
+      <div class="option-grid">
+        <div class="option" data-value="0111">01 11</div>
+        <div class="option" data-value="1001">10 01</div>
+        <div class="option" data-value="1101">11 01</div>
+      </div>
+    </div>
+
+    <div class="question single" data-correct="agv">
+      <div class="question-title">3) Что означает код <strong>00 11 10</strong>?</div>
+      <div class="option-grid">
+        <div class="option" data-value="agv">АГВ</div>
+        <div class="option" data-value="vga">ВГА</div>
+        <div class="option" data-value="abv">АБВ</div>
+      </div>
+    </div>
+
+    <div class="question single" data-correct="010011">
+      <div class="question-title">4) Какой код у слова <strong>БАГ</strong>?</div>
+      <div class="option-grid">
+        <div class="option" data-value="110001">11 00 01</div>
+        <div class="option" data-value="010011">01 00 11</div>
+        <div class="option" data-value="000111">00 01 11</div>
+      </div>
+    </div>
+
+    <button class="check-btn" onclick="checkSingleMission('mission3',3,'mission4','msg3')">Проверить миссию 3</button>
+    <div class="message" id="msg3"></div>
+  </section>
+
+  <!-- Миссия 4 -->
+  <section class="mission locked" id="mission4">
+    <div class="mission-head">
+      <div>
+        <div class="mission-tag">Миссия 4</div>
+        <h2>Пиксельный художник</h2>
+        <p class="lead">Собери рисунок по коду. Закрашивай клетки кликом.</p>
+      </div>
+    </div>
+
+    <div class="pixel-wrap">
+      <div class="pixel-code">
+        <strong>Код рисунка:</strong>
+        <pre>0 1 1 1 1 0
+1 1 1 1 1 1
+1 1 1 1 1 1
+0 1 1 1 1 0
+0 0 1 1 0 0
+0 0 0 0 0 0</pre>
+      </div>
+
+      <div>
+        <div class="pixel-grid" id="pixelGrid"></div>
+        <div class="legend">
+          <span><i class="square"></i> 0 = белая клетка</span>
+          <span><i class="square fill"></i> 1 = синяя клетка</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="check-btn" onclick="checkPixels()">Проверить миссию 4</button>
+    <button class="secondary-btn" onclick="resetPixels()">Сбросить</button>
+    <div class="message" id="msg4"></div>
+  </section>
+
+  <!-- Миссия 5 -->
+  <section class="mission locked" id="mission5">
+    <div class="mission-head">
+      <div>
+        <div class="mission-tag">Миссия 5</div>
+        <h2>Что превращается в код?</h2>
+        <p class="lead">Выбери всё, что компьютер может хранить в двоичном коде.</p>
+      </div>
+    </div>
+
+    <div class="question multi" id="multiQ">
+      <div class="question-title">Можно выбрать несколько вариантов.</div>
+      <div class="option-grid">
+        <div class="option" data-value="video" data-correct="1">Видео</div>
+        <div class="option" data-value="smell" data-correct="0">Запах</div>
+        <div class="option" data-value="text" data-correct="1">Текст</div>
+        <div class="option" data-value="taste" data-correct="0">Вкус</div>
+        <div class="option" data-value="sound" data-correct="1">Звук</div>
+        <div class="option" data-value="photo" data-correct="1">Фото</div>
+        <div class="option" data-value="number" data-correct="1">Число</div>
+      </div>
+    </div>
+
+    <button class="check-btn" onclick="checkMulti()">Проверить миссию 5</button>
+    <div class="message" id="msg5"></div>
+  </section>
+
+  <!-- Миссия 6 -->
+  <section class="mission locked" id="mission6">
+    <div class="mission-head">
+      <div>
+        <div class="mission-tag">Миссия 6</div>
+        <h2>Найди ошибку робота</h2>
+        <p class="lead">Робот немного запутался. Помоги ему.</p>
+      </div>
+    </div>
+
+    <div class="info-box">
+      Робот сказал: <strong>«Только текст превращается в 0 и 1, а фото, звук и видео компьютер хранит по-другому».</strong>
+    </div>
+
+    <div class="question single" data-correct="all">
+      <div class="question-title">Что робот понял неправильно?</div>
+      <div class="option-grid">
+        <div class="option" data-value="only-photo">В двоичный код превращаются только фотографии.</div>
+        <div class="option" data-value="all">Компьютер представляет в двоичном коде все виды цифровой информации.</div>
+        <div class="option" data-value="video-no">Видео компьютер вообще не умеет хранить.</div>
+        <div class="option" data-value="text-number">В код превращаются только текст и числа.</div>
+      </div>
+    </div>
+
+    <button class="check-btn" onclick="checkSingleMission('mission6',6,'mission7','msg6')">Проверить миссию 6</button>
+    <div class="message" id="msg6"></div>
+  </section>
+
+  <!-- Миссия 7 -->
+  <section class="mission locked" id="mission7">
+    <div class="mission-head">
+      <div>
+        <div class="mission-tag">Миссия 7</div>
+        <h2>Данные потерялись</h2>
+        <p class="lead">Прочитай ситуацию и выбери самый точный ответ.</p>
+      </div>
+    </div>
+
+    <div class="info-box">
+      Мы нашли код: <span class="bit-target">01001101</span>
+    </div>
+
+    <div class="question single" data-correct="rule">
+      <div class="question-title">Можно ли точно сказать, что это: текст, картинка или звук?</div>
+      <div class="option-grid">
+        <div class="option" data-value="text">Да, это точно текст.</div>
+        <div class="option" data-value="picture">Да, это точно картинка.</div>
+        <div class="option" data-value="rule">Нет, без правила кодирования точно определить нельзя.</div>
+        <div class="option" data-value="sound">Да, это точно звук.</div>
+      </div>
+    </div>
+
+    <button class="check-btn" onclick="checkSingleMission('mission7',7,'mission8','msg7')">Проверить миссию 7</button>
+    <div class="message" id="msg7"></div>
+  </section>
+
+  <!-- Миссия 8 -->
+  <section class="mission locked" id="mission8">
+    <div class="mission-head">
+      <div>
+        <div class="mission-tag">BOSS LEVEL</div>
+        <h2>Цифровая лаборатория</h2>
+        <p class="lead">Соотнеси вид информации и то, как компьютер превращает её в код.</p>
+      </div>
+    </div>
+
+    <div class="select-grid">
+      <div class="select-row">
+        <strong>Текст</strong>
+        <select data-correct="symbols">
+          <option value="">Выбери ответ…</option>
+          <option value="pixels">пиксели → 0 и 1</option>
+          <option value="frames">кадры + звук → 0 и 1</option>
+          <option value="symbols">символы → код → 0 и 1</option>
+          <option value="measures">измерения → числа → 0 и 1</option>
+        </select>
+      </div>
+
+      <div class="select-row">
+        <strong>Фото</strong>
+        <select data-correct="pixels">
+          <option value="">Выбери ответ…</option>
+          <option value="symbols">символы → код → 0 и 1</option>
+          <option value="pixels">пиксели → 0 и 1</option>
+          <option value="measures">измерения → числа → 0 и 1</option>
+          <option value="frames">кадры + звук → 0 и 1</option>
+        </select>
+      </div>
+
+      <div class="select-row">
+        <strong>Звук</strong>
+        <select data-correct="measures">
+          <option value="">Выбери ответ…</option>
+          <option value="frames">кадры + звук → 0 и 1</option>
+          <option value="measures">измерения → числа → 0 и 1</option>
+          <option value="pixels">пиксели → 0 и 1</option>
+          <option value="symbols">символы → код → 0 и 1</option>
+        </select>
+      </div>
+
+      <div class="select-row">
+        <strong>Видео</strong>
+        <select data-correct="frames">
+          <option value="">Выбери ответ…</option>
+          <option value="measures">измерения → числа → 0 и 1</option>
+          <option value="symbols">символы → код → 0 и 1</option>
+          <option value="frames">кадры + звук → 0 и 1</option>
+          <option value="pixels">пиксели → 0 и 1</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="check-btn" onclick="checkBoss()">Проверить BOSS LEVEL</button>
+    <div class="message" id="msg8"></div>
+  </section>
+
+  <!-- Challenge -->
+  <section class="mission challenge locked" id="challengeBox">
+    <div class="mission-head">
+      <div>
+        <div class="mission-tag">CHALLENGE</div>
+        <h2>Для самых быстрых</h2>
+        <p class="lead">Необязательное задание для размышления.</p>
+      </div>
+    </div>
+
+    <div class="question single" data-correct="8x8">
+      <div class="question-title">У какого изображения понадобится больше данных?</div>
+      <div class="option-grid">
+        <div class="option" data-value="4x4">У изображения 4×4 пикселя</div>
+        <div class="option" data-value="8x8">У изображения 8×8 пикселя</div>
+        <div class="option" data-value="same">Одинаково</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      Напиши своими словами: <strong>почему?</strong>
+      <textarea placeholder="Например: у 8×8 больше пикселей, поэтому нужно сохранить больше информации..."></textarea>
+      <button class="secondary-btn" onclick="showChallengeHint()">Показать пример ответа</button>
+      <div class="message" id="challengeHint"></div>
+    </div>
+  </section>
+
+  <!-- Финал -->
+  <section class="mission final" id="finalBox">
+    <div class="mission-head">
+      <div>
+        <div class="mission-tag">ФИНИШ</div>
+        <h2>Ты справился!</h2>
+        <p class="lead">Теперь ты понимаешь, почему компьютер любит 0 и 1.</p>
+      </div>
+    </div>
+
+    <div class="stars">★ ★ ★ ★ ★</div>
+
+    <div class="info-box">
+      <strong>Теперь я умею:</strong>
+      <ul>
+        <li>объяснять, что такое двоичный код;</li>
+        <li>понимать, что бит — это 0 или 1;</li>
+        <li>объяснять, как текст, фото, звук и видео превращаются в код;</li>
+        <li>понимать, что без правила кодирования один и тот же код может означать разное.</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // ---------------------------
+  // Общие настройки
+  // ---------------------------
+  const TOTAL = 8;
+  const doneSet = new Set();
+
+  function updateProgress(){
+    const done = doneSet.size;
+    document.getElementById('progressText').textContent = done + '/' + TOTAL;
+    document.getElementById('progressFill').style.width = (done / TOTAL * 100) + '%';
+
+    if(done === TOTAL){
+      document.getElementById('finalBox').classList.add('show');
+      document.getElementById('challengeBox').classList.remove('locked');
+      document.getElementById('finalBox').scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  }
+
+  function markDone(num, nextId){
+    if(!doneSet.has(num)){
+      doneSet.add(num);
+      updateProgress();
+    }
+    const mission = document.getElementById('mission' + num);
+    if(mission) mission.classList.add('done');
+
+    if(nextId){
+      const next = document.getElementById(nextId);
+      if(next) next.classList.remove('locked');
+    }
+  }
+
+  function showMessage(id, text, type){
+    const el = document.getElementById(id);
+    el.className = 'message show ' + type;
+    el.textContent = text;
+  }
+
+  function clearOptionState(scope){
+    scope.querySelectorAll('.option').forEach(opt=>{
+      opt.classList.remove('correct','wrong');
+    });
+  }
+
+  // ---------------------------
+  // Выбор вариантов
+  // ---------------------------
+  document.querySelectorAll('.question.single .option').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const q = btn.closest('.question');
+      q.classList.remove('missing');
+      q.querySelectorAll('.option').forEach(o=>{
+        o.classList.remove('selected');
+        o.classList.remove('correct');
+        o.classList.remove('wrong');
+      });
+      btn.classList.add('selected');
+    });
+  });
+
+  document.querySelectorAll('.question.multi .option').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const q = btn.closest('.question');
+      q.classList.remove('missing');
+      btn.classList.toggle('selected');
+      btn.classList.remove('correct','wrong');
+    });
+  });
+
+  // ---------------------------
+  // Универсальная проверка одиночных миссий
+  // ---------------------------
+  function checkSingleMission(missionId, missionNum, nextId, msgId){
+    const mission = document.getElementById(missionId);
+    const questions = mission.querySelectorAll('.question.single');
+    let hasMissing = false;
+    let allCorrect = true;
+
+    questions.forEach(q=>{
+      q.classList.remove('missing');
+      clearOptionState(q);
+
+      const correct = q.dataset.correct;
+      const selected = q.querySelector('.option.selected');
+
+      if(!selected){
+        q.classList.add('missing');
+        hasMissing = true;
+        allCorrect = false;
+        return;
+      }
+
+      if(selected.dataset.value === correct){
+        selected.classList.add('correct');
+      } else {
+        selected.classList.add('wrong');
+        const correctBtn = q.querySelector(`.option[data-value="${correct}"]`);
+        if(correctBtn) correctBtn.classList.add('correct');
+        allCorrect = false;
+      }
+    });
+
+    if(hasMissing){
+      showMessage(msgId, 'Сначала ответь на все вопросы миссии.', 'warn');
+      return;
+    }
+
+    if(allCorrect){
+      showMessage(msgId, 'Отлично! Миссия выполнена.', 'ok');
+      markDone(missionNum, nextId);
+    } else {
+      showMessage(msgId, 'Есть ошибки. Подумай ещё и попробуй снова.', 'error');
+    }
+  }
+
+  // ---------------------------
+  // Миссия 2 — биты
+  // ---------------------------
+  const targetBits = [1,0,1,1,0,0,1];
+  let currentBits = [0,0,0,0,0,0,0];
+
+  function renderBits(){
+    const row = document.getElementById('bitRow');
+    row.innerHTML = '';
+    currentBits.forEach((bit, index)=>{
+      const el = document.createElement('button');
+      el.className = 'bit' + (bit ? ' on' : '');
+      el.textContent = bit;
+      el.type = 'button';
+      el.addEventListener('click', ()=>{
+        currentBits[index] = currentBits[index] ? 0 : 1;
+        renderBits();
+      });
+      row.appendChild(el);
+    });
+  }
+
+  function resetBits(){
+    currentBits = [0,0,0,0,0,0,0];
+    renderBits();
+    document.getElementById('msg2').className = 'message';
+    document.getElementById('msg2').textContent = '';
+  }
+
+  function checkBits(){
+    const result = currentBits.join('');
+    const target = targetBits.join('');
+    if(result === '0000000'){
+      showMessage('msg2', 'Сначала собери код.', 'warn');
+      return;
+    }
+
+    if(result === target){
+      showMessage('msg2', 'Супер! Ты правильно собрал последовательность.', 'ok');
+      markDone(2, 'mission3');
+      document.getElementById('mission2').classList.add('done');
+    } else {
+      showMessage('msg2', 'Пока не совпало. Сравни внимательно с образцом.', 'error');
+    }
+  }
+
+  // ---------------------------
+  // Миссия 4 — пиксели
+  // ---------------------------
+  const pixelTarget = [
+    0,1,1,1,1,0,
+    1,1,1,1,1,1,
+    1,1,1,1,1,1,
+    0,1,1,1,1,0,
+    0,0,1,1,0,0,
+    0,0,0,0,0,0
+  ];
+
+  let pixelState = new Array(36).fill(0);
+
+  function renderPixels(){
+    const grid = document.getElementById('pixelGrid');
+    grid.innerHTML = '';
+    pixelState.forEach((v, i)=>{
+      const px = document.createElement('button');
+      px.type = 'button';
+      px.className = 'pixel' + (v ? ' on' : '');
+      px.addEventListener('click', ()=>{
+        pixelState[i] = pixelState[i] ? 0 : 1;
+        renderPixels();
+        document.getElementById('msg4').className = 'message';
+        document.getElementById('msg4').textContent = '';
+      });
+      grid.appendChild(px);
+    });
+  }
+
+  function resetPixels(){
+    pixelState = new Array(36).fill(0);
+    renderPixels();
+    document.getElementById('msg4').className = 'message';
+    document.getElementById('msg4').textContent = '';
+  }
+
+  function checkPixels(){
+    const selectedCount = pixelState.reduce((a,b)=>a+b,0);
+    if(selectedCount === 0){
+      showMessage('msg4', 'Сначала закрась клетки по коду.', 'warn');
+      return;
+    }
+
+    const buttons = document.querySelectorAll('#pixelGrid .pixel');
+    buttons.forEach(btn=>{
+      btn.classList.remove('extra','miss');
+    });
+
+    let ok = true;
+    pixelState.forEach((val, i)=>{
+      if(val !== pixelTarget[i]){
+        ok = false;
+        if(val === 1 && pixelTarget[i] === 0){
+          buttons[i].classList.add('extra');
+        }
+        if(val === 0 && pixelTarget[i] === 1){
+          buttons[i].classList.add('miss');
+        }
+      }
+    });
+
+    if(ok){
+      showMessage('msg4', 'Отлично! Ты собрал изображение из кода.', 'ok');
+      markDone(4, 'mission5');
+      document.getElementById('mission4').classList.add('done');
+    } else {
+      showMessage('msg4', 'Есть неточности. Красным отмечены лишние или пропущенные клетки.', 'error');
+    }
+  }
+
+  // ---------------------------
+  // Миссия 5 — множественный выбор
+  // ---------------------------
+  function checkMulti(){
+    const q = document.getElementById('multiQ');
+    const opts = q.querySelectorAll('.option');
+    const selected = q.querySelectorAll('.option.selected');
+
+    q.classList.remove('missing');
+    opts.forEach(o=>o.classList.remove('correct','wrong'));
+
+    if(selected.length === 0){
+      q.classList.add('missing');
+      showMessage('msg5', 'Сначала выбери хотя бы один вариант.', 'warn');
+      return;
+    }
+
+    let allCorrect = true;
+    opts.forEach(o=>{
+      const should = o.dataset.correct === '1';
+      const isSel = o.classList.contains('selected');
+
+      if(isSel && should) o.classList.add('correct');
+      if(isSel && !should){
+        o.classList.add('wrong');
+        allCorrect = false;
+      }
+      if(!isSel && should){
+        o.classList.add('correct');
+        allCorrect = false;
+      }
+    });
+
+    if(allCorrect){
+      showMessage('msg5', 'Верно! Компьютер может хранить текст, фото, звук, видео и числа в двоичном коде.', 'ok');
+      markDone(5, 'mission6');
+      document.getElementById('mission5').classList.add('done');
+    } else {
+      showMessage('msg5', 'Не совсем так. Подумай: какие виды информации мы сегодня изучали как цифровые?', 'error');
+    }
+  }
+
+  // ---------------------------
+  // Миссия 8 — Boss
+  // ---------------------------
+  function checkBoss(){
+    const selects = document.querySelectorAll('#mission8 select');
+    let hasMissing = false;
+    let allCorrect = true;
+
+    selects.forEach(sel=>{
+      sel.classList.remove('correct','wrong');
+
+      if(sel.value === ''){
+        sel.classList.add('wrong');
+        hasMissing = true;
+        allCorrect = false;
+        return;
+      }
+
+      if(sel.value === sel.dataset.correct){
+        sel.classList.add('correct');
+      } else {
+        sel.classList.add('wrong');
+        allCorrect = false;
+      }
+    });
+
+    if(hasMissing){
+      showMessage('msg8', 'Сначала выбери ответы во всех строках.', 'warn');
+      return;
+    }
+
+    if(allCorrect){
+      showMessage('msg8', 'Блестяще! Ты прошёл весь урок.', 'ok');
+      markDone(8, null);
+      document.getElementById('mission8').classList.add('done');
+      document.getElementById('challengeBox').classList.remove('locked');
+    } else {
+      showMessage('msg8', 'Есть ошибки. Проверь цепочки ещё раз.', 'error');
+    }
+  }
+
+  // ---------------------------
+  // Challenge
+  // ---------------------------
+  function showChallengeHint(){
+    showMessage(
+      'challengeHint',
+      'Пример ответа: у изображения 8×8 больше пикселей (клеток), значит нужно сохранить больше информации, поэтому понадобится больше данных.',
+      'ok'
+    );
+  }
+
+  // ---------------------------
+  // Инициализация
+  // ---------------------------
+  renderBits();
+  renderPixels();
+  updateProgress();
+</script>
+</body>
+</html>

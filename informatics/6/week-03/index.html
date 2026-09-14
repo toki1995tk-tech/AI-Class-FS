@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>6 класс — Как ИИ учится на данных?</title>
+<style>
+:root{
+  --ink:#0b2740;--muted:#607486;--green:#12b76a;--green2:#079455;
+  --teal:#18a6a6;--mint:#e7f9f1;--line:#d8eee5;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);
+  background:radial-gradient(circle at 90% 5%,rgba(24,166,166,.17),transparent 25%),
+             radial-gradient(circle at 8% 0%,rgba(18,183,106,.12),transparent 22%),
+             linear-gradient(180deg,#fbfffd,#effcf7);min-height:100vh;
+}
+.wrap{max-width:1180px;margin:auto;padding:22px 18px 70px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.nav{display:flex;gap:10px;flex-wrap:wrap}
+.nav a{text-decoration:none;color:var(--ink);background:#fff;border:1px solid var(--line);padding:10px 14px;border-radius:14px;font-weight:800}
+.badge{background:linear-gradient(135deg,var(--green),var(--teal));color:#fff;padding:10px 16px;border-radius:999px;font-weight:900}
+.hero{background:linear-gradient(135deg,#fff,#e8fbf3);border:1px solid var(--line);border-radius:28px;padding:27px;box-shadow:0 14px 34px rgba(7,68,76,.10)}
+.kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:900;color:var(--green2)}
+h1{font-size:clamp(32px,5vw,58px);line-height:1;margin:8px 0 10px}
+.hero p{color:var(--muted);font-size:18px;line-height:1.5;max-width:900px}
+.chain{display:inline-flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:14px;padding:12px 16px;border-radius:16px;background:#fff;border:1px solid var(--line);font-weight:900}
+.chain b{color:var(--green2)}
+.progress-wrap{margin:22px 0}.progress-row{display:flex;justify-content:space-between;margin-bottom:8px}
+.progress{height:13px;background:#dfeee8;border-radius:999px;overflow:hidden}
+.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--teal));transition:.35s}
+.mission{margin-top:22px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:23px;box-shadow:0 12px 30px rgba(7,68,76,.09);position:relative}
+.mission.locked{opacity:.5}
+.mission.locked:after{content:"🔒 Сначала пройди предыдущую миссию";position:absolute;inset:0;background:rgba(255,255,255,.82);border-radius:24px;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;font-size:20px;font-weight:900}
+.mission h2{margin:0 0 8px;font-size:28px}.mission p{color:var(--muted)}
+.qbox{padding:17px;border:1px solid var(--line);border-radius:18px;background:#f9fffc;margin:14px 0}
+.options{display:grid;gap:9px;margin-top:12px}
+.option{padding:12px 14px;background:#fff;border:1px solid #d7ebe3;border-radius:12px;cursor:pointer;font-weight:750}
+.option:hover{background:#f3fbf7}.option.chosen{border-color:var(--green);background:#e9f9f1}
+.btn{border:none;border-radius:14px;padding:12px 18px;font-size:16px;font-weight:900;cursor:pointer;background:linear-gradient(135deg,var(--green),var(--teal));color:#fff}
+.feedback{display:none;margin-top:12px;padding:13px 14px;border-radius:14px;font-weight:800}
+.feedback.ok{display:block;background:#e8f9f0;color:#087443}.feedback.bad{display:block;background:#fff0f0;color:#b42318}
+.check-list{display:grid;gap:9px;margin-top:12px}
+.check-item{display:flex;gap:10px;align-items:flex-start;padding:11px 12px;background:#fff;border:1px solid var(--line);border-radius:12px}
+.table{width:100%;border-collapse:collapse}.table th,.table td{padding:10px;border-bottom:1px solid #e5efeb;text-align:left}.table th{background:#eefaf5}
+.final{background:linear-gradient(135deg,#0f766e,#16a34a);color:#fff;border:none}.final p{color:#eafff6}
+.master{border:2px solid #efc76d;background:linear-gradient(180deg,#fffdf6,#fff)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div class="nav">
+      <a href="../">← К неделям</a>
+      <a href="/informatics/">← К предмету</a>
+    </div>
+    <div class="badge">6 класс · Неделя 3</div>
+  </div>
+
+  <section class="hero">
+    <div class="kicker">Роль данных в искусственном интеллекте</div>
+    <h1>Как ИИ учится на данных?</h1>
+    <p>Попробуй работать как модель ИИ, проверь обучающие данные и выясни, почему количество, разнообразие и правильность примеров влияют на результат.</p>
+    <div class="chain"><b>ДАННЫЕ</b> → <b>ОБУЧЕНИЕ</b> → <b>ЗАКОНОМЕРНОСТЬ</b> → <b>ПРОГНОЗ</b></div>
+  </section>
+
+  <div class="progress-wrap">
+    <div class="progress-row"><strong>Прогресс</strong><span id="progressText">0 из 6</span></div>
+    <div class="progress"><div id="progressBar"></div></div>
+  </div>
+
+  <section class="mission" id="m1">
+    <h2>Миссия 1. Ты — модель</h2>
+    <p>Изучи примеры и выведи правило классификации.</p>
+    <div id="m1q"></div>
+    <button class="btn" onclick="checkM1()">Проверить</button>
+    <div class="feedback" id="f1"></div>
+  </section>
+
+  <section class="mission locked" id="m2">
+    <h2>Миссия 2. Чего не хватает?</h2>
+    <p>Оцени обучающие наборы. Выбери наиболее точное объяснение проблемы.</p>
+    <div id="m2q"></div>
+    <button class="btn" onclick="checkM2()">Проверить миссию</button>
+    <div class="feedback" id="f2"></div>
+  </section>
+
+  <section class="mission locked" id="m3">
+    <h2>Миссия 3. Найди испорченные данные</h2>
+    <p>Проверь метки. Неправильная метка может научить модель неправильному ответу.</p>
+    <div class="qbox">
+      <table class="table">
+        <thead><tr><th>№</th><th>Пример</th><th>Метка</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>🐱</td><td>Кошка</td></tr>
+          <tr><td>2</td><td>🐶</td><td>Собака</td></tr>
+          <tr><td>3</td><td>🐱</td><td>Собака</td></tr>
+          <tr><td>4</td><td>🐶</td><td>Собака</td></tr>
+          <tr><td>5</td><td>🐱</td><td>Кошка</td></tr>
+          <tr><td>6</td><td>🐶</td><td>Кошка</td></tr>
+          <tr><td>7</td><td>🐱</td><td>Кошка</td></tr>
+          <tr><td>8</td><td>🐶</td><td>Собака</td></tr>
+        </tbody>
+      </table>
+      <div class="check-list">
+        <label class="check-item"><input type="checkbox" data-good="0"> Строка 1</label>
+        <label class="check-item"><input type="checkbox" data-good="0"> Строка 2</label>
+        <label class="check-item"><input type="checkbox" data-good="1"> Строка 3</label>
+        <label class="check-item"><input type="checkbox" data-good="0"> Строка 4</label>
+        <label class="check-item"><input type="checkbox" data-good="0"> Строка 5</label>
+        <label class="check-item"><input type="checkbox" data-good="1"> Строка 6</label>
+        <label class="check-item"><input type="checkbox" data-good="0"> Строка 7</label>
+        <label class="check-item"><input type="checkbox" data-good="0"> Строка 8</label>
+      </div>
+    </div>
+    <button class="btn" onclick="checkM3()">Проверить данные</button>
+    <div class="feedback" id="f3"></div>
+  </section>
+
+  <section class="mission locked" id="m4">
+    <h2>Миссия 4. Собери обучающий набор</h2>
+    <p>Нужно обучить ИИ распознавать яблоки в реальных фотографиях. Выбери все полезные примеры, которые сделают набор разнообразнее.</p>
+    <div class="qbox"><div class="check-list" id="m4checks"></div></div>
+    <button class="btn" onclick="checkM4()">Проверить набор</button>
+    <div class="feedback" id="f4"></div>
+  </section>
+
+  <section class="mission locked" id="m5">
+    <h2>Миссия 5. Почему модель ошиблась?</h2>
+    <p>Выбери причину, которая лучше всего объясняется обучающими данными.</p>
+    <div id="m5q"></div>
+    <button class="btn" onclick="checkM5()">Проверить миссию</button>
+    <div class="feedback" id="f5"></div>
+  </section>
+
+  <section class="mission final locked" id="m6">
+    <h2>🏆 Финальный челлендж — AI TRAINER</h2>
+    <p>Ты обучаешь ИИ отличать здоровые листья растений от повреждённых. Пройди весь путь от данных до прогноза.</p>
+    <div id="m6q"></div>
+    <button class="btn" style="background:#fff;color:#0f766e" onclick="checkM6()">Завершить челлендж</button>
+    <div class="feedback" id="f6"></div>
+  </section>
+
+  <section class="mission master locked" id="master">
+    <h2>⭐ DATA MASTER</h2>
+    <p>Система распознавания голоса обучалась почти только на записях взрослых людей. Что из этого следует?</p>
+    <div id="masterq"></div>
+    <button class="btn" onclick="checkMaster()">Проверить DATA MASTER</button>
+    <div class="feedback" id="fm"></div>
+  </section>
+</div>
+
+<script>
+const shuffle=a=>[...a].sort(()=>Math.random()-.5);
+let completed=0;
+function setFeedback(id,ok,msg){const e=document.getElementById(id);e.className='feedback '+(ok?'ok':'bad');e.textContent=msg}
+function unlock(id){document.getElementById(id).classList.remove('locked');setTimeout(()=>document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'}),250)}
+function done(n,next){
+ const m=document.getElementById('m'+n);
+ if(!m.dataset.done){
+   m.dataset.done=1;completed++;
+   document.getElementById('progressText').textContent=completed+' из 6';
+   document.getElementById('progressBar').style.width=(completed/6*100)+'%';
+ }
+ if(next)unlock(next)
+}
+function renderMC(id,qs){
+ const c=document.getElementById(id);
+ qs.forEach((q,qi)=>{
+   const box=document.createElement('div');box.className='qbox';
+   box.innerHTML='<strong>'+(qi+1)+'. '+q.q+'</strong><div class="options"></div>';
+   shuffle(q.opts.map((t,i)=>({t,correct:i===q.a}))).forEach(o=>{
+     const d=document.createElement('div');d.className='option';d.textContent=o.t;d.dataset.correct=o.correct?'1':'0';
+     d.onclick=()=>{[...box.querySelectorAll('.option')].forEach(x=>x.classList.remove('chosen'));d.classList.add('chosen')};
+     box.querySelector('.options').appendChild(d);
+   });
+   c.appendChild(box);
+ });
+}
+function checkRendered(section){
+ const boxes=[...document.querySelectorAll('#'+section+' .qbox')];
+ if(boxes.some(b=>!b.querySelector('.option.chosen'))) return null;
+ return boxes.every(b=>b.querySelector('.option.chosen').dataset.correct==='1');
+}
+
+const q1=[
+ {q:'Примеры: 🔴▲ → A, 🔵▲ → A, 🟢▲ → A; 🔴■ → B, 🔵■ → B, 🟢■ → B. К какой группе относится 🟡▲?',opts:['A','B','Невозможно определить','Зависит только от цвета'],a:0},
+ {q:'Примеры: маленький круг → X, большой круг → X, маленький квадрат → Y, большой квадрат → Y. Что задаёт правило?',opts:['Форма объекта','Размер объекта','Цвет объекта','Порядок примеров'],a:0},
+ {q:'Модель видела только красные треугольники как A и синие квадраты как B. Почему красный квадрат создаёт неопределённость?',opts:['По данным непонятно, что главное: цвет или форма','Модель всегда выбирает первый класс','Красный цвет нельзя использовать','Квадраты нельзя классифицировать'],a:0}
+];
+renderMC('m1q',q1);
+
+const q2=[
+ {q:'ИИ распознаёт кошек. В наборе 5 фото одной и той же чёрной кошки, снятой почти одинаково.',opts:['Набор слишком маленький и однообразный','Главная проблема — низкое разрешение','Набор хороший, потому что метки верные','Нужно добавить ещё пять почти таких же фото'],a:0},
+ {q:'В наборе 100 фотографий кошек, но 40 подписаны как «собака».',opts:['Ошибочные метки могут научить модель неправильным связям','Фотографий слишком много','Нужно оставить только первые 10 фото','Чем больше ошибок, тем устойчивее модель'],a:0},
+ {q:'ИИ должен распознавать яблоки на улице и в магазине, но все обучающие фото сняты на белом фоне.',opts:['Данные недостаточно разнообразны по условиям','Белый фон гарантирует точность','Нужно оставить только самые качественные фото','Условия съёмки не важны'],a:0}
+];
+renderMC('m2q',q2);
+
+const m4items=shuffle([
+ ['Красное яблоко на белом фоне',1],['Зелёное яблоко на дереве',1],['Яблоко в руке человека',1],
+ ['Яблоко частично закрыто листьями',1],['Маленькое яблоко',1],['Большое яблоко',1],
+ ['Груша на белом фоне',0],['Банан на столе',0],['Красный мяч',0],
+ ['Ещё 20 почти одинаковых фото одного красного яблока',0]
+]);
+const m4c=document.getElementById('m4checks');
+m4items.forEach(([t,g])=>{
+ const l=document.createElement('label');l.className='check-item';
+ l.innerHTML='<input type="checkbox" data-good="'+g+'"> <span>'+t+'</span>';
+ m4c.appendChild(l)
+});
+
+const q5=[
+ {q:'Все школьные автобусы в обучении были жёлтыми. Синий автобус модель назвала «не автобус».',opts:['Модель могла принять цвет за важный признак из-за однообразных данных','Синий цвет невозможно распознавать камерой','Все автобусы должны быть жёлтыми','Модель вообще не умеет распознавать транспорт'],a:0},
+ {q:'Модель хорошо распознаёт листья днём, но часто ошибается вечером. Все обучающие фотографии были сняты при ярком свете.',opts:['В данных почти не было примеров при слабом освещении','Вечером листья становятся другим классом','Любая модель обязательно ошибается вечером','Нужно удалить дневные фотографии'],a:0},
+ {q:'Из 500 обучающих примеров 80 имеют неправильные метки. Почему это опасно?',opts:['Модель может выучить ложные закономерности и повторять ошибки','Ошибки влияют только на скорость сайта','Неверные метки исправятся автоматически','Большой набор полностью отменяет влияние неверных меток'],a:0}
+];
+renderMC('m5q',q5);
+
+const q6=[
+ {q:'Какие данные лучше собрать для задачи «здоровый лист / повреждённый лист»?',opts:['Много фото здоровых и повреждённых листьев разных видов и условий','Только 10 красивых здоровых листьев','Фотографии горшков без листьев','Только повреждённые листья'],a:0},
+ {q:'Какая метка подходит фотографии здорового листа?',opts:['Здоровый','Повреждённый','Растение','Фото'],a:0},
+ {q:'Несколько повреждённых листьев ошибочно подписаны как «здоровый». Что сделать?',opts:['Исправить неверные метки до обучения','Оставить, потому что примеров много','Удалить все повреждённые листья','Добавить ещё такие же ошибки для баланса'],a:0},
+ {q:'После обучения модель видит новый лист. Что является прогнозом?',opts:['Ответ модели «вероятно, повреждённый»','Все исходные фотографии','Список правильных меток','Количество обучающих примеров'],a:0},
+ {q:'Почему разнообразие данных важно?',opts:['Чтобы модель видела разные реальные варианты и не привязывалась к случайному признаку','Чтобы сайт выглядел красивее','Чтобы изображения были разного размера','Чтобы модель никогда не ошибалась'],a:0}
+];
+renderMC('m6q',q6);
+
+const master=[
+ {q:'Система распознавания голоса обучалась почти только на взрослых. Какой вывод наиболее обоснован?',opts:['Она может хуже распознавать детские голоса, потому что таких примеров почти не было','Она обязательно не распознает ни одного ребёнка','Она лучше распознает детей, потому что их голос выше','Возраст говорящего не может влиять на результат'],a:0},
+ {q:'Как лучше улучшить набор данных?',opts:['Добавить записи голосов разных возрастов, тембров и условий','Добавить ещё больше записей только взрослых','Удалить все взрослые голоса','Записать один детский голос много раз одинаково'],a:0}
+];
+renderMC('masterq',master);
+
+function checkM1(){const r=checkRendered('m1');if(r===null)return setFeedback('f1',false,'Ответь на все вопросы.');if(r){setFeedback('f1',true,'Отлично! Ты смог вывести правило по примерам.');done(1,'m2')}else setFeedback('f1',false,'Есть ошибка. Ищи закономерность между всеми примерами.')}
+function checkM2(){const r=checkRendered('m2');if(r===null)return setFeedback('f2',false,'Ответь на все вопросы.');if(r){setFeedback('f2',true,'Верно! Ты умеешь замечать проблемы обучающего набора.');done(2,'m3')}else setFeedback('f2',false,'Подумай, что именно мешает модели увидеть реальные варианты задачи.')}
+function checkM3(){const ins=[...document.querySelectorAll('#m3 input')];const ok=ins.every(i=>i.checked===(i.dataset.good==='1'));if(ok){setFeedback('f3',true,'Верно! Ошибочные метки найдены.');done(3,'m4')}else setFeedback('f3',false,'Не все испорченные строки найдены. Сверь объект и его метку.')}
+function checkM4(){const ins=[...document.querySelectorAll('#m4 input')];const ok=ins.every(i=>i.checked===(i.dataset.good==='1'));if(ok){setFeedback('f4',true,'Отлично! Набор получился полезным и разнообразным.');done(4,'m5')}else setFeedback('f4',false,'Проверь: нужны разные реальные варианты именно яблок, а не просто разные картинки.')}
+function checkM5(){const r=checkRendered('m5');if(r===null)return setFeedback('f5',false,'Ответь на все вопросы.');if(r){setFeedback('f5',true,'Супер! Ты умеешь объяснять ошибку модели через качество данных.');done(5,'m6')}else setFeedback('f5',false,'Выбирай причину, которая прямо связана с тем, какие данные модель видела при обучении.')}
+function checkM6(){const r=checkRendered('m6');if(r===null)return setFeedback('f6',false,'Ответь на все вопросы.');if(r){setFeedback('f6',true,'🏆 AI TRAINER пройден! Ты понимаешь путь от данных до прогноза.');done(6,'master')}else setFeedback('f6',false,'Есть ошибка. Проверь цепочку: примеры → метки → обучение → прогноз.')}
+function checkMaster(){const r=checkRendered('master');if(r===null)return setFeedback('fm',false,'Ответь на оба вопроса.');setFeedback('fm',r,r?'⭐ DATA MASTER пройден! Ты понял, почему состав данных влияет на качество модели.':'Подумай: каких голосов модель почти не видела и какие примеры нужно добавить.')}
+</script>
+</body>
+</html>

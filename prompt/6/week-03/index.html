@@ -40,7 +40,53 @@
 const completed=JSON.parse(localStorage.getItem('ai6w3_completed')||'[]');let selectedAIType=localStorage.getItem('ai6w3_type')||'';
 function norm(s){return(s||'').toLowerCase().replace(/ё/g,'е').replace(/[.,!?;:()«»"'—–\-]/g,' ').replace(/\s+/g,' ').trim()}
 function stem(w){let x=norm(w);const endings=['иями','ями','ами','его','ого','ему','ому','ыми','ими','ий','ый','ая','яя','ое','ее','ые','ие','ов','ев','ам','ям','ах','ях','ы','и','а','я','у','ю','е','о'];for(const e of endings){if(x.length>5&&x.endsWith(e))return x.slice(0,-e.length)}return x}
-function tokens(s){return norm(s).split(' ').filter(Boolean).map(stem)}function minWords(s,n){return tokens(s).length>=n}
+function tokens(s){return norm(s).split(' ').filter(Boolean).map(stem)}
+function minWords(s,n){return tokens(s).length>=n}
+function looksLikeGibberish(s){
+  const raw=norm(s);
+  if(!raw) return true;
+  if(/(.)\1{4,}/.test(raw)) return true;
+  const t=tokens(s).filter(x=>x.length>1);
+  if(t.length<3) return true;
+  const uniq=new Set(t);
+  if(uniq.size/Math.max(1,t.length)<0.45) return true;
+  const letters=(s.match(/[а-яА-Яa-zA-ZёЁ]/g)||[]).length;
+  const visible=(s.match(/\S/g)||[]).length;
+  if(visible && letters/visible<0.55) return true;
+  return false;
+}
+function hasReasoning(s){
+  return !looksLikeGibberish(s) && fuzzyHas(s,[
+    'потому что','так как','чтобы','поэтому','иначе','это поможет',
+    'это нужно','влияет','зависит','поможет понять','нужно узнать'
+  ]);
+}
+function hasQuestionIntent(s){
+  return !looksLikeGibberish(s) && (
+    s.includes('?') || fuzzyHas(s,[
+      'какой','какая','какие','сколько','когда','где','что','чем','почему',
+      'умеешь','знаешь','нравится','хочешь','есть ли','нужно ли'
+    ])
+  );
+}
+function meaningfulList(text,cats,minCats,minItems){
+  if(looksLikeGibberish(text)) return false;
+  const items=distinctLines(text);
+  const catCount=countSemanticCats(text,cats);
+  return items.length>=minItems && catCount>=minCats;
+}
+function containsNonsenseMarkers(s){
+  const x=norm(s);
+  const bad=[
+    'абракадабра','блабла','бла бла','фигня','ерунда','рандом','рандомные слова',
+    'лалала','лалал','аааа','ыыыы','хз хз','не знаю не знаю'
+  ];
+  return bad.some(w=>x.includes(w));
+}
+function qualityAnswer(s,minTokenCount=5){
+  return minWords(s,minTokenCount) && !looksLikeGibberish(s) && !containsNonsenseMarkers(s);
+}
+
 function fuzzyHas(text,variants){const t=tokens(text);return variants.some(v=>tokens(v).every(part=>t.some(tok=>tok.includes(part)||part.includes(tok))))}
 function distinctLines(text){return text.split(/\n|[;]+/).map(x=>norm(x)).filter(x=>x.length>2)}
 function similarity(a,b){const A=new Set(tokens(a)),B=new Set(tokens(b));if(!A.size||!B.size)return 0;let inter=0;A.forEach(x=>{if(B.has(x))inter++});return inter/Math.min(A.size,B.size)}
@@ -51,19 +97,167 @@ function saveInputs(){document.querySelectorAll('textarea,input[type="text"]').f
 function restoreInputs(){document.querySelectorAll('textarea,input[type="text"]').forEach(el=>{const v=localStorage.getItem('ai6w3_'+el.id);if(v!==null)el.value=v;el.addEventListener('input',saveInputs)})}
 function countSemanticCats(text,cats){let c=0;cats.forEach(g=>{if(fuzzyHas(text,g))c++});return c}
 const giftCats=[['возраст','сколько лет','лет другу'],['интерес','увлечен','хобби','что любит','чем любит заниматься'],['бюджет','деньги','сколько потратить','стоимость','цена'],['повод','праздник','день рождения','для чего подарок'],['что уже есть','есть у него','уже имеет'],['не любит','не нравится','антипатии'],['отношения','кто он мне','насколько близкий']];
-function checkM1(){const a=m1a.value,b=m1b.value,catCount=countSemanticCats(a,giftCats),enough=minWords(a,10),reason=minWords(b,12)&&fuzzyHas(b,['потому что','чтобы','так как','иначе','влияет','зависит']);if(enough&&catCount>=4&&reason){showFeedback('f1','ok','✅ Сильный анализ. Ты собрал несколько разных типов данных и объяснил, почему они влияют на результат.');markDone('m1')}else if(enough&&minWords(b,10)){showFeedback('f1','maybe','🤔 Ответ выглядит содержательно, но автоматическая проверка не уверена, что распознала все категории. Объясни один нестандартный пункт — и можно засчитать.');sc1.style.display='block'}else showFeedback('f1','no','🧠 Нужны минимум 5 разных идей и объяснение, почему три из них действительно важны.')}
-function overrideM1(){if(minWords(m1c.value,8)){showFeedback('f1','ok','✅ Засчитано по объяснению. Хороший нестандартный ответ тоже считается правильным, если ты можешь обосновать его влияние.');sc1.style.display='none';markDone('m1')}else showFeedback('f1','no','Нужно чуть подробнее объяснить, как эта информация влияет на выбор подарка.')}
-function checkM2(){const a=m2a.value,b=m2b.value,qs=distinctLines(a);let unique=true;for(let i=0;i<qs.length;i++)for(let j=i+1;j<qs.length;j++)if(similarity(qs[i],qs[j])>.66)unique=false;const semantic=countSemanticCats(a,[['предмет','тема','область'],['интерес','увлечен','что нравится'],['время','срок','когда сдавать'],['один','команд','группа'],['формат','что представить','презентац','сайт','макет'],['ресурс','материал','оборудован','что есть'],['цель','результат'],['бюджет','деньги']]);if(qs.length>=5&&unique&&semantic>=4&&minWords(b,8)){showFeedback('f2','ok','✅ Интервью получилось разнообразным: вопросы действительно собирают разные части контекста.');markDone('m2')}else if(qs.length>=5&&unique&&minWords(b,7)){showFeedback('f2','maybe','🤔 Пять разных вопросов есть. Один из смыслов нестандартный — объясни, какую новую информацию он даёт.');sc2.style.display='block'}else showFeedback('f2','no','🎤 Проверь: должно быть минимум 5 вопросов, и они не должны повторять одну и ту же мысль разными словами.')}
-function overrideM2(){if(minWords(m2c.value,8)){showFeedback('f2','ok','✅ Засчитано по обоснованию. Нестандартный вопрос подходит, если он действительно добавляет новую информацию.');sc2.style.display='none';markDone('m2')}else showFeedback('f2','no','Объясни чуть подробнее, какую новую информацию даст этот вопрос.')}
+function checkM1(){
+  const a=m1a.value,b=m1b.value;
+  const catCount=countSemanticCats(a,giftCats);
+  const explanationCats=countSemanticCats(b,giftCats);
+  const listOk=qualityAnswer(a,8)&&catCount>=4;
+  const reasonOk=qualityAnswer(b,12)&&hasReasoning(b)&&explanationCats>=2;
+  if(listOk&&reasonOk){
+    showFeedback('f1','ok','✅ Сильный анализ. Ты назвал разные типы информации и объяснил, как минимум две из них влияют на выбор подарка.');
+    markDone('m1');
+  }else if(listOk&&qualityAnswer(b,10)){
+    showFeedback('f1','maybe','🤔 Список хороший, но в объяснении я пока не вижу связи между информацией и выбором подарка. Объясни один нестандартный пункт конкретно.');
+    sc1.style.display='block';
+  }else{
+    showFeedback('f1','no','🧠 Нужны минимум 4 разные смысловые категории (например возраст, интересы, бюджет, повод и т.п.) и связное объяснение, почему они влияют на выбор.');
+  }
+}
+function overrideM1(){
+  const c=m1c.value;
+  if(qualityAnswer(c,8)&&hasReasoning(c)){
+    showFeedback('f1','ok','✅ Засчитано по объяснению: ты показал причинную связь между информацией и результатом.');
+    sc1.style.display='none'; markDone('m1');
+  }else showFeedback('f1','no','Нужно не просто написать длинный текст, а объяснить: ЧТО узнает AI и КАК это изменит выбор подарка.');
+}
+function checkM2(){
+  const a=m2a.value,b=m2b.value,qs=distinctLines(a);
+  let unique=true;
+  for(let i=0;i<qs.length;i++)for(let j=i+1;j<qs.length;j++)if(similarity(qs[i],qs[j])>.62)unique=false;
+  const semantic=countSemanticCats(a,[
+    ['предмет','тема','область'],
+    ['интерес','увлечен','что нравится'],
+    ['время','срок','когда сдавать'],
+    ['один','команд','группа'],
+    ['формат','что представить','презентац','сайт','макет'],
+    ['ресурс','материал','оборудован','что есть'],
+    ['цель','результат'],
+    ['бюджет','деньги']
+  ]);
+  const fiveQuestions=qs.length>=5 && qs.slice(0,5).every(q=>hasQuestionIntent(q)&&qualityAnswer(q,3));
+  const reasonOk=qualityAnswer(b,8)&&hasReasoning(b);
+  if(fiveQuestions&&unique&&semantic>=4&&reasonOk){
+    showFeedback('f2','ok','✅ Интервью получилось разнообразным: вопросы собирают разные части контекста, а выбор главного вопроса обоснован.');
+    markDone('m2');
+  }else if(fiveQuestions&&unique&&semantic>=3&&qualityAnswer(b,7)){
+    showFeedback('f2','maybe','🤔 Вопросы похожи на осмысленные, но один смысл нестандартный. Объясни, какую новую информацию он даст и зачем она нужна.');
+    sc2.style.display='block';
+  }else{
+    showFeedback('f2','no','🎤 Нужно 5 осмысленных вопросов. Каждый должен реально что-то выяснять, а вопросы не должны повторять одну и ту же мысль.');
+  }
+}
+function overrideM2(){
+  const c=m2c.value;
+  if(qualityAnswer(c,8)&&hasReasoning(c)){
+    showFeedback('f2','ok','✅ Засчитано: ты объяснил, какую новую информацию даёт вопрос и как она поможет выбрать проект.');
+    sc2.style.display='none'; markDone('m2');
+  }else showFeedback('f2','no','Нужно объяснить связь: какую информацию даст вопрос и как она повлияет на подбор проекта.');
+}
 const sortExpected={q1:'need',q2:'need',q3:'maybe',q4:'need',q5:'junk',q6:'maybe',q7:'junk',q8:'maybe',q9:'need',q10:'junk',q11:'need',q12:'maybe'};
-function checkM3(){let placed=0,correct=0;document.querySelectorAll('.sortcol .qitem').forEach(item=>{placed++;if(sortExpected[item.dataset.id]===item.parentElement.dataset.cat)correct++});const reasonA=minWords(m3a.value,7)&&fuzzyHas(m3a.value,['не влияет','не относится','не нужен','лишний','не помогает']);const reasonB=minWords(m3b.value,7)&&fuzzyHas(m3b.value,['устанет','слишком много','долго','лишняя информация','не все нужно','только нужное']);if(placed===12&&correct>=9&&reasonA&&reasonB){showFeedback('f3','ok','✅ Отлично. Ты понял главный принцип: AI должен собирать не максимум данных, а только те, что помогают задаче.');markDone('m3')}else showFeedback('f3','no','🧹 Проверь сортировку и оба объяснения. Допускается небольшая спорность в категории «может быть полезно», но явно лишние вопросы должны быть удалены.')}
-function checkM4(){const required=countSemanticCats(m4a.value,[['класс','возраст'],['предмет'],['тема'],['что знает','знания','уровень'],['что не понимает','трудность','проблема'],['дата','когда контрольная','время']]);const qs=distinctLines(m4b.value);const c=m4c.value;const nextGood=minWords(c,5)&&fuzzyHas(c,['что именно не понимаешь','какая часть дробей','с чем проблема','что уже умеешь','с чего начнем','сложение дробей','знаменатель','числитель']);if(required>=4&&qs.length>=4&&nextGood){showFeedback('f4','ok','✅ Алгоритм работает: сначала общий контекст, потом следующий вопрос зависит от ответа ученика.');markDone('m4')}else if(required>=4&&qs.length>=4&&minWords(c,5)){showFeedback('f4','maybe','🤔 Общая логика хорошая. Следующий вопрос нестандартный — объясни, как он поможет выбрать способ объяснения.');sc4.style.display='block'}else showFeedback('f4','no','🧠 Нужно минимум 4 обязательных пункта, 4 стартовых вопроса и один логичный следующий вопрос после ответа ученика.')}
-function overrideM4(){if(minWords(m4d.value,8)){showFeedback('f4','ok','✅ Засчитано по объяснению. В диалоге может быть несколько хороших следующих вопросов — важна логика.');sc4.style.display='none';markDone('m4')}else showFeedback('f4','no','Объясни подробнее, как ответ на твой вопрос поможет AI.')}
-function checkM5(){const p=m5a.value;let score=0;if(fuzzyHas(p,['не отвечай сразу','сначала спроси','сначала задай']))score++;if(fuzzyHas(p,['по одному вопросу','задавай по одному']))score++;if(fuzzyHas(p,['класс','возраст']))score++;if(fuzzyHas(p,['предмет']))score++;if(fuzzyHas(p,['тема']))score++;if(fuzzyHas(p,['что уже знает','уровень знаний','что понимает']))score++;if(fuzzyHas(p,['что непонятно','где трудность','что сложно']))score++;if(fuzzyHas(p,['после этого объясни','затем помоги','только потом']))score++;if(fuzzyHas(p,['уровень сложности','простыми словами','под уровень']))score++;if(minWords(p,35)&&score>=7){showFeedback('f5','ok','✅ Сильная системная инструкция. Ты описал не просто ответ, а поведение AI по шагам.');markDone('m5')}else showFeedback('f5','no','🛠 Проверь: промпт должен управлять порядком действий AI, сбором контекста и уровнем объяснения. Сейчас не хватает части поведения.')}
+function checkM3(){
+  let placed=0,correct=0;
+  document.querySelectorAll('.sortcol .qitem').forEach(item=>{
+    placed++; if(sortExpected[item.dataset.id]===item.parentElement.dataset.cat)correct++;
+  });
+  const a=m3a.value,b=m3b.value;
+  const reasonA=qualityAnswer(a,7)&&hasReasoning(a)&&fuzzyHas(a,['не влияет','не относится','не нужен','лишний','не помогает','не меняет результат']);
+  const reasonB=qualityAnswer(b,7)&&hasReasoning(b)&&fuzzyHas(b,['устанет','слишком много','долго','лишняя информация','не все нужно','только нужное','перегруз']);
+  if(placed===12&&correct>=9&&reasonA&&reasonB){
+    showFeedback('f3','ok','✅ Отлично. Ты не только отсортировал вопросы, но и объяснил, почему лишние данные вредят интервью.');
+    markDone('m3');
+  }else{
+    showFeedback('f3','no','🧹 Нужна корректная сортировка и два связных объяснения с причиной, а не просто длинный текст.');
+  }
+}
+function checkM4(){
+  const a=m4a.value,b=m4b.value,c=m4c.value;
+  const required=countSemanticCats(a,[
+    ['класс','возраст'],['предмет'],['тема'],
+    ['что знает','знания','уровень'],['что не понимает','трудность','проблема'],
+    ['дата','когда контрольная','время']
+  ]);
+  const qs=distinctLines(b);
+  const questionsOk=qs.length>=4&&qs.slice(0,4).every(q=>hasQuestionIntent(q)&&qualityAnswer(q,3));
+  let unique=true;
+  for(let i=0;i<Math.min(4,qs.length);i++)for(let j=i+1;j<Math.min(4,qs.length);j++)if(similarity(qs[i],qs[j])>.65)unique=false;
+  const nextGood=hasQuestionIntent(c)&&qualityAnswer(c,5)&&fuzzyHas(c,[
+    'что именно не понимаешь','какая часть дробей','с чем проблема','что уже умеешь',
+    'с чего начнем','сложение дробей','знаменатель','числитель','какое действие'
+  ]);
+  if(qualityAnswer(a,8)&&required>=4&&questionsOk&&unique&&nextGood){
+    showFeedback('f4','ok','✅ Алгоритм работает: стартовые вопросы собирают контекст, а следующий вопрос опирается на уже полученный ответ.');
+    markDone('m4');
+  }else if(qualityAnswer(a,8)&&required>=4&&questionsOk&&unique&&hasQuestionIntent(c)&&qualityAnswer(c,5)){
+    showFeedback('f4','maybe','🤔 Следующий вопрос выглядит осмысленным, но он нестандартный. Объясни, как ответ на него поможет выбрать способ объяснения.');
+    sc4.style.display='block';
+  }else{
+    showFeedback('f4','no','🧠 Нужны 4 осмысленных стартовых вопроса без повторов и логичный следующий вопрос, связанный с дробями или уровнем понимания.');
+  }
+}
+function overrideM4(){
+  const d=m4d.value;
+  if(qualityAnswer(d,8)&&hasReasoning(d)){
+    showFeedback('f4','ok','✅ Засчитано: ты объяснил, как ответ на этот вопрос повлияет на дальнейшее объяснение AI.');
+    sc4.style.display='none'; markDone('m4');
+  }else showFeedback('f4','no','Нужно объяснить причинную связь: что узнает AI и как это изменит его следующий шаг.');
+}
+function checkM5(){
+  const p=m5a.value;
+  let score=0;
+  if(fuzzyHas(p,['не отвечай сразу','сначала спроси','сначала задай']))score++;
+  if(fuzzyHas(p,['по одному вопросу','задавай по одному']))score++;
+  if(fuzzyHas(p,['класс','возраст']))score++;
+  if(fuzzyHas(p,['предмет']))score++;
+  if(fuzzyHas(p,['тема']))score++;
+  if(fuzzyHas(p,['что уже знает','уровень знаний','что понимает']))score++;
+  if(fuzzyHas(p,['что непонятно','где трудность','что сложно']))score++;
+  if(fuzzyHas(p,['после этого объясни','затем помоги','только потом']))score++;
+  if(fuzzyHas(p,['уровень сложности','простыми словами','под уровень']))score++;
+  const structureOk=qualityAnswer(p,35)&&!containsNonsenseMarkers(p);
+  if(structureOk&&score>=7){
+    showFeedback('f5','ok','✅ Сильная системная инструкция. Здесь есть порядок действий, сбор контекста и правило адаптации ответа.');
+    markDone('m5');
+  }else{
+    showFeedback('f5','no','🛠 Длинный текст сам по себе не засчитывается. В промпте должны быть минимум 7 смысловых требований к поведению AI.');
+  }
+}
 function addQARow(q='',why=''){const row=document.createElement('div');row.className='kv-row';const idx=document.querySelectorAll('#qaRows .kv-row').length+1;row.innerHTML=`<textarea id="q_${idx}" class="small" placeholder="Вопрос ${idx}">${q}</textarea><textarea id="w_${idx}" class="small" placeholder="Зачем AI это знать?">${why}</textarea>`;qaRows.appendChild(row);row.querySelectorAll('textarea').forEach(el=>el.addEventListener('input',saveProjectRows))}
 function saveProjectRows(){const rows=[...document.querySelectorAll('#qaRows .kv-row')].map(r=>{const t=r.querySelectorAll('textarea');return[t[0].value,t[1].value]});localStorage.setItem('ai6w3_rows',JSON.stringify(rows))}
 function restoreProjectRows(){const saved=JSON.parse(localStorage.getItem('ai6w3_rows')||'null');if(saved&&saved.length)saved.forEach(x=>addQARow(x[0],x[1]));else for(let i=0;i<5;i++)addQARow()}
-function checkM6(){const rows=[...document.querySelectorAll('#qaRows .kv-row')].map(r=>{const t=r.querySelectorAll('textarea');return{q:t[0].value,w:t[1].value}}).filter(x=>minWords(x.q,3)||minWords(x.w,3));const valid=rows.filter(x=>minWords(x.q,3)&&minWords(x.w,5)).length;const typeOk=selectedAIType&&(selectedAIType!=='custom'||minWords(m6custom.value,2));if(typeOk&&minWords(m6audience.value,6)&&valid>=5&&minWords(m6privacy.value,8)){showFeedback('f6','ok','🏆 MODULE 01 ГОТОВ. Ты спроектировал первое знакомство будущего MY AI и объяснил, зачем ему нужны эти данные.');markDone('m6');final.scrollIntoView({behavior:'smooth'})}else showFeedback('f6','no','🔥 Для завершения нужны: тип MY AI, кому он помогает, минимум 5 пар «вопрос + зачем это знать» и осмысленный privacy-check.')}
+function checkM6(){
+  const aud=m6audience.value,privacy=m6privacy.value;
+  const rows=[...document.querySelectorAll('#qaRows .kv-row')].map(r=>{
+    const t=r.querySelectorAll('textarea'); return {q:t[0].value,w:t[1].value}
+  }).filter(x=>minWords(x.q,2)||minWords(x.w,2));
+
+  let valid=0;
+  let semanticKinds=new Set();
+  const semGroups=[
+    ['класс','возраст'],['цель','зачем','результат'],['интерес','увлечен'],
+    ['предмет','тема'],['уровень','что умеет','что знает'],['время','расписание'],
+    ['формат','как удобно','вид помощи'],['язык','уровень языка'],['срок','дедлайн']
+  ];
+
+  rows.forEach(x=>{
+    const qOk=hasQuestionIntent(x.q)&&qualityAnswer(x.q,3);
+    const wOk=qualityAnswer(x.w,6)&&hasReasoning(x.w);
+    if(qOk&&wOk){
+      valid++;
+      semGroups.forEach((g,i)=>{if(fuzzyHas(x.q,g)) semanticKinds.add(i)});
+    }
+  });
+
+  const typeOk=selectedAIType&&(selectedAIType!=='custom'||qualityAnswer(m6custom.value,2));
+  const audienceOk=qualityAnswer(aud,6);
+  const privacyOk=qualityAnswer(privacy,8)&&hasReasoning(privacy);
+
+  if(typeOk&&audienceOk&&valid>=5&&semanticKinds.size>=3&&privacyOk){
+    showFeedback('f6','ok','🏆 MODULE 01 ГОТОВ. У тебя минимум 5 осмысленных вопросов, каждый имеет объяснение, а вопросы собирают разные типы контекста.');
+    markDone('m6'); final.scrollIntoView({behavior:'smooth'});
+  }else{
+    showFeedback('f6','no','🔥 Нельзя пройти Boss просто длинным текстом. Нужны минимум 5 осмысленных вопросов, объяснение пользы каждого, минимум 3 разных типа информации и обоснованный privacy-check.');
+  }
+}
 document.querySelectorAll('.choice-btn').forEach(btn=>btn.addEventListener('click',()=>{selectedAIType=btn.dataset.value;localStorage.setItem('ai6w3_type',selectedAIType);document.querySelectorAll('.choice-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected')}));if(selectedAIType){const b=document.querySelector(`.choice-btn[data-value="${selectedAIType}"]`);if(b)b.classList.add('selected')}
 let dragged=null;document.addEventListener('dragstart',e=>{if(e.target.classList.contains('qitem')){dragged=e.target;e.target.classList.add('dragging')}});document.addEventListener('dragend',e=>{if(e.target.classList.contains('qitem'))e.target.classList.remove('dragging')});document.querySelectorAll('.sortcol,#questionBank').forEach(zone=>{zone.addEventListener('dragover',e=>e.preventDefault());zone.addEventListener('drop',e=>{e.preventDefault();if(dragged)zone.appendChild(dragged)})});
 restoreProjectRows();restoreInputs();updateProgress();

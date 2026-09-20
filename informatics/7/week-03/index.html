@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>7 класс — Неделя 3 — Единицы измерения информации. Урок 2</title>
+<style>
+:root{
+  --bg:#061326;--panel:#0c2342;--panel2:#102e56;--cyan:#38dcff;
+  --blue:#4d8eff;--orange:#ffad42;--green:#3ddc97;--red:#ff6474;
+  --text:#f7f9ff;--muted:#9eb2ce;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;color:var(--text);font-family:Inter,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 85% 5%,rgba(56,220,255,.13),transparent 28%),
+    radial-gradient(circle at 10% 60%,rgba(77,142,255,.08),transparent 35%),
+    linear-gradient(135deg,#061225,#092045 65%,#061326);
+}
+.wrap{width:min(1050px,92%);margin:auto;padding:28px 0 70px}
+.nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
+.nav a{
+  text-decoration:none;color:white;border:1px solid rgba(56,220,255,.35);
+  border-radius:13px;padding:10px 15px;background:rgba(10,31,60,.82)
+}
+.hero{
+  padding:30px;border-radius:26px;
+  background:linear-gradient(135deg,rgba(15,47,87,.98),rgba(7,27,56,.98));
+  border:1px solid rgba(56,220,255,.28);margin-bottom:20px
+}
+.kicker{color:var(--cyan);font-size:14px;font-weight:900;text-transform:uppercase;letter-spacing:1px}
+.hero h1{font-size:clamp(32px,6vw,56px);margin:8px 0 10px}
+.hero p{color:var(--muted);font-size:18px;line-height:1.55}
+.notebook{
+  margin-top:20px;padding:14px 16px;border-left:4px solid var(--orange);
+  border-radius:12px;background:rgba(255,173,66,.09);color:#ffe2b6;font-weight:700
+}
+.rule-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.rule{
+  padding:14px;border:1px solid rgba(56,220,255,.18);border-radius:14px;
+  background:rgba(7,24,45,.55);color:#dbe9ff
+}
+.rule strong{color:var(--cyan)}
+.progress-wrap{
+  margin:22px 0;padding:18px;background:rgba(13,34,66,.78);
+  border:1px solid rgba(255,255,255,.08);border-radius:18px
+}
+.progress-text{display:flex;justify-content:space-between;gap:10px;margin-bottom:10px}
+.progress{height:12px;background:#061327;border-radius:999px;overflow:hidden}
+.progress-bar{width:0;height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:.3s}
+.mission{
+  margin-top:22px;padding:26px;background:rgba(10,31,60,.87);
+  border:1px solid rgba(56,220,255,.18);border-radius:24px
+}
+.mission h2{margin:0 0 8px;font-size:30px}
+.mission-description{color:var(--muted);line-height:1.55;margin-bottom:24px}
+.question{
+  padding:20px;border-radius:18px;background:rgba(17,46,86,.72);
+  border:1px solid rgba(255,255,255,.08);margin:14px 0;transition:.2s
+}
+.question-title{font-size:19px;font-weight:800;margin-bottom:13px;line-height:1.4}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.option{
+  display:flex;align-items:center;gap:10px;cursor:pointer;
+  border:1px solid rgba(255,255,255,.1);border-radius:13px;padding:13px;transition:.2s
+}
+.option:hover{border-color:var(--cyan)}
+.option:has(input:checked){border-color:var(--cyan);background:rgba(56,220,255,.11)}
+input[type="radio"]{accent-color:var(--cyan);transform:scale(1.15)}
+.answer-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.expression{font-size:27px;font-weight:900;letter-spacing:.5px}
+.answer-input{
+  width:180px;max-width:100%;padding:12px 14px;font-size:20px;border-radius:12px;
+  border:2px solid rgba(255,255,255,.13);outline:none;background:#07182d;color:white;text-align:center;transition:.2s
+}
+.answer-input:focus{border-color:var(--cyan)}
+.feedback{min-height:22px;margin-top:10px;font-weight:800}
+.correct{border-color:rgba(61,220,151,.75)!important;background:rgba(61,220,151,.08)!important}
+.correct .feedback{color:var(--green)}
+.wrong{border-color:rgba(255,100,116,.75)!important;background:rgba(255,100,116,.07)!important}
+.wrong .feedback{color:var(--red)}
+.unanswered{border-color:rgba(255,100,116,.65)!important}
+.unanswered .feedback{color:#ff9aa4}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+button{border:0;cursor:pointer;font-weight:900;font-size:16px;border-radius:13px;padding:13px 20px}
+.check{color:#041424;background:linear-gradient(90deg,var(--cyan),#6deaff)}
+.check:hover{filter:brightness(1.06)}
+.mission-result{margin-top:16px;padding:15px;border-radius:14px;display:none}
+.success{color:#c8ffe9;background:rgba(61,220,151,.11);border:1px solid rgba(61,220,151,.34)}
+.retry{color:#ffd3d8;background:rgba(255,100,116,.1);border:1px solid rgba(255,100,116,.3)}
+.finish{
+  display:none;margin-top:28px;padding:34px;text-align:center;border-radius:26px;
+  background:radial-gradient(circle at 50% 0,rgba(56,220,255,.17),transparent 40%),rgba(13,34,66,.92);
+  border:1px solid rgba(56,220,255,.35)
+}
+.finish .icon{font-size:55px}.finish h2{font-size:34px;margin:10px 0}.finish p{color:var(--muted);font-size:18px}
+sub{font-size:.57em}
+@media(max-width:650px){
+  .options,.rule-grid{grid-template-columns:1fr}.mission{padding:19px}.hero{padding:22px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav">
+    <a href="/informatics/7/">← К неделям</a>
+    <a href="/informatics/">← К предметам</a>
+  </div>
+
+  <section class="hero">
+    <div class="kicker">7 класс · Неделя 3</div>
+    <h1>Единицы измерения информации. Урок 2</h1>
+    <p>Сегодня переводим числа напрямую между двоичной, восьмеричной и шестнадцатеричной системами — без промежуточного перехода в десятичную.</p>
+    <div class="notebook">📝 Все вычисления и группировку разрядов выполняй в тетради. На сайт вводи только итоговый ответ.</div>
+    <div class="rule-grid">
+      <div class="rule"><strong>2 ↔ 8:</strong> группируем двоичные цифры по 3 справа налево.</div>
+      <div class="rule"><strong>2 ↔ 16:</strong> группируем двоичные цифры по 4 справа налево.</div>
+    </div>
+  </section>
+
+  <div class="progress-wrap">
+    <div class="progress-text"><strong>Прогресс</strong><span id="progressText">0 из 3 миссий</span></div>
+    <div class="progress"><div class="progress-bar" id="progressBar"></div></div>
+  </div>
+
+  <section class="mission" id="mission1">
+    <h2>Миссия 1 · Проверь правило</h2>
+    <div class="mission-description">Определи, верны ли утверждения о быстрых переводах между системами счисления.</div>
+
+    <div class="question radio-question" data-answer="yes">
+      <div class="question-title">1. Для перевода из двоичной системы в восьмеричную число делят на группы по 3 бита справа налево.</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q1" value="yes"> Верно</label>
+        <label class="option"><input type="radio" name="q1" value="no"> Неверно</label>
+      </div><div class="feedback"></div>
+    </div>
+
+    <div class="question radio-question" data-answer="no">
+      <div class="question-title">2. Для перевода из двоичной системы в шестнадцатеричную число делят на группы по 3 бита.</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q2" value="yes"> Верно</label>
+        <label class="option"><input type="radio" name="q2" value="no"> Неверно</label>
+      </div><div class="feedback"></div>
+    </div>
+
+    <div class="question radio-question" data-answer="yes">
+      <div class="question-title">3. Если слева не хватает битов для полной группы, можно дописать ведущие нули.</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q3" value="yes"> Верно</label>
+        <label class="option"><input type="radio" name="q3" value="no"> Неверно</label>
+      </div><div class="feedback"></div>
+    </div>
+
+    <div class="question radio-question" data-answer="yes">
+      <div class="question-title">4. В шестнадцатеричной системе символ F соответствует числу 15.</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q4" value="yes"> Верно</label>
+        <label class="option"><input type="radio" name="q4" value="no"> Неверно</label>
+      </div><div class="feedback"></div>
+    </div>
+
+    <div class="question radio-question" data-answer="no">
+      <div class="question-title">5. Восьмеричная цифра 7 переводится в двоичную как 1111.</div>
+      <div class="options">
+        <label class="option"><input type="radio" name="q5" value="yes"> Верно</label>
+        <label class="option"><input type="radio" name="q5" value="no"> Неверно</label>
+      </div><div class="feedback"></div>
+    </div>
+
+    <div class="actions"><button class="check" onclick="checkMission1()">Проверить миссию</button></div>
+    <div id="result1" class="mission-result"></div>
+  </section>
+
+  <section class="mission" id="mission2">
+    <h2>Миссия 2 · Двоичная ↔ восьмеричная</h2>
+    <div class="mission-description">Группируй биты по три. Решение запиши в тетрадь, на сайт введи только ответ.</div>
+
+    <div class="question input-question" data-answer="55">
+      <div class="question-title">1. Переведи в восьмеричную систему</div>
+      <div class="answer-row"><div class="expression">101101<sub>2</sub> =</div><input class="answer-input" autocomplete="off"><div class="expression"><sub>8</sub></div></div>
+      <div class="feedback"></div>
+    </div>
+    <div class="question input-question" data-answer="72">
+      <div class="question-title">2. Переведи в восьмеричную систему</div>
+      <div class="answer-row"><div class="expression">111010<sub>2</sub> =</div><input class="answer-input" autocomplete="off"><div class="expression"><sub>8</sub></div></div>
+      <div class="feedback"></div>
+    </div>
+    <div class="question input-question" data-answer="127">
+      <div class="question-title">3. Переведи в восьмеричную систему</div>
+      <div class="answer-row"><div class="expression">1010111<sub>2</sub> =</div><input class="answer-input" autocomplete="off"><div class="expression"><sub>8</sub></div></div>
+      <div class="feedback"></div>
+    </div>
+    <div class="question input-question" data-answer="111011">
+      <div class="question-title">4. Переведи в двоичную систему</div>
+      <div class="answer-row"><div class="expression">73<sub>8</sub> =</div><input class="answer-input" autocomplete="off"><div class="expression"><sub>2</sub></div></div>
+      <div class="feedback"></div>
+    </div>
+    <div class="question input-question" data-answer="1100101">
+      <div class="question-title">5. Переведи в двоичную систему</div>
+      <div class="answer-row"><div class="expression">145<sub>8</sub> =</div><input class="answer-input" autocomplete="off"><div class="expression"><sub>2</sub></div></div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="actions"><button class="check" onclick="checkInputMission('mission2','result2',2)">Проверить миссию</button></div>
+    <div id="result2" class="mission-result"></div>
+  </section>
+
+  <section class="mission" id="mission3">
+    <h2>Миссия 3 · Двоичная ↔ шестнадцатеричная</h2>
+    <div class="mission-description">Группируй биты по четыре. Для шестнадцатеричных цифр используй A, B, C, D, E, F.</div>
+
+    <div class="question input-question" data-answer="AF">
+      <div class="question-title">1. Переведи в шестнадцатеричную систему</div>
+      <div class="answer-row"><div class="expression">10101111<sub>2</sub> =</div><input class="answer-input" autocomplete="off"><div class="expression"><sub>16</sub></div></div>
+      <div class="feedback"></div>
+    </div>
+    <div class="question input-question" data-answer="F4">
+      <div class="question-title">2. Переведи в шестнадцатеричную систему</div>
+      <div class="answer-row"><div class="expression">11110100<sub>2</sub> =</div><input class="answer-input" autocomplete="off"><div class="expression"><sub>16</sub></div></div>
+      <div class="feedback"></div>
+    </div>
+    <div class="question input-question" data-answer="135">
+      <div class="question-title">3. Переведи в шестнадцатеричную систему</div>
+      <div class="answer-row"><div class="expression">100110101<sub>2</sub> =</div><input class="answer-input" autocomplete="off"><div class="expression"><sub>16</sub></div></div>
+      <div class="feedback"></div>
+    </div>
+    <div class="question input-question" data-answer="111100">
+      <div class="question-title">4. Переведи в двоичную систему</div>
+      <div class="answer-row"><div class="expression">3C<sub>16</sub> =</div><input class="answer-input" autocomplete="off"><div class="expression"><sub>2</sub></div></div>
+      <div class="feedback"></div>
+    </div>
+    <div class="question input-question" data-answer="10100111">
+      <div class="question-title">5. Переведи в двоичную систему</div>
+      <div class="answer-row"><div class="expression">A7<sub>16</sub> =</div><input class="answer-input" autocomplete="off"><div class="expression"><sub>2</sub></div></div>
+      <div class="feedback"></div>
+    </div>
+
+    <div class="actions"><button class="check" onclick="checkInputMission('mission3','result3',3)">Проверить миссию</button></div>
+    <div id="result3" class="mission-result"></div>
+  </section>
+
+  <section class="finish" id="finish">
+    <div class="icon">🏆</div>
+    <h2>Урок 2 завершён!</h2>
+    <p>Ты потренировался переводить числа напрямую между системами 2, 8 и 16.</p>
+    <p>Главное правило: 2 ↔ 8 — группы по 3 бита, 2 ↔ 16 — группы по 4 бита.</p>
+  </section>
+</div>
+
+<script>
+const completed=new Set();
+
+function updateProgress(){
+  const count=completed.size;
+  document.getElementById("progressText").textContent=count+" из 3 миссий";
+  document.getElementById("progressBar").style.width=(count/3*100)+"%";
+  if(count===3){
+    document.getElementById("finish").style.display="block";
+    document.getElementById("finish").scrollIntoView({behavior:"smooth",block:"center"});
+  }
+}
+
+function checkMission1(){
+  const questions=document.querySelectorAll("#mission1 .radio-question");
+  let allCorrect=true,hasEmpty=false;
+  questions.forEach(q=>{
+    q.classList.remove("correct","wrong","unanswered");
+    const feedback=q.querySelector(".feedback"); feedback.textContent="";
+    const selected=q.querySelector("input:checked");
+    if(!selected){
+      q.classList.add("unanswered"); feedback.textContent="Выбери ответ.";
+      hasEmpty=true; allCorrect=false; return;
+    }
+    if(selected.value===q.dataset.answer){
+      q.classList.add("correct"); feedback.textContent="✓ Верно";
+    }else{
+      q.classList.add("wrong"); feedback.textContent="✗ Подумай ещё."; allCorrect=false;
+    }
+  });
+  const result=document.getElementById("result1"); result.style.display="block";
+  if(allCorrect){
+    result.className="mission-result success"; result.textContent="✅ Отлично! Миссия 1 выполнена.";
+    completed.add(1); updateProgress();
+  }else{
+    result.className="mission-result retry";
+    result.textContent=hasEmpty?"Заполни все вопросы и попробуй ещё раз.":"Есть ошибки. Исправь их и проверь миссию снова.";
+  }
+}
+
+function normalizeAnswer(value){
+  let v=value.trim().toUpperCase().replace(/\s+/g,"");
+  v=v.replace(/^0+(?=[0-9A-F])/,"");
+  return v||"0";
+}
+
+function checkInputMission(missionId,resultId,missionNumber){
+  const questions=document.querySelectorAll("#"+missionId+" .input-question");
+  let allCorrect=true,hasEmpty=false;
+  questions.forEach(q=>{
+    q.classList.remove("correct","wrong","unanswered");
+    const input=q.querySelector(".answer-input");
+    const feedback=q.querySelector(".feedback"); feedback.textContent="";
+    const raw=input.value.trim();
+    if(raw===""){
+      q.classList.add("unanswered"); feedback.textContent="Сначала реши пример и введи ответ.";
+      hasEmpty=true; allCorrect=false; return;
+    }
+    const value=normalizeAnswer(raw);
+    const correct=normalizeAnswer(q.dataset.answer);
+    if(value===correct){
+      q.classList.add("correct"); feedback.textContent="✓ Верно";
+    }else{
+      q.classList.add("wrong"); feedback.textContent="✗ Пока неверно. Проверь группировку в тетради.";
+      allCorrect=false;
+    }
+  });
+  const result=document.getElementById(resultId); result.style.display="block";
+  if(allCorrect){
+    result.className="mission-result success"; result.textContent="✅ Отлично! Все 5 примеров решены правильно.";
+    completed.add(missionNumber); updateProgress();
+  }else{
+    result.className="mission-result retry";
+    result.textContent=hasEmpty?"Сначала заполни все примеры. Правильные ответы сайт не подсказывает.":"Есть ошибки. Пересчитай примеры в тетради и попробуй снова.";
+  }
+}
+
+document.querySelectorAll(".answer-input").forEach(input=>{
+  input.addEventListener("input",()=>{
+    const q=input.closest(".question");
+    q.classList.remove("correct","wrong","unanswered");
+    q.querySelector(".feedback").textContent="";
+  });
+});
+document.querySelectorAll('input[type="radio"]').forEach(input=>{
+  input.addEventListener("change",()=>{
+    const q=input.closest(".question");
+    q.classList.remove("correct","wrong","unanswered");
+    q.querySelector(".feedback").textContent="";
+  });
+});
+</script>
+</body>
+</html>

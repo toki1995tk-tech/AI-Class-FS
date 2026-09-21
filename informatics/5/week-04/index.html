@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>5 класс — Поиск информации в интернете</title>
+<style>
+:root{--blue:#2563eb;--blue2:#1d4ed8;--dark:#0f172a;--bg:#dbeafe;--card:#fff;--line:#bfdbfe;--muted:#64748b;--green:#16a34a;--red:#ef4444;--yellow:#f59e0b;--shadow:0 14px 35px rgba(37,99,235,.16)}
+*{box-sizing:border-box} body{margin:0;font-family:"Segoe UI",Arial,sans-serif;color:#15305b;background:linear-gradient(180deg,#eff6ff,#93c5fd);min-height:100vh}.wrap{max-width:1180px;margin:0 auto;padding:20px}.nav{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}.nav a{text-decoration:none;color:var(--blue2);font-weight:900;background:white;border:2px solid rgba(255,255,255,.8);padding:10px 16px;border-radius:16px;box-shadow:var(--shadow)}.hero,.mission{background:rgba(255,255,255,.94);border-radius:28px;padding:22px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.8);margin:18px 0}.badge{display:inline-block;background:#dbeafe;color:var(--blue2);padding:8px 14px;border-radius:999px;font-weight:900}h1{font-size:clamp(28px,4vw,44px);margin:12px 0 8px;color:var(--dark)}h2{font-size:28px;margin:6px 0;color:var(--dark)}.lead{color:var(--muted);line-height:1.5}.progress{display:flex;gap:14px;align-items:center;margin-top:16px;flex-wrap:wrap}.bar{height:16px;border-radius:999px;background:#dbeafe;border:1px solid var(--line);flex:1;min-width:260px;overflow:hidden}.fill{height:100%;width:0;background:linear-gradient(90deg,#22c55e,#2563eb);transition:.25s}.mission.locked{opacity:.55;pointer-events:none}.mission.done{border:2px solid #86efac}.tag{display:inline-block;background:#dbeafe;color:var(--blue2);border-radius:999px;padding:8px 14px;font-weight:900}.box{background:#f8fbff;border:1px solid var(--line);border-radius:20px;padding:14px;margin:14px 0}.q{background:#f8fbff;border:1px solid var(--line);border-radius:20px;padding:14px;margin:14px 0}.q.missing{border:2px dashed var(--red);background:#fff7f7}.qt{font-weight:900;color:var(--dark);margin-bottom:12px}.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.opt{border:2px solid var(--line);background:#fff;border-radius:18px;padding:14px;font-weight:850;text-align:center;cursor:pointer;transition:.15s;user-select:none}.opt:hover{transform:translateY(-2px)}.opt.sel{background:#dbeafe;border-color:var(--blue);color:var(--blue2)}.opt.correct{background:#dcfce7!important;border-color:var(--green)!important;color:#166534!important}.opt.wrong{background:#fee2e2!important;border-color:var(--red)!important;color:#991b1b!important}.btn{border:none;border-radius:16px;padding:13px 18px;font-weight:900;background:var(--blue);color:#fff;cursor:pointer;margin-top:8px;box-shadow:0 10px 20px rgba(37,99,235,.2)}.btn2{background:#eaf2ff;color:var(--blue2);margin-left:8px}.msg{display:none;margin-top:12px;padding:12px 14px;border-radius:16px;font-weight:800}.msg.show{display:block}.msg.ok{background:#dcfce7;color:#166534;border:1px solid #86efac}.msg.warn{background:#fff7ed;color:#9a3412;border:1px solid #fdba74}.msg.err{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5}.build{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.selectrow{background:#f8fbff;border:1px solid var(--line);border-radius:18px;padding:14px}select,textarea,input{width:100%;padding:12px;border-radius:14px;border:2px solid var(--line);font:inherit;font-weight:700;color:#15305b}select.good{border-color:var(--green);background:#dcfce7}select.bad{border-color:var(--red);background:#fee2e2}.final{display:none;background:linear-gradient(135deg,#e0f2fe,#dcfce7)}.final.show{display:block}.formula{font-size:22px;font-weight:900;color:var(--blue2);text-align:center}.small{font-size:14px;color:var(--muted)}@media(max-width:700px){.wrap{padding:14px}.hero,.mission{padding:17px}.opts{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav"><a href="/informatics/5/">← К неделям</a><a href="/informatics/">⌂ К классам</a></div>
+  <section class="hero"><span class="badge">5 класс • Информатика</span><h1>Поиск информации в интернете</h1><p class="lead"><b>Урок 1:</b> учимся составлять поисковые запросы так, чтобы находить точную, полную и актуальную информацию.</p><div class="progress"><b>Прогресс: <span id="pt">0/7</span></b><div class="bar"><div class="fill" id="pf"></div></div></div></section>
+
+  <section class="mission" id="m1"><span class="tag">Миссия 1</span><h2>Плохой или хороший запрос?</h2><p class="lead">Выбери запрос, который поможет найти информацию точнее.</p>
+    <div class="q one" data-correct="good"><div class="qt">1) Нужно узнать правила игры в баскетбол для новичка.</div><div class="opts"><div class="opt" data-v="bad">баскетбол</div><div class="opt" data-v="good">правила игры в баскетбол для начинающих</div><div class="opt" data-v="bad2">всё про спорт</div></div></div>
+    <div class="q one" data-correct="good"><div class="qt">2) Нужно кратко понять, почему Луна светится.</div><div class="opts"><div class="opt" data-v="good">почему Луна светится кратко для 5 класса</div><div class="opt" data-v="bad">Луна</div><div class="opt" data-v="bad2">космос интересно</div></div></div>
+    <div class="q one" data-correct="good"><div class="qt">3) Нужно узнать погоду на завтра в Астане.</div><div class="opts"><div class="opt" data-v="bad">погода</div><div class="opt" data-v="bad2">завтра</div><div class="opt" data-v="good">погода в Астане завтра</div></div></div>
+    <button class="btn" onclick="checkOne('m1',1,'m2','msg1')">Проверить миссию 1</button><div class="msg" id="msg1"></div>
+  </section>
+
+  <section class="mission locked" id="m2"><span class="tag">Миссия 2</span><h2>Найди ключевые слова</h2><p class="lead">Выбери слова, которые обязательно должны быть в запросе.</p>
+    <div class="q multi" id="multi1"><div class="qt">Задача: найти, <b>как безопасно создать пароль для школьного аккаунта</b>.</div><div class="opts"><div class="opt" data-c="1">безопасный пароль</div><div class="opt" data-c="0">пожалуйста</div><div class="opt" data-c="1">школьный аккаунт</div><div class="opt" data-c="0">очень срочно</div><div class="opt" data-c="1">как создать</div><div class="opt" data-c="0">самое интересное</div></div></div>
+    <button class="btn" onclick="checkMulti('multi1',2,'m3','msg2')">Проверить миссию 2</button><div class="msg" id="msg2"></div>
+  </section>
+
+  <section class="mission locked" id="m3"><span class="tag">Миссия 3</span><h2>Убери лишнее</h2><p class="lead">Выбери более точную и короткую версию запроса.</p>
+    <div class="q one" data-correct="best1"><div class="qt">1) «пожалуйста расскажи мне всё самое интересное про вулканы»</div><div class="opts"><div class="opt" data-v="bad">интересное про всё</div><div class="opt" data-v="best1">как извергается вулкан кратко</div><div class="opt" data-v="bad2">пожалуйста вулканы расскажи</div></div></div>
+    <div class="q one" data-correct="best2"><div class="qt">2) «мне надо быстро найти что такое фотосинтез для урока»</div><div class="opts"><div class="opt" data-v="best2">что такое фотосинтез кратко для 5 класса</div><div class="opt" data-v="bad">быстро надо урок</div><div class="opt" data-v="bad2">фотосинтез всё</div></div></div>
+    <button class="btn" onclick="checkOne('m3',3,'m4','msg3')">Проверить миссию 3</button><div class="msg" id="msg3"></div>
+  </section>
+
+  <section class="mission locked" id="m4"><span class="tag">Миссия 4</span><h2>Добавь уточнение</h2><p class="lead">Подбери запрос под ситуацию.</p>
+    <div class="q one" data-correct="a"><div class="qt">1) Нужно найти не просто «достопримечательности», а места в Астане.</div><div class="opts"><div class="opt" data-v="b">достопримечательности</div><div class="opt" data-v="a">достопримечательности Астаны для детей</div><div class="opt" data-v="c">красивые места</div></div></div>
+    <div class="q one" data-correct="b"><div class="qt">2) Нужно узнать актуальное расписание каникул на этот учебный год.</div><div class="opts"><div class="opt" data-v="a">каникулы</div><div class="opt" data-v="c">школа отдых</div><div class="opt" data-v="b">расписание каникул Казахстан 2026 учебный год</div></div></div>
+    <div class="q one" data-correct="c"><div class="qt">3) Нужно найти инструкцию, а не просто картинки.</div><div class="opts"><div class="opt" data-v="c">как сделать презентацию в PowerPoint пошагово</div><div class="opt" data-v="a">презентация картинки</div><div class="opt" data-v="b">PowerPoint</div></div></div>
+    <button class="btn" onclick="checkOne('m4',4,'m5','msg4')">Проверить миссию 4</button><div class="msg" id="msg4"></div>
+  </section>
+
+  <section class="mission locked" id="m5"><span class="tag">Миссия 5</span><h2>Собери формулу запроса</h2><p class="lead">В каждой строке выбери правильную часть.</p><div class="box formula">ОБЪЕКТ + ЧТО УЗНАТЬ + УТОЧНЕНИЕ</div>
+    <div class="build">
+      <div class="selectrow"><b>Объект</b><select data-correct="mars"><option value="">Выбери…</option><option value="fast">быстро</option><option value="mars">Марс</option><option value="tell">расскажи</option></select></div>
+      <div class="selectrow"><b>Что узнать?</b><select data-correct="whyred"><option value="">Выбери…</option><option value="whyred">почему красный</option><option value="please">пожалуйста</option><option value="cool">интересно</option></select></div>
+      <div class="selectrow"><b>Уточнение</b><select data-correct="grade5"><option value="">Выбери…</option><option value="all">всё обо всём</option><option value="grade5">кратко для 5 класса</option><option value="none">без темы</option></select></div>
+    </div>
+    <button class="btn" onclick="checkBuild()">Проверить миссию 5</button><div class="msg" id="msg5"></div>
+  </section>
+
+  <section class="mission locked" id="m6"><span class="tag">Миссия 6</span><h2>Ошибка робота</h2><div class="box">Робот сказал: <b>«Чем длиннее запрос, тем он всегда лучше».</b></div>
+    <div class="q one" data-correct="truth"><div class="qt">Что нужно объяснить роботу?</div><div class="opts"><div class="opt" data-v="long">Да, всегда нужно писать как можно больше слов.</div><div class="opt" data-v="short">Лучше всегда писать только одно слово.</div><div class="opt" data-v="truth">Важна не длина, а точность и ключевые слова.</div><div class="opt" data-v="random">Можно писать любые слова.</div></div></div>
+    <button class="btn" onclick="checkOne('m6',6,'m7','msg6')">Проверить миссию 6</button><div class="msg" id="msg6"></div>
+  </section>
+
+  <section class="mission locked" id="m7"><span class="tag">BOSS LEVEL</span><h2>Поисковый детектив</h2><p class="lead">Выбери лучший запрос для каждой ситуации.</p>
+    <div class="q one" data-correct="q1"><div class="qt">1) Айша делает доклад: «Почему важно мыть руки?»</div><div class="opts"><div class="opt" data-v="q1">почему важно мыть руки кратко для детей</div><div class="opt" data-v="q2">руки</div><div class="opt" data-v="q3">гигиена всё</div></div></div>
+    <div class="q one" data-correct="q5"><div class="qt">2) Данияр хочет найти инструкцию: как сделать надёжный пароль.</div><div class="opts"><div class="opt" data-v="q4">пароль</div><div class="opt" data-v="q6">аккаунт взлом</div><div class="opt" data-v="q5">как создать надёжный пароль инструкция для школьника</div></div></div>
+    <div class="q one" data-correct="q8"><div class="qt">3) Нужно найти примеры графической информации.</div><div class="opts"><div class="opt" data-v="q7">картинки</div><div class="opt" data-v="q8">примеры графической информации 5 класс</div><div class="opt" data-v="q9">информация вокруг</div></div></div>
+    <button class="btn" onclick="checkOne('m7',7,null,'msg7')">Проверить BOSS LEVEL</button><div class="msg" id="msg7"></div>
+  </section>
+
+  <section class="mission final" id="final"><span class="tag">Финиш</span><h2>Ты справился!</h2><div class="box"><b>Главный вывод:</b> хороший поисковый запрос содержит ключевые слова, не содержит лишних слов и уточняет, что именно нужно найти.</div></section>
+</div>
+<script>
+const total=7, done=new Set();
+function upd(){document.getElementById('pt').textContent=done.size+'/'+total;document.getElementById('pf').style.width=(done.size/total*100)+'%'; if(done.size===total){document.getElementById('final').classList.add('show');}}
+function msg(id,t,cls){let e=document.getElementById(id);e.className='msg show '+cls;e.textContent=t;}
+function mark(n,next){done.add(n);document.getElementById('m'+n).classList.add('done'); if(next)document.getElementById(next).classList.remove('locked'); upd();}
+document.querySelectorAll('.q.one .opt').forEach(o=>o.onclick=()=>{let q=o.closest('.q');q.classList.remove('missing');q.querySelectorAll('.opt').forEach(x=>x.classList.remove('sel','correct','wrong'));o.classList.add('sel')});
+document.querySelectorAll('.q.multi .opt').forEach(o=>o.onclick=()=>{let q=o.closest('.q');q.classList.remove('missing');o.classList.toggle('sel');o.classList.remove('correct','wrong')});
+function checkOne(mid,num,next,msgid){let m=document.getElementById(mid), qs=m.querySelectorAll('.q.one');let miss=false, ok=true;qs.forEach(q=>{q.classList.remove('missing');q.querySelectorAll('.opt').forEach(o=>o.classList.remove('correct','wrong'));let s=q.querySelector('.opt.sel');if(!s){miss=true;ok=false;q.classList.add('missing');return;}if(s.dataset.v===q.dataset.correct){s.classList.add('correct')}else{ok=false;s.classList.add('wrong');let c=q.querySelector('.opt[data-v="'+q.dataset.correct+'"]');if(c)c.classList.add('correct');}});if(miss){msg(msgid,'Сначала ответь на все вопросы.','warn');return;} if(ok){msg(msgid,'Отлично! Миссия выполнена.','ok');mark(num,next)}else msg(msgid,'Есть ошибки. Подумай, какой запрос точнее.','err');}
+function checkMulti(qid,num,next,msgid){let q=document.getElementById(qid), opts=q.querySelectorAll('.opt'), selected=q.querySelectorAll('.opt.sel');q.classList.remove('missing');opts.forEach(o=>o.classList.remove('correct','wrong'));if(selected.length===0){q.classList.add('missing');msg(msgid,'Сначала выбери варианты.','warn');return;}let ok=true;opts.forEach(o=>{let should=o.dataset.c==='1', sel=o.classList.contains('sel');if(sel&&should)o.classList.add('correct');if(sel&&!should){o.classList.add('wrong');ok=false;}if(!sel&&should){o.classList.add('correct');ok=false;}});if(ok){msg(msgid,'Верно! Ты выделил ключевые слова.','ok');mark(num,next)}else msg(msgid,'Не совсем. Зелёным показаны нужные ключевые слова.','err');}
+function checkBuild(){let selects=document.querySelectorAll('#m5 select');let ok=true, miss=false;selects.forEach(s=>{s.classList.remove('good','bad');if(!s.value){miss=true;ok=false;s.classList.add('bad');return;} if(s.value===s.dataset.correct)s.classList.add('good');else{ok=false;s.classList.add('bad')}});if(miss){msg('msg5','Выбери все части формулы.','warn');return;} if(ok){msg('msg5','Готовый запрос: Марс почему красный кратко для 5 класса.','ok');mark(5,'m6')}else msg('msg5','Проверь части формулы ещё раз.','err');}
+upd();
+</script>
+</body>
+</html>

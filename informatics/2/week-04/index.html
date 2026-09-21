@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2 класс — Неделя 4 | Файлы и папки</title>
+<style>
+:root{
+  --blue:#2f80ed;
+  --blue2:#56a5ff;
+  --navy:#12356b;
+  --green:#2dbf71;
+  --orange:#ff9f43;
+  --purple:#8b5cf6;
+  --red:#ef5b5b;
+  --yellow:#ffd54a;
+  --bg:#eef7ff;
+  --shadow:0 16px 36px rgba(38,91,150,.14);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--navy);
+  background:
+    radial-gradient(circle at 8% 8%,rgba(86,165,255,.18),transparent 22%),
+    radial-gradient(circle at 92% 12%,rgba(45,191,113,.10),transparent 24%),
+    linear-gradient(180deg,#f8fcff,#eef7ff);
+  min-height:100vh;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(248,252,255,.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(47,128,237,.13);
+}
+.topbar-inner{
+  max-width:1180px;margin:auto;padding:12px 18px;
+  display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;
+}
+.nav{display:flex;gap:10px;flex-wrap:wrap}
+.nav a,.reset{
+  border:0;background:#fff;color:var(--navy);font-weight:900;
+  padding:10px 14px;border-radius:999px;
+  box-shadow:0 5px 16px rgba(40,90,145,.10);
+}
+.reset{color:#a94444}
+.progress-wrap{display:flex;align-items:center;gap:10px;min-width:255px}
+.progress{height:12px;flex:1;background:#dceeff;border-radius:999px;overflow:hidden}
+.progress>div{
+  height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--green));
+  transition:.35s ease;
+}
+#progressText{font-weight:1000;white-space:nowrap}
+
+.page{max-width:1180px;margin:auto;padding:28px 18px 64px}
+.hero{
+  background:linear-gradient(135deg,#fff,#f6fbff);
+  border:3px solid rgba(47,128,237,.20);
+  border-radius:34px;box-shadow:var(--shadow);
+  padding:28px;display:grid;grid-template-columns:1fr 300px;gap:22px;align-items:center;
+  position:relative;overflow:hidden;margin-bottom:24px;
+}
+.hero:after{
+  content:"";position:absolute;width:280px;height:280px;border-radius:50%;
+  background:rgba(86,165,255,.10);right:-90px;top:-90px;
+}
+.eyebrow{
+  display:inline-block;background:#e8f3ff;color:#1d65b8;font-weight:1000;
+  padding:8px 12px;border-radius:999px;margin-bottom:10px;
+}
+h1{margin:0;font-size:clamp(36px,5.2vw,64px);line-height:.98}
+.hero p{font-size:20px;line-height:1.5;margin:16px 0 0;max-width:760px}
+
+.byte-wrap{position:relative;z-index:2;text-align:center}
+.robot{
+  width:185px;margin:auto;background:linear-gradient(180deg,#fff,#e2efff);
+  border:7px solid var(--blue);border-radius:44px 44px 34px 34px;
+  padding:18px 14px 12px;box-shadow:0 12px 28px rgba(47,128,237,.18);
+}
+.face{height:90px;border-radius:28px;background:#102b55;position:relative}
+.eye{position:absolute;top:25px;width:19px;height:27px;border-radius:50%;background:#6fe6ff;box-shadow:0 0 12px #6fe6ff}
+.eye.l{left:29px}.eye.r{right:29px}
+.mouth{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);width:38px;height:17px;border-bottom:5px solid #fff;border-radius:0 0 24px 24px}
+.byte-name{display:inline-block;margin-top:12px;background:linear-gradient(180deg,#3b9cf5,#176ed0);color:#fff;font-weight:1000;font-size:27px;padding:7px 17px;border-radius:14px}
+.bubble{margin:12px auto 0;background:#fff;border:3px solid #a9d4ff;border-radius:20px;padding:11px 14px;font-weight:900}
+
+.note{
+  background:#fff8d9;border:2px solid #ffe080;border-radius:22px;
+  padding:16px 18px;font-weight:850;line-height:1.45;margin-bottom:24px;
+}
+
+.mission{
+  background:#fff;border-radius:30px;padding:24px;margin:22px 0;
+  border:3px solid rgba(47,128,237,.10);box-shadow:var(--shadow);
+  position:relative;transition:.25s;
+}
+.mission.locked{opacity:.56;filter:grayscale(.2);pointer-events:none}
+.mission.locked:after{
+  content:"🔒 Сначала заверши предыдущую миссию";
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(247,251,255,.88);border-radius:27px;padding:20px;text-align:center;
+  font-size:22px;font-weight:1000;color:#234f86;
+}
+.mission-head{display:flex;gap:14px;align-items:center;margin-bottom:12px}
+.badge{
+  width:60px;height:60px;border-radius:18px;display:grid;place-items:center;
+  color:#fff;font-size:28px;font-weight:1000;flex:0 0 auto;
+}
+.b1{background:var(--blue)} .b2{background:var(--green)} .b3{background:var(--orange)}
+.b4{background:var(--purple)} .b5{background:linear-gradient(135deg,#ffb02e,#ff6c61)}
+.mission h2{margin:0;font-size:30px}
+.sub{color:#55759a;font-size:17px;margin-top:4px}
+
+.question{
+  background:#f8fbff;border:2px solid #d8ebff;border-radius:22px;padding:16px;margin:14px 0;
+}
+.question.missing{border-color:var(--red);box-shadow:0 0 0 4px rgba(239,91,91,.10)}
+.qtitle{font-weight:1000;font-size:20px;margin-bottom:12px}
+.options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.option{
+  border:2px solid #d7e9fb;background:#fff;border-radius:16px;padding:12px;
+  font-weight:900;color:#183e70;transition:.16s;
+}
+.option:hover{transform:translateY(-1px);background:#f1f8ff}
+.option.selected{background:#e7f3ff;border-color:var(--blue);color:#0f4f96;box-shadow:0 0 0 4px rgba(47,128,237,.16)}
+.option.correct{background:#e6fff1!important;border-color:var(--green)!important;color:#117344!important;box-shadow:0 0 0 4px rgba(45,191,113,.15)}
+.option.correct:after{content:"  ✓";font-weight:1000}
+.option.wrong{background:#fff0f0!important;border-color:var(--red)!important;color:#b53636!important;box-shadow:0 0 0 4px rgba(239,91,91,.14)}
+.option.wrong:after{content:"  ✕";font-weight:1000}
+
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.match-card{
+  border:2px solid #d7eaff;border-radius:20px;padding:15px;background:#f9fcff;
+}
+.match-card h3{margin:0 0 10px}
+.select-row{display:flex;gap:8px;flex-wrap:wrap}
+.choice{
+  border:2px solid #cfe5ff;background:#fff;border-radius:999px;padding:9px 13px;
+  font-weight:900;color:#1a568f;
+}
+.choice.selected{background:#e7f3ff;border-color:var(--blue);box-shadow:0 0 0 4px rgba(47,128,237,.14)}
+.choice.correct{background:#e8fff2;border-color:var(--green);color:#117344}
+.choice.wrong{background:#fff0f0;border-color:var(--red);color:#b53636}
+
+.practice{
+  background:linear-gradient(135deg,#eef8ff,#f4fff8);
+  border:3px solid #a8d7ff;border-radius:26px;padding:20px;margin:14px 0;
+}
+.step{display:flex;gap:12px;align-items:flex-start;margin:12px 0}
+.stepn{
+  width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+  background:var(--blue);color:#fff;font-weight:1000;flex:0 0 auto;
+}
+.checklist{display:grid;gap:10px;margin-top:14px}
+.checkitem{
+  display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #d9ebff;border-radius:16px;padding:12px;font-weight:850;
+}
+.checkitem input{width:22px;height:22px;accent-color:var(--green)}
+.warn{
+  background:#fff0e8;border:2px solid #ffbc91;border-radius:18px;padding:13px 15px;font-weight:900;color:#a64a22;margin-top:12px
+}
+.check-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.primary{
+  border:0;border-radius:16px;padding:12px 18px;background:linear-gradient(135deg,var(--blue),#176bc8);
+  color:#fff;font-weight:1000;box-shadow:0 7px 18px rgba(47,128,237,.25)
+}
+.secondary{border:0;border-radius:16px;padding:12px 18px;background:#edf6ff;color:#1a5ea8;font-weight:900}
+.feedback{min-height:26px;font-weight:1000;margin-top:12px}
+.ok{color:#15945a}.no{color:#d64f4f}
+
+.bit-box{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:12px
+}
+.bit-card{
+  background:#fff;border:2px solid #d8ebff;border-radius:18px;padding:16px;text-align:center;font-weight:900
+}
+.bit-card .big{font-size:42px;line-height:1}
+.final{
+  text-align:center;background:linear-gradient(135deg,#fff9d9,#eefeff);
+  border:3px solid #9bd2ff;border-radius:28px;padding:22px
+}
+.secret{display:none;background:#fff7d9;border:2px solid #ffd76e;border-radius:22px;padding:17px;margin-top:16px}
+.secret.show{display:block}
+.done{
+  display:none;text-align:center;margin-top:24px;background:linear-gradient(135deg,#fff9d9,#f1fff7);
+  border:3px solid #8fd4ff;border-radius:30px;padding:28px;box-shadow:var(--shadow)
+}
+.done.show{display:block}
+.done h2{font-size:40px;margin:0}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}.byte-wrap{order:-1}
+  .options,.match-grid,.bit-box{grid-template-columns:1fr}
+}
+@media(max-width:580px){
+  .mission{padding:18px}.hero{padding:20px}.progress-wrap{width:100%}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="nav">
+      <a href="../">← К неделям</a>
+      <a href="/informatics/">← К предметам</a>
+      <button class="reset" onclick="resetProgress()">↻ Сбросить прогресс</button>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress"><div id="progressBar"></div></div>
+      <span id="progressText">0 / 5</span>
+    </div>
+  </div>
+</div>
+
+<main class="page">
+  <section class="hero">
+    <div>
+      <div class="eyebrow">2 класс · Неделя 4</div>
+      <h1>Файлы и папки</h1>
+      <p>Помоги Байту навести порядок: различай файлы, папки и ярлыки, используй контекстное меню и узнай, что такое бит.</p>
+    </div>
+    <div class="byte-wrap">
+      <div class="robot">
+        <div class="face"><span class="eye l"></span><span class="eye r"></span><span class="mouth"></span></div>
+        <div class="byte-name">Byte</div>
+      </div>
+      <div class="bubble">Готов к компьютерной миссии? 📁</div>
+    </div>
+  </section>
+
+  <div class="note">
+    💡 В этой неделе часть заданий выполняется прямо на компьютере. Сайт будет вести тебя по шагам, а учитель поможет, если что-то не получится.
+  </div>
+
+  <!-- МИССИЯ 1 -->
+  <section class="mission" id="mission1">
+    <div class="mission-head">
+      <div class="badge b1">1</div>
+      <div><h2>Файл, папка или ярлык?</h2><div class="sub">Определи, что перед тобой.</div></div>
+    </div>
+    <div id="m1"></div>
+    <div class="check-row"><button class="primary" onclick="checkSimple(1)">Проверить</button></div>
+    <div class="feedback" id="f1"></div>
+  </section>
+
+  <!-- МИССИЯ 2 -->
+  <section class="mission locked" id="mission2">
+    <div class="mission-head">
+      <div class="badge b2">2</div>
+      <div><h2>Что выбрать в контекстном меню?</h2><div class="sub">Выбери команду для каждой ситуации.</div></div>
+    </div>
+    <div id="m2"></div>
+    <div class="check-row"><button class="primary" onclick="checkSimple(2)">Проверить</button></div>
+    <div class="feedback" id="f2"></div>
+  </section>
+
+  <!-- МИССИЯ 3 -->
+  <section class="mission locked" id="mission3">
+    <div class="mission-head">
+      <div class="badge b3">3</div>
+      <div><h2>Практика на компьютере</h2><div class="sub">Работай каждый в своём темпе. Общих остановок нет.</div></div>
+    </div>
+
+    <div class="practice">
+      <div class="step"><div class="stepn">1</div><div><b>На Рабочем столе</b> создай папку <b>«Байт»</b>.</div></div>
+      <div class="step"><div class="stepn">2</div><div>Внутри папки «Байт» создай папки <b>«Картинки»</b> и <b>«Игры»</b>.</div></div>
+      <div class="step"><div class="stepn">3</div><div>Создай внутри папки «Байт» <b>текстовый файл</b>.</div></div>
+      <div class="step"><div class="stepn">4</div><div><b>Скопируй</b> этот файл в папку «Картинки».</div></div>
+      <div class="step"><div class="stepn">5</div><div><b>Перемести</b> копию из «Картинки» в «Игры».</div></div>
+      <div class="step"><div class="stepn">6</div><div>Создай временный файл <b>«Удалить меня»</b> и удали его.</div></div>
+      <div class="step"><div class="stepn">7</div><div>Создай на Рабочем столе <b>ярлык папки «Байт»</b>.</div></div>
+      <div class="warn">⚠️ Перед удалением всегда проверяй, что удаляешь именно временный файл.</div>
+    </div>
+
+    <h3>Проверь себя:</h3>
+    <div class="checklist">
+      <label class="checkitem"><input type="checkbox" class="prac"> Я создал папку «Байт».</label>
+      <label class="checkitem"><input type="checkbox" class="prac"> Я создал «Картинки» и «Игры».</label>
+      <label class="checkitem"><input type="checkbox" class="prac"> Я создал текстовый файл.</label>
+      <label class="checkitem"><input type="checkbox" class="prac"> Я скопировал файл.</label>
+      <label class="checkitem"><input type="checkbox" class="prac"> Я переместил файл.</label>
+      <label class="checkitem"><input type="checkbox" class="prac"> Я удалил временный файл.</label>
+      <label class="checkitem"><input type="checkbox" class="prac"> Я создал ярлык.</label>
+    </div>
+
+    <div class="check-row"><button class="primary" onclick="checkPractice()">Я всё выполнил</button></div>
+    <div class="feedback" id="f3"></div>
+  </section>
+
+  <!-- МИССИЯ 4 -->
+  <section class="mission locked" id="mission4">
+    <div class="mission-head">
+      <div class="badge b4">4</div>
+      <div><h2>Что такое бит?</h2><div class="sub">Вспомни, как компьютер хранит информацию.</div></div>
+    </div>
+
+    <div class="bit-box">
+      <div class="bit-card"><div class="big">0</div><div>может быть битом</div></div>
+      <div class="bit-card"><div class="big">1</div><div>может быть битом</div></div>
+      <div class="bit-card"><div class="big">📷</div><div>фото тоже хранится в компьютере</div></div>
+      <div class="bit-card"><div class="big">🎵</div><div>звук тоже хранится в компьютере</div></div>
+    </div>
+
+    <div id="m4"></div>
+    <div class="check-row"><button class="primary" onclick="checkSimple(4)">Проверить</button></div>
+    <div class="feedback" id="f4"></div>
+  </section>
+
+  <!-- ФИНАЛ -->
+  <section class="mission locked" id="mission5">
+    <div class="mission-head">
+      <div class="badge b5">🏆</div>
+      <div><h2>Финальная миссия Байта</h2><div class="sub">Покажи, что умеешь работать с файлами и папками.</div></div>
+    </div>
+    <div class="final">
+      <div id="m5"></div>
+      <div class="check-row" style="justify-content:center"><button class="primary" onclick="checkSimple(5)">Завершить миссию</button></div>
+      <div class="feedback" id="f5"></div>
+    </div>
+
+    <div class="secret" id="secret">
+      <h3>⭐ Секреты Байта — для быстрых</h3>
+      <p>Создай папку <b>«Секреты Байта»</b>. Перемести туда 2 любых учебных файла. Один из них скопируй.</p>
+      <p>Потом объясни соседу: <b>чем копирование отличается от перемещения?</b></p>
+    </div>
+  </section>
+
+  <section class="done" id="done">
+    <h2>🎉 Миссия выполнена!</h2>
+    <p style="font-size:21px;font-weight:900">Теперь компьютер Байта в порядке.</p>
+    <p style="font-size:18px">Ты умеешь создавать, копировать, перемещать и удалять объекты и знаешь, что такое бит.</p>
+  </section>
+</main>
+
+<script>
+const Q={
+  1:[
+    {q:"Что хранит сохранённую информацию: текст, фото или рисунок?",opts:["Файл","Папка","Ярлык","Мышь"],correct:"Файл"},
+    {q:"Что помогает хранить файлы вместе?",opts:["Ярлык","Папка","Курсор","Клавиатура"],correct:"Папка"},
+    {q:"Что является быстрым путём к файлу или папке?",opts:["Ярлык","Файл","Корзина","Монитор"],correct:"Ярлык"}
+  ],
+  2:[
+    {q:"Нужно сделать ещё один такой же файл. Что выбрать?",opts:["Копировать","Удалить","Создать ярлык","Переименовать"],correct:"Копировать"},
+    {q:"Нужно перенести файл в другую папку. Что сделать?",opts:["Переместить","Удалить","Создать новый","Открыть"],correct:"Переместить"},
+    {q:"Нужен новый каталог для картинок. Что выбрать?",opts:["Создать папку","Удалить","Копировать мышь","Закрыть"],correct:"Создать папку"},
+    {q:"Файл больше не нужен. Что выбрать?",opts:["Удалить","Копировать","Создать ярлык","Открыть"],correct:"Удалить"}
+  ],
+  4:[
+    {q:"Как называется очень маленькая единица информации?",opts:["Бит","Папка","Файл","Ярлык"],correct:"Бит"},
+    {q:"Какие два значения использует компьютер для представления информации?",opts:["0 и 1","2 и 3","А и Б","Красный и синий"],correct:"0 и 1"},
+    {q:"Можно ли измерять информацию, которая хранится в компьютере?",opts:["Да","Нет"],correct:"Да"}
+  ],
+  5:[
+    {q:"Ты хочешь получить второй такой же файл. Что делаешь?",opts:["Копирую","Перемещаю","Удаляю","Создаю ярлык"],correct:"Копирую"},
+    {q:"Ты хочешь, чтобы файл оказался в другом месте, а старого экземпляра там не осталось.",opts:["Перемещаю","Копирую","Удаляю папку","Создаю ярлык"],correct:"Перемещаю"},
+    {q:"Если удалить только ярлык, что обычно происходит с настоящим файлом?",opts:["Файл остаётся","Файл обязательно исчезает","Компьютер выключается","Папка становится пустой"],correct:"Файл остаётся"},
+    {q:"Как открыть контекстное меню объекта?",opts:["Нажать правой кнопкой мыши","Нажать пробел","Дважды нажать Enter","Выключить компьютер"],correct:"Нажать правой кнопкой мыши"}
+  ]
+};
+
+const state={done:[false,false,false,false,false],answers:{}};
+
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+
+function render(n){
+  const root=document.getElementById("m"+n);
+  root.innerHTML="";
+  Q[n].forEach((item,i)=>{
+    const q=document.createElement("div");
+    q.className="question";
+    q.innerHTML=`<div class="qtitle">${i+1}. ${item.q}</div>`;
+    const opts=document.createElement("div");
+    opts.className="options";
+    shuffle(item.opts).forEach(op=>{
+      const b=document.createElement("button");
+      b.className="option";
+      b.textContent=op;
+      b.onclick=()=>{
+        [...opts.children].forEach(x=>x.classList.remove("selected","correct","wrong"));
+        q.classList.remove("missing");
+        b.classList.add("selected");
+        state.answers[`${n}-${i}`]=op;
+        save();
+      };
+      opts.appendChild(b);
+    });
+    q.appendChild(opts);
+    root.appendChild(q);
+  });
+}
+
+function setProgress(){
+  const c=state.done.filter(Boolean).length;
+  document.getElementById("progressText").textContent=`${c} / 5`;
+  document.getElementById("progressBar").style.width=`${c*20}%`;
+}
+
+function unlock(n){
+  document.getElementById("mission"+n).classList.remove("locked");
+}
+
+function complete(n){
+  if(!state.done[n-1]){
+    state.done[n-1]=true;
+    setProgress();
+    save();
+  }
+  if(n<5) unlock(n+1);
+  if(n===5){
+    document.getElementById("secret").classList.add("show");
+    document.getElementById("done").classList.add("show");
+    setTimeout(()=>document.getElementById("done").scrollIntoView({behavior:"smooth"}),300);
+  }
+}
+
+function feedback(id,text,ok){
+  const el=document.getElementById(id);
+  el.textContent=text;
+  el.className="feedback "+(ok?"ok":"no");
+}
+
+function checkSimple(n){
+  const root=document.getElementById("m"+n);
+  const blocks=[...root.querySelectorAll(".question")];
+  let all=true,good=true;
+
+  Q[n].forEach((item,i)=>{
+    const val=state.answers[`${n}-${i}`];
+    const block=blocks[i];
+    const buttons=[...block.querySelectorAll(".option")];
+
+    block.classList.remove("missing");
+    buttons.forEach(b=>b.classList.remove("correct","wrong"));
+
+    if(!val){
+      all=false;good=false;
+      block.classList.add("missing");
+      return;
+    }
+
+    const selected=buttons.find(b=>b.textContent.trim()===val);
+    if(val===item.correct){
+      selected?.classList.add("correct");
+    }else{
+      selected?.classList.add("wrong");
+      good=false;
+    }
+  });
+
+  if(!all){
+    feedback("f"+n,"Заполни все задания. Красной рамкой отмечено, где ответа пока нет.",false);
+    return;
+  }
+  if(!good){
+    feedback("f"+n,"Есть ошибка. Красным отмечен выбранный неправильный ответ. Исправь и проверь ещё раз.",false);
+    return;
+  }
+
+  feedback("f"+n,"✅ Отлично! Всё правильно.",true);
+  complete(n);
+}
+
+function checkPractice(){
+  const boxes=[...document.querySelectorAll(".prac")];
+  if(boxes.every(b=>b.checked)){
+    feedback("f3","✅ Отлично! Практическая миссия завершена.",true);
+    complete(3);
+  }else{
+    feedback("f3","Сначала выполни все шаги и отметь каждый пункт чек-листа.",false);
+  }
+}
+
+function save(){
+  localStorage.setItem("grade2-week4-filesfolders",JSON.stringify(state));
+}
+
+function load(){
+  try{
+    const s=JSON.parse(localStorage.getItem("grade2-week4-filesfolders")||"null");
+    if(!s)return;
+    state.done=s.done||state.done;
+    state.answers=s.answers||{};
+    state.done.forEach((v,i)=>{if(v && i<4) unlock(i+2)});
+    if(state.done[4]){
+      document.getElementById("secret").classList.add("show");
+      document.getElementById("done").classList.add("show");
+    }
+  }catch(e){}
+  setProgress();
+}
+
+function resetProgress(){
+  if(!confirm("Сбросить весь прогресс этой недели?"))return;
+  localStorage.removeItem("grade2-week4-filesfolders");
+  location.reload();
+}
+
+render(1);render(2);render(4);render(5);
+load();
+</script>
+</body>
+</html>

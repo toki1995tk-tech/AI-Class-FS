@@ -102,8 +102,13 @@ button,textarea{font:inherit}.wrap{width:min(1160px,calc(100% - 22px));margin:au
 <div class="box"><b>Ситуация:</b> пользователь пишет: «Помоги мне подготовить школьное выступление».</div>
 <div class="box"><b>Шаг 1.</b> Хватает информации?<div class="options" id="bossDecision"><button class="opt" data-v="yes">Да, AI уже знает всё нужное</button><button class="opt" data-v="no">Нет, сначала нужны уточнения</button></div></div>
 <div class="box"><b>Шаг 2.</b> Выбери три самых полезных уточнения.<div class="grid2" id="bossQs"></div></div>
-<div class="box"><b>Шаг 3.</b> Напиши финальный промпт так, чтобы AI сначала получил недостающие данные, а затем сделал хороший результат.<textarea id="bossText" placeholder="Напиши финальный промпт..."></textarea></div>
-<div class="btnrow"><button class="btn primary" onclick="checkBoss()">🔥 Победить босса</button></div><div class="thinking" id="think8">AI проверяет финальный промпт...</div><div class="feedback" id="f8"></div></section>
+<div class="box"><b>Шаг 3.</b> Напиши финальный промпт так, чтобы AI сначала получил недостающие данные, а затем сделал хороший результат.
+  <div style="margin-top:10px"><span class="ai-chip">🤖 Финальный промпт проверит искусственный интеллект</span></div>
+  <textarea id="bossText" placeholder="Напиши финальный промпт..."></textarea>
+</div>
+<div class="btnrow"><button type="button" class="btn primary" onclick="checkBoss()">🤖 Проверить финальный промпт</button></div>
+<div class="thinking" id="think8">🤖 AI анализирует смысл, структуру и качество промпта...</div>
+<div class="feedback" id="f8"></div></section>
 
 <section class="final" id="final"><div style="font-size:76px">🏆</div><div class="eyebrow" style="color:#0d6fd8">WEEK 04 COMPLETE</div><h2>PROMPT TRAINER</h2><p>Ты повторил первые недели и научился самостоятельно строить сильный промпт.</p><div class="extra"><h3>🔥 EXTRA LEVEL — для тех, кто закончил раньше</h3><div class="box">1. Создай два хороших промпта на одну тему: один для ребёнка 7 лет, второй для учёного.</div><div class="box">2. Возьми любой свой длинный промпт и сократи его минимум на треть, не потеряв важные условия.</div><div class="box">3. Создай промпт, где AI сначала задаёт 3 вопроса, а затем выдаёт результат в таблице.</div></div></section>
 <div class="footer">AI Prompt Engineering • 5 класс • Week 04</div>

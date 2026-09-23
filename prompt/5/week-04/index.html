@@ -110,110 +110,268 @@ button,textarea{font:inherit}.wrap{width:min(1160px,calc(100% - 22px));margin:au
 </div>
 
 <script>
-const KEY='aiclassfs_prompt5_week04_v1', AI='https://ovjpqjnjceuloakqnwsm.supabase.co/functions/v1/ai-grade';
-let state=JSON.parse(localStorage.getItem(KEY)||'{"done":[],"xp":0,"tries":{}}');
+const KEY='aiclassfs_prompt5_week04_v2';
+const AI='https://ovjpqjnjceuloakqnwsm.supabase.co/functions/v1/ai-grade';
+let state={done:[],xp:0,tries:{}};
+try{ state=JSON.parse(localStorage.getItem(KEY)||'{"done":[],"xp":0,"tries":{}}'); }catch(e){}
 
-/* Safari и некоторые браузеры не обязаны создавать JS-переменные из id элементов.
-   Поэтому все нужные элементы получаем явно. */
-const xp=document.getElementById('xp');
-const progressText=document.getElementById('progressText');
-const progress=document.getElementById('progress');
-const rank=document.getElementById('rank');
-const final=document.getElementById('final');
-const askCases=document.getElementById('askCases');
-const missingCases=document.getElementById('missingCases');
-const dragBank=document.getElementById('dragBank');
-const drops=document.getElementById('drops');
-const battleCases=document.getElementById('battleCases');
-const noiseCases=document.getElementById('noiseCases');
-const bossQs=document.getElementById('bossQs');
-const bossDecision=document.getElementById('bossDecision');
-const bossText=document.getElementById('bossText');
-const think8=document.getElementById('think8');
-const m1=document.getElementById('m1');
-const m2=document.getElementById('m2');
-const m3=document.getElementById('m3');
-const m4=document.getElementById('m4');
-const m5=document.getElementById('m5');
-const m6=document.getElementById('m6');
-const m7=document.getElementById('m7');
-const m8=document.getElementById('m8');
+const $=id=>document.getElementById(id);
+const save=()=>localStorage.setItem(KEY,JSON.stringify(state));
+const done=n=>state.done.includes(n);
 
-const save=()=>localStorage.setItem(KEY,JSON.stringify(state)), done=n=>state.done.includes(n);
-function finish(n,x){if(!done(n)){state.done.push(n);state.xp+=x;save()}update();document.getElementById('m'+n).classList.add('done')}
-function feedback(n,type,msg){const e=document.getElementById('f'+n);e.className='feedback '+type;e.textContent=msg}
-function attempt(n){state.tries[n]=(state.tries[n]||0)+1;save();return state.tries[n]}
-function update(){xp.textContent=state.xp;progressText.textContent='Пройдено: '+state.done.length+' из 8';progress.style.width=(state.done.length/8*100)+'%';for(let i=1;i<=8;i++){let e=document.getElementById('m'+i);e.classList.toggle('locked',i>1&&!done(i-1));e.classList.toggle('done',done(i))}rank.textContent=state.done.length<3?'🔵 PROMPT ROOKIE':state.done.length<6?'🟣 PROMPT BUILDER':state.done.length<8?'🟠 PROMPT ENGINEER':'🔥 PROMPT TRAINER';if(done(8))final.classList.add('show')}
-function clear(root){root.querySelectorAll('.correct,.wrong').forEach(x=>x.classList.remove('correct','wrong'))}
-function single(box,b){box.querySelectorAll('.opt,.choice').forEach(x=>x.classList.remove('selected'));b.classList.add('selected')}
-function resetAll(){if(confirm('Сбросить весь прогресс Week 04?')){localStorage.removeItem(KEY);location.reload()}}
+function feedback(n,type,msg){
+  const e=$('f'+n);
+  if(!e) return;
+  e.className='feedback '+type;
+  e.textContent=msg;
+}
+function attempt(n){
+  state.tries[n]=(state.tries[n]||0)+1;
+  save();
+  return state.tries[n];
+}
+function finish(n,reward){
+  if(!done(n)){ state.done.push(n); state.xp+=reward; save(); }
+  update();
+}
+function update(){
+  $('xp').textContent=state.xp;
+  $('progressText').textContent='Пройдено: '+state.done.length+' из 8';
+  $('progress').style.width=(state.done.length/8*100)+'%';
+  for(let i=1;i<=8;i++){
+    const e=$('m'+i);
+    if(!e) continue;
+    e.classList.toggle('locked',i>1&&!done(i-1));
+    e.classList.toggle('done',done(i));
+  }
+  $('rank').textContent=state.done.length<3?'🔵 PROMPT ROOKIE':state.done.length<6?'🟣 PROMPT BUILDER':state.done.length<8?'🟠 PROMPT ENGINEER':'🔥 PROMPT TRAINER';
+  if(done(8)) $('final').classList.add('show');
+}
+function clearMarks(root){
+  root.querySelectorAll('.correct,.wrong').forEach(x=>x.classList.remove('correct','wrong'));
+}
+function selectOne(box,btn){
+  box.querySelectorAll('.opt,.choice').forEach(x=>x.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+function resetAll(){
+  if(confirm('Сбросить весь прогресс Week 04?')){
+    localStorage.removeItem(KEY);
+    ['write5','write7','bossText'].forEach(id=>localStorage.removeItem(KEY+'_'+id));
+    location.reload();
+  }
+}
 
-const ask=[['Придумай 4 названия для школьной команды по робототехнике.','answer'],['Помоги мне выбрать подарок.','ask'],['Составь 5 вопросов викторины про динозавров для 5 класса.','answer'],['Помоги подготовиться к соревнованию.','ask'],['Напиши 3 коротких слогана для проекта по экологии.','answer'],['Подбери мне книгу.','ask']];
-ask.forEach((x,i)=>{let d=document.createElement('div');d.className='box';d.innerHTML='<div class="prompt">'+(i+1)+'. '+x[0]+'</div><div class="options"><button class="opt" data-v="answer">✅ Можно отвечать</button><button class="opt" data-v="ask">❓ Сначала спросить</button></div>';d.querySelectorAll('.opt').forEach(b=>b.onclick=()=>single(d,b));askCases.appendChild(d)});
-function checkM1(){clear(m1);let ok=0,miss=false;[...askCases.children].forEach((d,i)=>{let s=d.querySelector('.selected');if(!s){miss=true;return}if(s.dataset.v===ask[i][1]){s.classList.add('correct');ok++}else s.classList.add('wrong')});if(miss)return feedback(1,'hint','Ответь на все ситуации.');if(ok===ask.length){feedback(1,'ok','Разминка пройдена: ты понимаешь, когда AI нужно уточнять.');finish(1,80)}else feedback(1,attempt(1)>1?'hint':'no',attempt(1)>1?'Подсказка: спросить нужно только там, где без новых данных ответ будет случайным.':'Есть ошибки. Попробуй ещё раз.')}
+/* MISSION 1 */
+const askAnswers=['answer','ask','answer','ask','answer','ask'];
+$('askCases').querySelectorAll('.ask-case').forEach((box)=>{
+  box.querySelectorAll('.opt').forEach(btn=>{
+    btn.addEventListener('click',()=>selectOne(box,btn));
+  });
+});
+function checkM1(){
+  const root=$('m1'); clearMarks(root);
+  const boxes=[...$('askCases').querySelectorAll('.ask-case')];
+  let missing=false, correct=0;
+  boxes.forEach((box,i)=>{
+    const s=box.querySelector('.opt.selected');
+    if(!s){ missing=true; return; }
+    if(s.dataset.v===askAnswers[i]){ s.classList.add('correct'); correct++; }
+    else s.classList.add('wrong');
+  });
+  if(missing) return feedback(1,'hint','Выбери ответ во всех 6 ситуациях.');
+  if(correct===boxes.length){ feedback(1,'ok','Разминка пройдена: ты понимаешь, когда AI нужно уточнять.'); finish(1,80); }
+  else feedback(1,attempt(1)>1?'hint':'no',attempt(1)>1?'Подсказка: спрашивать нужно там, где без новых данных AI будет угадывать.':'Есть ошибки. Попробуй ещё раз.');
+}
 
-const miss=[{p:'«Объясни фотосинтез для ученика 5 класса»',a:['format','limit']},{p:'«Придумай персонажа: робот, добрый, живёт на Марсе. Оформи в 4 пунктах»',a:['context']},{p:'«Составь план презентации на 6 слайдов про океаны»',a:['audience','limit']}];
+/* MISSION 2 */
+const missingData=[
+  {p:'«Объясни фотосинтез для ученика 5 класса»',a:['format','limit']},
+  {p:'«Придумай персонажа: робот, добрый, живёт на Марсе. Оформи в 4 пунктах»',a:['context']},
+  {p:'«Составь план презентации на 6 слайдов про океаны»',a:['audience','limit']}
+];
 const labels={task:'Задача',details:'Детали',context:'Контекст / для чего',audience:'Для кого',format:'Формат',limit:'Ограничение'};
-miss.forEach((c,i)=>{let d=document.createElement('div');d.className='box';d.innerHTML='<div class="prompt">'+c.p+'</div><div class="grid2"></div>';Object.entries(labels).forEach(([k,v])=>{let b=document.createElement('button');b.className='choice';b.textContent=v;b.dataset.v=k;b.onclick=()=>b.classList.toggle('selected');d.querySelector('.grid2').appendChild(b)});missingCases.appendChild(d)});
-function checkM2(){clear(m2);let ok=true,complete=true;[...missingCases.children].forEach((d,i)=>{let sel=[...d.querySelectorAll('.selected')].map(x=>x.dataset.v);if(!sel.length)complete=false;let target=miss[i].a;if(sel.length!==target.length||!target.every(x=>sel.includes(x)))ok=false;d.querySelectorAll('.selected').forEach(x=>x.classList.add(target.includes(x.dataset.v)?'correct':'wrong'))});if(!complete)return feedback(2,'hint','В каждом кейсе выбери недостающие части.');if(ok){feedback(2,'ok','Отлично: ты видишь, чего не хватает промпту.');finish(2,100)}else feedback(2,attempt(2)>1?'hint':'no',attempt(2)>1?'Подсказка: часть считается пропущенной только если её смысл действительно не указан.':'Есть ошибки. Проверь ещё раз.')}
+missingData.forEach(c=>{
+  const d=document.createElement('div'); d.className='box';
+  d.innerHTML='<div class="prompt">'+c.p+'</div><div class="grid2"></div>';
+  const grid=d.querySelector('.grid2');
+  Object.entries(labels).forEach(([k,v])=>{
+    const b=document.createElement('button'); b.type='button'; b.className='choice'; b.textContent=v; b.dataset.v=k;
+    b.addEventListener('click',()=>b.classList.toggle('selected'));
+    grid.appendChild(b);
+  });
+  $('missingCases').appendChild(d);
+});
+function checkM2(){
+  const root=$('m2'); clearMarks(root);
+  let ok=true, complete=true;
+  [...$('missingCases').children].forEach((d,i)=>{
+    const sel=[...d.querySelectorAll('.choice.selected')].map(x=>x.dataset.v);
+    const target=missingData[i].a;
+    if(!sel.length) complete=false;
+    if(sel.length!==target.length || !target.every(x=>sel.includes(x))) ok=false;
+    d.querySelectorAll('.choice.selected').forEach(x=>x.classList.add(target.includes(x.dataset.v)?'correct':'wrong'));
+  });
+  if(!complete) return feedback(2,'hint','В каждом кейсе выбери недостающие части.');
+  if(ok){ feedback(2,'ok','Отлично: ты видишь, чего не хватает промпту.'); finish(2,100); }
+  else feedback(2,attempt(2)>1?'hint':'no',attempt(2)>1?'Подсказка: часть считается пропущенной только если её смысл действительно не указан.':'Есть ошибки. Проверь ещё раз.');
+}
 
-const dragData=[['Составь план', 'task'],['Придумай героя','task'],['добавь имя и суперспособность','details'],['используй 3 примера','details'],['для школьного проекта','context'],['для приключенческой игры','context'],['оформи таблицей','format'],['ответ дай в 5 пунктах','format'],['не больше 80 слов','limit'],['не используй сложные термины','limit']];
+/* MISSION 3 */
+const dragData=[
+ ['Составь план','task'],['Придумай героя','task'],['добавь имя и суперспособность','details'],['используй 3 примера','details'],
+ ['для школьного проекта','context'],['для приключенческой игры','context'],['оформи таблицей','format'],['ответ дай в 5 пунктах','format'],
+ ['не больше 80 слов','limit'],['не используй сложные термины','limit']
+];
 const cats=[['task','ЗАДАЧА'],['details','ДЕТАЛИ'],['context','КОНТЕКСТ'],['format','ФОРМАТ'],['limit','ОГРАНИЧЕНИЯ']];
-function makeDrag(t,c){let e=document.createElement('div');e.className='drag';e.draggable=true;e.textContent=t;e.dataset.cat=c;e.addEventListener('dragstart',()=>e.classList.add('dragging'));e.addEventListener('dragend',()=>e.classList.remove('dragging'));e.onclick=()=>{let target=[...document.querySelectorAll('.drop')].find(z=>z.dataset.cat===c);if(e.parentElement===dragBank)target.appendChild(e);else dragBank.appendChild(e)};return e}
-dragData.sort(()=>Math.random()-.5).forEach(x=>dragBank.appendChild(makeDrag(x[0],x[1])));
-cats.forEach(([c,t])=>{let z=document.createElement('div');z.className='drop';z.dataset.cat=c;z.innerHTML='<h3>'+t+'</h3>';z.ondragover=e=>{e.preventDefault();z.classList.add('over')};z.ondragleave=()=>z.classList.remove('over');z.ondrop=e=>{e.preventDefault();z.classList.remove('over');let d=document.querySelector('.dragging');if(d)z.appendChild(d)};drops.appendChild(z)});
-function resetDrag(){[...document.querySelectorAll('.drag')].forEach(x=>dragBank.appendChild(x));clear(m3)}
-function checkM3(){clear(m3);let all=[...document.querySelectorAll('.drop .drag')];if(all.length<dragData.length)return feedback(3,'hint','Разложи все 10 карточек.');let ok=all.every(x=>x.parentElement.dataset.cat===x.dataset.cat);all.forEach(x=>x.classList.add(x.parentElement.dataset.cat===x.dataset.cat?'correct':'wrong'));if(ok){feedback(3,'ok','POWER PROMPT собран правильно.');finish(3,140)}else feedback(3,attempt(3)>1?'hint':'no',attempt(3)>1?'Подсказка: формат говорит, КАК выглядит ответ; ограничение задаёт границы.':'Есть ошибки в сортировке. Попробуй переставить красные карточки.')}
+function makeDrag(t,c){
+  const e=document.createElement('div'); e.className='drag'; e.draggable=true; e.textContent=t; e.dataset.cat=c;
+  e.addEventListener('dragstart',()=>e.classList.add('dragging'));
+  e.addEventListener('dragend',()=>e.classList.remove('dragging'));
+  e.addEventListener('click',()=>{
+    if(e.parentElement===$('dragBank')){
+      const target=[...document.querySelectorAll('.drop')].find(z=>z.dataset.cat===c);
+      target.appendChild(e);
+    }else $('dragBank').appendChild(e);
+  });
+  return e;
+}
+dragData.sort(()=>Math.random()-.5).forEach(x=>$('dragBank').appendChild(makeDrag(x[0],x[1])));
+cats.forEach(([c,t])=>{
+  const z=document.createElement('div'); z.className='drop'; z.dataset.cat=c; z.innerHTML='<h3>'+t+'</h3>';
+  z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('over')});
+  z.addEventListener('dragleave',()=>z.classList.remove('over'));
+  z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('over');const d=document.querySelector('.dragging');if(d)z.appendChild(d)});
+  $('drops').appendChild(z);
+});
+function resetDrag(){ [...document.querySelectorAll('.drag')].forEach(x=>$('dragBank').appendChild(x)); clearMarks($('m3')); }
+function checkM3(){
+  const root=$('m3'); clearMarks(root);
+  const all=[...document.querySelectorAll('.drop .drag')];
+  if(all.length<dragData.length) return feedback(3,'hint','Разложи все 10 карточек.');
+  const ok=all.every(x=>x.parentElement.dataset.cat===x.dataset.cat);
+  all.forEach(x=>x.classList.add(x.parentElement.dataset.cat===x.dataset.cat?'correct':'wrong'));
+  if(ok){ feedback(3,'ok','POWER PROMPT собран правильно.'); finish(3,140); }
+  else feedback(3,attempt(3)>1?'hint':'no',attempt(3)>1?'Подсказка: формат говорит, КАК выглядит ответ; ограничение задаёт границы.':'Есть ошибки в сортировке.');
+}
 
+/* MISSION 4 */
 const battles=[
-['Расскажи про вулканы.','Объясни пятикласснику, почему извергаются вулканы. Дай 3 коротких пункта и один простой пример.',1],
-['Придумай животное.','Придумай 20 случайных животных и пиши очень подробно.',0],
-['Составь викторину про космос на 5 вопросов с 4 вариантами ответа. Не показывай ответы сразу.','Сделай викторину про космос.',0],
-['Помоги с проектом.','Помоги с проектом. Сначала задай мне 3 вопроса, чтобы узнать тему, формат результата и срок.',1]
+ ['Расскажи про вулканы.','Объясни пятикласснику, почему извергаются вулканы. Дай 3 коротких пункта и один простой пример.',1],
+ ['Придумай животное.','Придумай 20 случайных животных и пиши очень подробно.',0],
+ ['Составь викторину про космос на 5 вопросов с 4 вариантами ответа. Не показывай ответы сразу.','Сделай викторину про космос.',0],
+ ['Помоги с проектом.','Помоги с проектом. Сначала задай мне 3 вопроса, чтобы узнать тему, формат результата и срок.',1]
 ];
-battles.forEach((x,i)=>{let d=document.createElement('div');d.className='box battle';d.innerHTML='<button class="choice" data-v="0"><b>A</b><br>'+x[0]+'</button><div class="vs">VS</div><button class="choice" data-v="1"><b>B</b><br>'+x[1]+'</button>';d.querySelectorAll('.choice').forEach(b=>b.onclick=()=>single(d,b));battleCases.appendChild(d)});
-function checkM4(){clear(m4);let ok=0,miss=false;[...battleCases.children].forEach((d,i)=>{let s=d.querySelector('.selected');if(!s){miss=true;return}if(+s.dataset.v===battles[i][2]){s.classList.add('correct');ok++}else s.classList.add('wrong')});if(miss)return feedback(4,'hint','Выбери победителя в каждой паре.');if(ok===battles.length){feedback(4,'ok','Ты выбираешь промпт по качеству, а не по длине.');finish(4,120)}else feedback(4,attempt(4)>1?'hint':'no',attempt(4)>1?'Подсказка: сильный промпт не обязательно длиннее — он конкретнее и управляет результатом.':'Не все победители выбраны верно.')}
+battles.forEach(x=>{
+  const d=document.createElement('div'); d.className='box battle';
+  d.innerHTML='<button type="button" class="choice" data-v="0"><b>A</b><br>'+x[0]+'</button><div class="vs">VS</div><button type="button" class="choice" data-v="1"><b>B</b><br>'+x[1]+'</button>';
+  d.querySelectorAll('.choice').forEach(b=>b.addEventListener('click',()=>selectOne(d,b)));
+  $('battleCases').appendChild(d);
+});
+function checkM4(){
+  const root=$('m4'); clearMarks(root);
+  let correct=0,missing=false;
+  [...$('battleCases').children].forEach((d,i)=>{
+    const s=d.querySelector('.selected');
+    if(!s){missing=true;return;}
+    if(+s.dataset.v===battles[i][2]){s.classList.add('correct');correct++;} else s.classList.add('wrong');
+  });
+  if(missing) return feedback(4,'hint','Выбери победителя в каждой паре.');
+  if(correct===battles.length){feedback(4,'ok','Ты выбираешь промпт по качеству, а не по длине.');finish(4,120);}
+  else feedback(4,attempt(4)>1?'hint':'no',attempt(4)>1?'Подсказка: сильный промпт конкретнее и лучше управляет результатом.':'Не все победители выбраны верно.');
+}
 
+/* MISSION 6 */
 const noise=[
-{p:'«Сделай 5 вопросов викторины о динозаврах для 5 класса. Мой рюкзак синий. В каждом вопросе 4 варианта.»',junk:'Мой рюкзак синий.'},
-{p:'«Придумай название для школьной команды по робототехнике. В команде 4 ученика. Сегодня вторник. Дай 6 вариантов.»',junk:'Сегодня вторник.'},
-{p:'«Объясни круговорот воды простыми словами для 5 класса. Я люблю пиццу. Ответ — 4 коротких шага.»',junk:'Я люблю пиццу.'}
+ {p:'«Сделай 5 вопросов викторины о динозаврах для 5 класса. Мой рюкзак синий. В каждом вопросе 4 варианта.»',junk:'Мой рюкзак синий.'},
+ {p:'«Придумай название для школьной команды по робототехнике. В команде 4 ученика. Сегодня вторник. Дай 6 вариантов.»',junk:'Сегодня вторник.'},
+ {p:'«Объясни круговорот воды простыми словами для 5 класса. Я люблю пиццу. Ответ — 4 коротких шага.»',junk:'Я люблю пиццу.'}
 ];
-noise.forEach((c,i)=>{let d=document.createElement('div');d.className='box';d.innerHTML='<div class="prompt">'+c.p+'</div><div class="grid2"></div>';let parts=c.p.replace(/[«»]/g,'').split('.').map(x=>x.trim()).filter(Boolean);parts.forEach(t=>{let b=document.createElement('button');b.className='choice';b.textContent=t+'.';b.onclick=()=>b.classList.toggle('selected');d.querySelector('.grid2').appendChild(b)});noiseCases.appendChild(d)});
-function checkM6(){clear(m6);let ok=true,complete=true;[...noiseCases.children].forEach((d,i)=>{let sel=[...d.querySelectorAll('.selected')];if(sel.length!==1)complete=false;sel.forEach(s=>{let yes=s.textContent.trim()===noise[i].junk;s.classList.add(yes?'correct':'wrong');if(!yes)ok=false});if(sel.length!==1)ok=false});if(!complete)return feedback(6,'hint','В каждом промпте выбери ровно одну лишнюю деталь.');if(ok){feedback(6,'ok','Да! Больше текста не значит лучше.');finish(6,100)}else feedback(6,attempt(6)>1?'hint':'no',attempt(6)>1?'Подсказка: лишняя деталь никак не меняет нужный результат.':'Есть ошибка. Удали информационный шум.')}
+noise.forEach(c=>{
+  const d=document.createElement('div'); d.className='box';
+  d.innerHTML='<div class="prompt">'+c.p+'</div><div class="grid2"></div>';
+  c.p.replace(/[«»]/g,'').split('.').map(x=>x.trim()).filter(Boolean).forEach(t=>{
+    const b=document.createElement('button'); b.type='button'; b.className='choice'; b.textContent=t+'.';
+    b.addEventListener('click',()=>b.classList.toggle('selected'));
+    d.querySelector('.grid2').appendChild(b);
+  });
+  $('noiseCases').appendChild(d);
+});
+function checkM6(){
+  clearMarks($('m6')); let ok=true,complete=true;
+  [...$('noiseCases').children].forEach((d,i)=>{
+    const sel=[...d.querySelectorAll('.selected')];
+    if(sel.length!==1) complete=false;
+    sel.forEach(s=>{const yes=s.textContent.trim()===noise[i].junk;s.classList.add(yes?'correct':'wrong');if(!yes)ok=false;});
+    if(sel.length!==1) ok=false;
+  });
+  if(!complete) return feedback(6,'hint','В каждом промпте выбери ровно одну лишнюю деталь.');
+  if(ok){feedback(6,'ok','Да! Больше текста не значит лучше.');finish(6,100);}
+  else feedback(6,attempt(6)>1?'hint':'no',attempt(6)>1?'Подсказка: лишняя деталь никак не меняет нужный результат.':'Есть ошибка.');
+}
 
-const bq=[['Тема выступления?',1],['Для какого класса или аудитории?',1],['Сколько минут должно длиться выступление?',1],['Любимый цвет?',0],['Как зовут соседа?',0],['Какая сегодня погода?',0]];
-bq.forEach(([t,a])=>{let b=document.createElement('button');b.className='choice';b.textContent=t;b.dataset.a=a;b.onclick=()=>{let s=[...bossQs.querySelectorAll('.selected')];if(!b.classList.contains('selected')&&s.length>=3)return;b.classList.toggle('selected')};bossQs.appendChild(b)});
-bossDecision.querySelectorAll('.opt').forEach(b=>b.onclick=()=>single(bossDecision,b));
+/* BOSS */
+const bossQuestions=[['Тема выступления?',1],['Для какого класса или аудитории?',1],['Сколько минут должно длиться выступление?',1],['Любимый цвет?',0],['Как зовут соседа?',0],['Какая сегодня погода?',0]];
+bossQuestions.forEach(([t,a])=>{
+  const b=document.createElement('button');b.type='button';b.className='choice';b.textContent=t;b.dataset.a=a;
+  b.addEventListener('click',()=>{const s=[...$('bossQs').querySelectorAll('.selected')];if(!b.classList.contains('selected')&&s.length>=3)return;b.classList.toggle('selected')});
+  $('bossQs').appendChild(b);
+});
+$('bossDecision').querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>selectOne($('bossDecision'),b)));
 
-function localStrong(text){let x=(text||'').toLowerCase();let words=x.split(/\s+/).filter(Boolean);let task=/(придум|объяс|созда|состав|напиш|расскаж|разработ)/.test(x),fmt=/(пункт|таблиц|список|шаг|формат|колонк|предложен)/.test(x),lim=/(не более|не использ|без |максим|коротк|огранич|до \d|не должен)/.test(x),ctx=/(для |пятикласс|ученик|игр|проект|выступлен)/.test(x);return words.length>=18&&task&&fmt&&lim&&ctx}
+function localStrong(text){
+  const x=(text||'').toLowerCase(), words=x.split(/\s+/).filter(Boolean);
+  const task=/(придум|объяс|созда|состав|напиш|расскаж|разработ)/.test(x);
+  const fmt=/(пункт|таблиц|список|шаг|формат|колонк|предложен)/.test(x);
+  const lim=/(не более|не использ|без |максим|коротк|огранич|до \d|не должен)/.test(x);
+  const ctx=/(для |пятикласс|ученик|игр|проект|выступлен)/.test(x);
+  return words.length>=18&&task&&fmt&&lim&&ctx;
+}
 async function aiCheck(mission,inputId,mid,reward){
- const n=mid.replace('m',''), text=document.getElementById(inputId).value.trim(), th=document.getElementById('think'+n);
- if(text.length<20)return feedback(n,'no','Ответ слишком короткий. Напиши цельный промпт.');
- th.classList.add('show');feedback(n,'hint','AI проверяет смысл...');
- try{
-   let r=await fetch(AI,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mission,answers:[text]})});
-   let data=await r.json();if(!r.ok||typeof data.pass!=='boolean')throw new Error();
-   if(data.pass){feedback(n,'ok','✅ '+(data.feedback||'Промпт засчитан.'));finish(+n,reward)}
-   else feedback(n,'no','🧠 '+(data.feedback||'Доработай промпт и попробуй ещё раз.'));
- }catch(e){
-   if(localStrong(text)){feedback(n,'ok','✅ AI-проверка временно недоступна, но резервная проверка засчитала сильный промпт.');finish(+n,reward)}
-   else feedback(n,'no','AI-проверка временно недоступна. По резервной проверке не хватает структуры или конкретики.');
- }finally{th.classList.remove('show')}
+  const n=+mid.replace('m',''), text=$(inputId).value.trim(), th=$('think'+n);
+  if(text.length<20) return feedback(n,'no','Ответ слишком короткий. Напиши цельный промпт.');
+  th.classList.add('show'); feedback(n,'hint','AI проверяет смысл...');
+  try{
+    const r=await fetch(AI,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mission,answers:[text]})});
+    const data=await r.json();
+    if(!r.ok||typeof data.pass!=='boolean') throw new Error('AI');
+    if(data.pass){feedback(n,'ok','✅ '+(data.feedback||'Промпт засчитан.'));finish(n,reward);}
+    else feedback(n,'no','🧠 '+(data.feedback||'Доработай промпт и попробуй ещё раз.'));
+  }catch(e){
+    if(localStrong(text)){feedback(n,'ok','✅ AI временно недоступен, резервная проверка засчитала сильный промпт.');finish(n,reward);}
+    else feedback(n,'no','AI-проверка временно недоступна. По резервной проверке не хватает структуры или конкретики.');
+  }finally{th.classList.remove('show');}
 }
 async function checkBoss(){
- clear(m8);let d=bossDecision.querySelector('.selected'), qs=[...bossQs.querySelectorAll('.selected')],txt=bossText.value.trim();
- if(!d||qs.length!==3||txt.length<25)return feedback(8,'hint','Заверши все три шага: решение, 3 вопроса и финальный промпт.');
- let logic=d.dataset.v==='no'&&qs.every(x=>x.dataset.a==='1');
- if(!logic){d.classList.add(d.dataset.v==='no'?'correct':'wrong');qs.forEach(x=>x.classList.add(x.dataset.a==='1'?'correct':'wrong'));return feedback(8,'no','Сначала исправь первые два шага.');
- think8.classList.add('show');feedback(8,'hint','AI проверяет финальный промпт...');
- try{
-  let r=await fetch(AI,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mission:'g5w4_boss',answers:[txt]})});let data=await r.json();if(!r.ok||typeof data.pass!=='boolean')throw new Error();
-  if(data.pass){feedback(8,'ok','🏆 '+(data.feedback||'Final Boss пройден!'));finish(8,220);final.scrollIntoView({behavior:'smooth'})}
-  else feedback(8,'no','🧠 '+(data.feedback||'Усиль финальный промпт.'));
- }catch(e){if(localStrong(txt)&&/(спрос|уточн|вопрос)/i.test(txt)){feedback(8,'ok','🏆 Резервная проверка засчитала финальный промпт.');finish(8,220)}else feedback(8,'no','AI временно недоступен. Резервная проверка просит добавить уточнения, формат и ограничение.')}finally{think8.classList.remove('show')}
+  clearMarks($('m8'));
+  const d=$('bossDecision').querySelector('.selected');
+  const qs=[...$('bossQs').querySelectorAll('.selected')];
+  const txt=$('bossText').value.trim();
+  if(!d||qs.length!==3||txt.length<25) return feedback(8,'hint','Заверши все три шага: решение, 3 вопроса и финальный промпт.');
+  const logic=d.dataset.v==='no'&&qs.every(x=>x.dataset.a==='1');
+  if(!logic){
+    d.classList.add(d.dataset.v==='no'?'correct':'wrong');
+    qs.forEach(x=>x.classList.add(x.dataset.a==='1'?'correct':'wrong'));
+    return feedback(8,'no','Сначала исправь первые два шага.');
+  }
+  $('think8').classList.add('show'); feedback(8,'hint','AI проверяет финальный промпт...');
+  try{
+    const r=await fetch(AI,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mission:'g5w4_boss',answers:[txt]})});
+    const data=await r.json();
+    if(!r.ok||typeof data.pass!=='boolean') throw new Error('AI');
+    if(data.pass){feedback(8,'ok','🏆 '+(data.feedback||'Final Boss пройден!'));finish(8,220);$('final').scrollIntoView({behavior:'smooth'});}
+    else feedback(8,'no','🧠 '+(data.feedback||'Усиль финальный промпт.'));
+  }catch(e){
+    if(localStrong(txt)&&/(спрос|уточн|вопрос)/i.test(txt)){feedback(8,'ok','🏆 Резервная проверка засчитала финальный промпт.');finish(8,220);}
+    else feedback(8,'no','AI временно недоступен. Резервная проверка просит добавить уточнения, формат и ограничение.');
+  }finally{$('think8').classList.remove('show');}
 }
-['write5','write7','bossText'].forEach(id=>{let e=document.getElementById(id),v=localStorage.getItem(KEY+'_'+id);if(v)e.value=v;e.addEventListener('input',()=>localStorage.setItem(KEY+'_'+id,e.value))});
+
+['write5','write7','bossText'].forEach(id=>{
+  const e=$(id),v=localStorage.getItem(KEY+'_'+id);
+  if(v)e.value=v;
+  e.addEventListener('input',()=>localStorage.setItem(KEY+'_'+id,e.value));
+});
 update();
 </script>
 </body></html>

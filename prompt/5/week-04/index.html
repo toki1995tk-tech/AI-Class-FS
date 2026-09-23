@@ -27,7 +27,64 @@ button,textarea{font:inherit}.wrap{width:min(1160px,calc(100% - 22px));margin:au
 
 <section class="status"><div><b id="progressText">Пройдено: 0 из 8</b><div class="bar"><div id="progress"></div></div></div><div class="rank" id="rank">🔵 PROMPT ROOKIE</div></section>
 
-<section class="mission" id="m1"><div class="mhead"><div><div class="num">Миссия 1 • Разминка</div><h2>Ответить или сначала спросить?</h2><div class="sub"><b>Задание:</b> прочитай 6 запросов. Для каждого реши: AI уже может выполнить задачу или ему сначала нужно задать уточняющий вопрос. Выбери один вариант в каждой карточке, затем нажми «Проверить».</div></div><div class="badge">+80 XP</div></div><div id="askCases"></div><div class="btnrow"><button type="button" class="btn primary" onclick="checkM1()">Проверить</button></div><div class="feedback" id="f1"></div></section>
+<section class="mission" id="m1">
+  <div class="mhead">
+    <div>
+      <div class="num">Миссия 1 • Разминка</div>
+      <h2>Ответить или сначала спросить?</h2>
+      <div class="sub"><b>Задание:</b> прочитай каждый запрос и выбери ответ прямо под ним: <b>«Можно отвечать»</b> или <b>«Сначала спросить»</b>. Ответь на все 6 ситуаций, затем нажми «Проверить».</div>
+    </div>
+    <div class="badge">+80 XP</div>
+  </div>
+
+  <div id="askCases">
+    <div class="box ask-case">
+      <div class="prompt">1. Придумай 4 названия для школьной команды по робототехнике.</div>
+      <div class="options">
+        <button type="button" class="opt" data-v="answer">✅ Можно отвечать</button>
+        <button type="button" class="opt" data-v="ask">❓ Сначала спросить</button>
+      </div>
+    </div>
+    <div class="box ask-case">
+      <div class="prompt">2. Помоги мне выбрать подарок.</div>
+      <div class="options">
+        <button type="button" class="opt" data-v="answer">✅ Можно отвечать</button>
+        <button type="button" class="opt" data-v="ask">❓ Сначала спросить</button>
+      </div>
+    </div>
+    <div class="box ask-case">
+      <div class="prompt">3. Составь 5 вопросов викторины про динозавров для 5 класса.</div>
+      <div class="options">
+        <button type="button" class="opt" data-v="answer">✅ Можно отвечать</button>
+        <button type="button" class="opt" data-v="ask">❓ Сначала спросить</button>
+      </div>
+    </div>
+    <div class="box ask-case">
+      <div class="prompt">4. Помоги подготовиться к соревнованию.</div>
+      <div class="options">
+        <button type="button" class="opt" data-v="answer">✅ Можно отвечать</button>
+        <button type="button" class="opt" data-v="ask">❓ Сначала спросить</button>
+      </div>
+    </div>
+    <div class="box ask-case">
+      <div class="prompt">5. Напиши 3 коротких слогана для проекта по экологии.</div>
+      <div class="options">
+        <button type="button" class="opt" data-v="answer">✅ Можно отвечать</button>
+        <button type="button" class="opt" data-v="ask">❓ Сначала спросить</button>
+      </div>
+    </div>
+    <div class="box ask-case">
+      <div class="prompt">6. Подбери мне книгу.</div>
+      <div class="options">
+        <button type="button" class="opt" data-v="answer">✅ Можно отвечать</button>
+        <button type="button" class="opt" data-v="ask">❓ Сначала спросить</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="btnrow"><button type="button" class="btn primary" onclick="checkM1()">Проверить</button></div>
+  <div class="feedback" id="f1"></div>
+</section>
 
 <section class="mission locked" id="m2"><div class="mhead"><div><div class="num">Миссия 2</div><h2>Что потерялось?</h2><div class="sub">Определи, каких частей не хватает слабому промпту.</div></div><div class="badge">+100 XP</div></div><div id="missingCases"></div><div class="btnrow"><button class="btn primary" onclick="checkM2()">Проверить</button></div><div class="feedback" id="f2"></div></section>
 

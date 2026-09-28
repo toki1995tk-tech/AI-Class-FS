@@ -41,12 +41,18 @@
         <span>AI-репетитор: объяснение по уровню ученика</span>
         <div class="tag">AI TUTOR LAB →</div>
       </a>
+
+      <a class="week active green" href="/prompt/6/week-05/">
+        <strong>Неделя 5</strong>
+        <span>AI Personality: характер, стиль и правила</span>
+        <div class="tag">AI PERSONALITY LAB →</div>
+      </a>
     </div>
   </section>
 </div>
 <script>
 const weeks = document.getElementById('weeks');
-for (let i = 5; i <= 34; i++) {
+for (let i = 6; i <= 34; i++) {
   const div = document.createElement('div');
   div.className = 'week locked';
   div.innerHTML = `<strong>Неделя ${i}</strong><span>Задание появится позже</span><div class="tag">🔒 СКОРО</div>`;

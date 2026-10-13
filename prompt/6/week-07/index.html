@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>6 класс — AI Model, Agent, API & Tokens</title>
+<style>
+:root{--bg:#f5fbff;--card:#fff;--ink:#15304a;--blue:#3388ff;--vio:#7c5cff;--green:#20a66b;--line:#dbe8f4;--red:#e95d69;--shadow:0 16px 40px rgba(38,89,140,.10)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(circle at 12% 0%,#e8f5ff 0,transparent 26%),radial-gradient(circle at 90% 4%,#eeeaff 0,transparent 24%),var(--bg);color:var(--ink)}
+.wrap{max-width:1120px;margin:auto;padding:18px 18px 60px}.nav{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.nav a,.reset{border:1px solid var(--line);background:#fff;color:var(--ink);text-decoration:none;padding:10px 14px;border-radius:14px;font-weight:900;box-shadow:0 5px 18px rgba(0,0,0,.04);cursor:pointer}.reset{background:#fff7f5;color:#9a4332}
+.hero{background:linear-gradient(135deg,#175a93,#6a4ee8);color:#fff;border-radius:28px;padding:30px;box-shadow:var(--shadow)}.eyebrow{font-size:13px;font-weight:1000;letter-spacing:.12em;text-transform:uppercase;opacity:.9}h1{font-size:clamp(34px,6vw,60px);line-height:.98;margin:8px 0 10px}.hero p{font-size:18px;line-height:1.45;max-width:860px}.cycle{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.cycle span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:9px 12px;border-radius:999px;font-weight:900}
+.status{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;margin:18px 0;background:#fff;padding:16px 18px;border-radius:20px;border:1px solid var(--line)}.progress{height:12px;background:#eaf0f6;border-radius:999px;overflow:hidden;margin-top:8px}.progress>div{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--vio));transition:.4s}.rank{font-weight:1000;background:#eef5ff;padding:10px 14px;border-radius:14px}
+.mission{margin-top:18px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:0 10px 30px rgba(38,89,140,.07)}.mission.locked{opacity:.52;pointer-events:none;position:relative;filter:grayscale(.2)}.mission.locked:after{content:"🔒 Сначала пройди предыдущую миссию";position:absolute;inset:0;display:grid;place-items:center;background:rgba(255,255,255,.87);border-radius:24px;font-size:20px;font-weight:1000;text-align:center;padding:20px}.mission.done{border:2px solid #83c5ff}.mhead{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.num{font-size:13px;font-weight:1000;letter-spacing:.1em;text-transform:uppercase;color:#365fba}h2{font-size:28px;margin:4px 0 8px}.badge{background:#f0f4ff;border:1px solid #dce3ff;padding:8px 12px;border-radius:999px;font-weight:900;white-space:nowrap}
+.box{background:#f9fbfe;border:1px solid #e1eaf3;border-radius:18px;padding:16px;margin:14px 0;line-height:1.5}.good{border-left:5px solid var(--green);background:#f4fff9}.warn{border-left:5px solid #f5a43c;background:#fffaf1}.bad{border-left:5px solid var(--red);background:#fff4f5}.prompt{border-left:5px solid var(--vio)}
+.label{font-weight:1000;margin:16px 0 8px;display:block}textarea,input{width:100%;border:2px solid #dce7f1;border-radius:16px;padding:14px;background:#fff;outline:none;font:inherit}textarea{min-height:96px;resize:vertical}.small{min-height:70px}textarea:focus,input:focus{border-color:#79aef0;box-shadow:0 0 0 4px rgba(51,136,255,.08)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.card{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff}.choice-row{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.choice{border:1px solid var(--line);background:#fff;border-radius:16px;padding:13px;cursor:pointer;font-weight:900}.choice.selected{border-color:var(--blue);background:#eef6ff}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.btn{border:0;border-radius:14px;padding:12px 16px;font-weight:1000;cursor:pointer;background:linear-gradient(90deg,var(--blue),var(--vio));color:#fff;box-shadow:0 8px 18px rgba(80,100,220,.20)}.feedback{margin-top:12px;padding:12px 14px;border-radius:14px;font-weight:800;display:none}.feedback.ok{display:block;background:#eafff2;color:#17643f;border:1px solid #bfe8cf}.feedback.no{display:block;background:#fff3ef;color:#8c3a25;border:1px solid #ffd3c7}.feedback.maybe{display:block;background:#fffbe9;color:#70590b;border:1px solid #f4dea0}
+.final{display:none;margin-top:20px;padding:26px;border-radius:24px;background:#172a46;color:#fff}.final h2{font-size:34px}@media(max-width:760px){.grid2,.grid3,.status{grid-template-columns:1fr}.mhead{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<nav class="nav"><a href="../">← К неделям</a><a href="../../">← К классам</a><a href="../../../">← К предметам</a><button class="reset" onclick="resetProgress()">↺ Сбросить прогресс</button></nav>
+
+<section class="hero">
+<div class="eyebrow">AI Prompt Engineering · Week 07</div>
+<h1>AI MODEL → AGENT → API → TOKENS</h1>
+<p>Сегодня разбираемся, из чего состоит настоящий AI-проект: чем модель отличается от агента, зачем нужен API-ключ, почему токены считаются и почему безопасность напрямую связана с деньгами.</p>
+<div class="cycle"><span>MODEL</span><span>→ AGENT</span><span>→ API KEY</span><span>→ TOKENS</span><span>→ PROJECT</span></div>
+</section>
+
+<section class="status"><div><b id="progressText">Пройдено: 0 из 6</b><div class="progress"><div id="progressFill"></div></div></div><div class="rank" id="rank">🟢 USER</div></section>
+
+<section class="mission" id="m1">
+<div class="mhead"><div><div class="num">Миссия 1</div><h2>🧠 Модель или агент?</h2></div><div class="badge">Core difference</div></div>
+<div class="box prompt"><b>Ситуация A:</b> система отвечает на вопрос и генерирует текст.<br><b>Ситуация B:</b> система получает цель, ищет информацию, работает с файлами и сама выполняет шаги.</div>
+<label class="label">Объясни своими словами, чем AI-модель отличается от AI-агента.</label><textarea id="m1a"></textarea>
+<label class="label">Какая из ситуаций — модель, а какая — агент? Почему?</label><textarea id="m1b" class="small"></textarea>
+<div class="btnrow"><button class="btn" onclick="smartCheck('g6w7_m1','m1')">Проверить ответ</button></div><div class="feedback" id="f1"></div>
+</section>
+
+<section class="mission locked" id="m2">
+<div class="mhead"><div><div class="num">Миссия 2</div><h2>🤖 Собери AI-агента</h2></div><div class="badge">Agent anatomy</div></div>
+<div class="box good"><b>Подсказка-конструктор:</b> мозг/модель · память/контекст · инструменты · цель/триггер · контроль результата.</div>
+<label class="label">Назови минимум 4 части AI-агента.</label><textarea id="m2a" class="small"></textarea>
+<label class="label">Объясни роль минимум двух частей.</label><textarea id="m2b"></textarea>
+<div class="btnrow"><button class="btn" onclick="smartCheck('g6w7_m2','m2')">Проверить ответ</button></div><div class="feedback" id="f2"></div>
+</section>
+
+<section class="mission locked" id="m3">
+<div class="mhead"><div><div class="num">Миссия 3</div><h2>🔑 Зачем нужен API-ключ?</h2></div><div class="badge">Connection</div></div>
+<div class="box prompt"><b>Цепочка:</b> сайт/приложение → сервер → API-ключ → AI-модель → ответ пользователю.</div>
+<label class="label">Объясни, какую роль играет API-ключ в AI-проекте.</label><textarea id="m3a"></textarea>
+<label class="label">Почему API-ключ нельзя писать прямо в открытом HTML/JavaScript и показывать другим?</label><textarea id="m3b"></textarea>
+<div class="btnrow"><button class="btn" onclick="smartCheck('g6w7_m3','m3')">Проверить ответ</button></div><div class="feedback" id="f3"></div>
+</section>
+
+<section class="mission locked" id="m4">
+<div class="mhead"><div><div class="num">Миссия 4</div><h2>🚨 API-ключ утёк!</h2></div><div class="badge">Security</div></div>
+<div class="box bad"><b>Ситуация:</b> ученик случайно выложил API-ключ в публичный GitHub-репозиторий.</div>
+<label class="label">Что нужно сделать теперь? Опиши правильные действия.</label><textarea id="m4a"></textarea>
+<label class="label">Где безопаснее хранить новый ключ?</label><textarea id="m4b" class="small"></textarea>
+<div class="btnrow"><button class="btn" onclick="smartCheck('g6w7_m4','m4')">Проверить ответ</button></div><div class="feedback" id="f4"></div>
+</section>
+
+<section class="mission locked" id="m5">
+<div class="mhead"><div><div class="num">Миссия 5</div><h2>🪙 Посчитай токены</h2></div><div class="badge">Usage</div></div>
+<div class="box">Один запрос использовал <b>600 входных токенов</b> и <b>400 выходных токенов</b>.</div>
+<label class="label">Сколько токенов ушло на один запрос?</label><input id="m5a" inputmode="numeric" placeholder="Например: 1000">
+<label class="label">Если таких запросов было 20, сколько токенов использовано всего?</label><input id="m5b" inputmode="numeric">
+<label class="label">Почему длинные диалоги обычно стоят дороже?</label><textarea id="m5c" class="small"></textarea>
+<div class="btnrow"><button class="btn" onclick="checkM5()">Проверить</button></div><div class="feedback" id="f5"></div>
+</section>
+
+<section class="mission locked" id="m6">
+<div class="mhead"><div><div class="num">FINAL BOSS</div><h2>🚀 Спроектируй свой AI-проект</h2></div><div class="badge">Architecture</div></div>
+<div class="box good">Придумай простой AI-проект и опиши его архитектуру. Не нужен настоящий API-ключ — только схема.</div>
+<label class="label">1. Что делает твой AI-проект?</label><textarea id="m6a" class="small"></textarea>
+<label class="label">2. Какая роль AI-модели?</label><textarea id="m6b" class="small"></textarea>
+<label class="label">3. Какие инструменты или действия нужны агенту?</label><textarea id="m6c"></textarea>
+<label class="label">4. Где участвует API-ключ и где он должен храниться?</label><textarea id="m6d"></textarea>
+<label class="label">5. Как ты будешь контролировать токены/расходы и безопасность?</label><textarea id="m6e"></textarea>
+<div class="btnrow"><button class="btn" onclick="smartCheck('g6w7_m6','m6')">Завершить Boss</button></div><div class="feedback" id="f6"></div>
+</section>
+
+<section class="final" id="final"><div class="eyebrow">Week 07 завершена</div><h2>🔥 AI PROJECT ARCHITECT READY</h2><p>Ты понимаешь разницу между моделью и агентом, роль API-ключа, токенов и правил безопасности.</p></section>
+</div>
+
+<script>
+const completed=JSON.parse(localStorage.getItem('ai6w7_completed')||'[]');
+function fb(id,type,msg){let e=document.getElementById('f'+id);e.className='feedback '+type;e.innerHTML=msg}
+function mark(id){if(!completed.includes(id)){completed.push(id);localStorage.setItem('ai6w7_completed',JSON.stringify(completed))}document.getElementById(id).classList.add('done');let n=+id.replace('m',''),nx=document.getElementById('m'+(n+1));if(nx)nx.classList.remove('locked');upd()}
+function upd(){completed.forEach(id=>{let e=document.getElementById(id);if(e)e.classList.add('done');let n=+id.replace('m',''),nx=document.getElementById('m'+(n+1));if(nx)nx.classList.remove('locked')});let c=completed.length;progressText.textContent='Пройдено: '+c+' из 6';progressFill.style.width=(c/6*100)+'%';rank.textContent=['🟢 USER','🔵 MODEL THINKER','🟣 AGENT BUILDER','🟠 API EXPLORER','🛡️ SECURITY','🪙 TOKEN TRACKER','🚀 AI ARCHITECT'][c];if(c>=6)final.style.display='block'}
+function save(){document.querySelectorAll('textarea,input').forEach(e=>localStorage.setItem('ai6w7_'+e.id,e.value))}
+function restore(){document.querySelectorAll('textarea,input').forEach(e=>{let v=localStorage.getItem('ai6w7_'+e.id);if(v!==null)e.value=v;e.addEventListener('input',save)})}
+const AI_GRADE_ENDPOINT='https://ovjpqjnjceuloakqnwsm.supabase.co/functions/v1/ai-grade';
+async function smartCheck(missionKey,mid){const n=mid.replace('m',''),f=document.getElementById('f'+n),answers=[...document.querySelectorAll('#'+mid+' textarea')].map(x=>x.value.trim());if(answers.every(x=>x.length<2)){f.className='feedback no';f.textContent='Сначала выполни задание.';return}f.className='feedback maybe';f.textContent='🤖 AI проверяет смысл ответа...';try{const r=await fetch(AI_GRADE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mission:missionKey,answers})});const data=await r.json();if(!r.ok||typeof data.pass!=='boolean')throw new Error('AI unavailable');if(data.pass){f.className='feedback ok';f.textContent='✅ '+(data.feedback||'Ответ засчитан.');mark(mid)}else{f.className='feedback no';f.textContent='🧠 '+(data.feedback||'Доработай ответ и попробуй снова.')}}catch(e){f.className='feedback no';f.textContent='AI-проверка временно недоступна. Попробуй ещё раз.'}}
+function checkM5(){const a=Number(m5a.value.trim()),b=Number(m5b.value.trim()),c=m5c.value.trim().toLowerCase();const ok=a===1000&&b===20000&&c.length>12&&(c.includes('токен')||c.includes('контекст')||c.includes('длин'));if(ok){fb(5,'ok','✅ Верно: 1000 токенов на запрос и 20 000 токенов на 20 запросов.');mark('m5')}else fb(5,'no','Проверь сумму input + output, затем умножь результат на 20 и объясни связь длины диалога с количеством токенов.')}
+function resetProgress(){if(!confirm('Сбросить прогресс Week 07?'))return;let ks=[];for(let i=0;i<localStorage.length;i++){let k=localStorage.key(i);if(k&&k.startsWith('ai6w7_'))ks.push(k)}ks.forEach(k=>localStorage.removeItem(k));localStorage.removeItem('ai6w7_completed');location.reload()}
+restore();upd();
+</script>
+</body>
+</html>
